@@ -54,9 +54,9 @@ class B2BApiClient {
   }
 
   async getProductsByCountry(countryCode: string): Promise<Product[]> {
-    // 优化：只加载前 10 页（1000 个产品），避免超时
+    // 获取所有产品（约 2600+，27 页）
     const allProducts: Product[] = [];
-    for (let page = 1; page <= 10; page++) {
+    for (let page = 1; page <= 30; page++) {
       const response = await this.getProducts(page, 100);
       allProducts.push(...response.list);
       if (response.list.length < 100) break;

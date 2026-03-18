@@ -15,11 +15,12 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   }
 
   try {
-    // 只获取前 3 页（300 个产品）用于国家列表，避免超时
+    // 获取所有产品（约 2600+，27 页）
     const allProducts: Product[] = [];
-    for (let page = 1; page <= 3; page++) {
+    for (let page = 1; page <= 30; page++) {
       const response = await b2bApi.getProducts(page, 100);
       allProducts.push(...response.list);
+      console.log(`[countries] 第${page}页：${response.list.length}个产品，累计${allProducts.length}个`);
       if (response.list.length < 100) break;
     }
 
