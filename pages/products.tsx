@@ -85,18 +85,16 @@ export default function ProductsPage() {
         setLoading(true);
         let endpoint = '';
         
-        // 如果有搜索关键词，先获取国家列表判断是否是国家搜索
-        if (searchQuery) {
-          console.log('[Search] Starting search for:', searchQuery);
+        // 如果有搜索关键词（从 URL 参数），先获取国家列表判断是否是国家搜索
+        if (search) {
           try {
             // 获取国家列表（用于匹配国家）
             const countriesRes = await fetch('/api/countries');
             const countriesJson = await countriesRes.json();
-            console.log('[Search] Countries loaded:', countriesJson.data?.length);
             
             if (countriesJson.success && countriesJson.data) {
-              const query = searchQuery.trim().toUpperCase();
-              const lowerQuery = searchQuery.trim().toLowerCase();
+              const query = (search as string).trim().toUpperCase();
+              const lowerQuery = (search as string).trim().toLowerCase();
               
               // 在国家列表中查找匹配（代码/中文名/英文名）
               const matchedCountry = countriesJson.data.find((c: any) => 
@@ -107,14 +105,10 @@ export default function ProductsPage() {
                 c.en?.toLowerCase().includes(lowerQuery)
               );
               
-              console.log('[Search] Matched country:', matchedCountry);
-              
               if (matchedCountry) {
                 // 是国家搜索，调用国家 API（只返回 local 产品）
-                console.log('[Search] Fetching products for country:', matchedCountry.code);
                 const res = await fetch(`/api/products/by-country/${matchedCountry.code}`);
                 const json = await res.json();
-                console.log('[Search] Products result:', json.data?.length);
                 if (json.success && json.data) {
                   setProducts(json.data);
                 } else {
@@ -129,7 +123,6 @@ export default function ProductsPage() {
           }
           
           // 不是国家搜索，获取所有产品进行关键词搜索（产品名称/描述）
-          console.log('[Search] Keyword search, fetching products...');
           const allProducts: Product[] = [];
           for (let page = 1; page <= 10; page++) {
             const res = await fetch(`/api/products?page=${page}&pageSize=100`);
@@ -140,13 +133,12 @@ export default function ProductsPage() {
           }
           
           // 前端搜索过滤（产品名称/描述）
-          const lowerQuery = searchQuery.toLowerCase();
+          const lowerQuery = (search as string).toLowerCase();
           const filtered = allProducts.filter((p: Product) => 
             p.name.toLowerCase().includes(lowerQuery) ||
             p.nameEn.toLowerCase().includes(lowerQuery) ||
             (p.description && p.description.toLowerCase().includes(lowerQuery))
           );
-          console.log('[Search] Keyword search results:', filtered.length);
           
           setProducts(filtered);
           setLoading(false);
