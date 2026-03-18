@@ -1,0 +1,73 @@
+export interface Country {
+  code: string;
+  name: string;
+  nameEn: string;
+  flag?: string;
+  productCount?: number;
+}
+
+export interface Product {
+  id: number;
+  name: string;
+  nameEn: string;
+  description?: string;
+  descriptionEn?: string;
+  type: 'local' | 'regional' | 'global';
+  countries: Country[];
+  dataSize: number;
+  validDays: number;
+  price: string;
+  agentPrice: string;
+  stock: number;
+  image?: string;
+  features: string[];
+  status: 'active' | 'inactive';
+  isHot?: boolean;
+  isRecommend?: boolean;
+}
+
+export interface CartItem {
+  product: Product;
+  quantity: number;
+}
+
+export interface OrderItem {
+  productId: number;
+  productName: string;
+  quantity: number;
+  price: number;
+}
+
+export interface EsimData {
+  iccid: string;
+  qrCode: string;
+  activationCode: string;
+  msisdn?: string;
+  lpa?: string;
+}
+
+export interface Order {
+  id: string;
+  orderNumber: string;
+  email: string;
+  items: OrderItem[];
+  totalAmount: number;
+  status: 'pending' | 'paid' | 'delivered' | 'refunded';
+  paymentMethod?: 'stripe' | 'usdt';
+  paymentTime?: string;
+  createdAt: string;
+  esimData?: EsimData[];
+}
+
+export interface ApiResponse<T> {
+  success: boolean;
+  data: T;
+  message?: string;
+}
+
+export interface ProductListResponse {
+  list: Product[];
+  total: number;
+  pageSize: number;
+  currentPage: number;
+}
