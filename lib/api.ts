@@ -13,7 +13,7 @@ function hmacSha256(message: string, secret: string): string {
 class B2BApiClient {
   private async request<T>(endpoint: string, method: "GET" | "POST" = "GET", data?: any): Promise<T> {
     const timestamp = Date.now().toString();
-    const nonce = Math.random().toString(36).substring(2, 18);
+    const nonce = Math.random().toString(36).substring(2, 20) + Date.now().toString(36);
     const body = data ? JSON.stringify(data) : "";
     
     // 签名顺序：method + endpoint + timestamp + nonce + body
