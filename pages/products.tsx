@@ -175,7 +175,7 @@ export default function ProductsPage() {
       }
     }
     loadProducts();
-  }, [viewMode, selectedItem, activeTab]);
+  }, [viewMode, selectedItem, activeTab, search]);
 
   // 导航处理
   const handleTabClick = (tabId: string) => {
