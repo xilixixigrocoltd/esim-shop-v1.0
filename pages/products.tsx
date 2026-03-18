@@ -68,11 +68,12 @@ export default function ProductsPage() {
     }
   }, [tab, country, region, planType, search]);
 
-  // 处理搜索
+  // 搜索提交处理
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
-    if (searchQuery.trim()) {
-      router.push(`/products?tab=all&search=${encodeURIComponent(searchQuery)}`);
+    const query = searchQuery.trim();
+    if (query) {
+      router.push(`/products?tab=all&search=${encodeURIComponent(query)}`);
     } else {
       router.push('/products?tab=all', undefined, { shallow: true });
     }
@@ -81,16 +82,21 @@ export default function ProductsPage() {
   // 加载产品
   useEffect(() => {
     async function loadProducts() {
+      // 如果没有任何筛选条件，不加载
+      if (!search && !viewMode && !activeTab) return;
+      
       try {
         setLoading(true);
         let endpoint = '';
         
         // 如果有搜索关键词（从 URL 参数），先获取国家列表判断是否是国家搜索
         if (search) {
+          console.log('[Products] 搜索:', search);
           try {
             // 获取国家列表（用于匹配国家）
             const countriesRes = await fetch('/api/countries');
             const countriesJson = await countriesRes.json();
+            console.log('[Products] 国家列表:', countriesJson.data?.length);
             
             if (countriesJson.success && countriesJson.data) {
               const query = (search as string).trim().toUpperCase();
@@ -105,10 +111,13 @@ export default function ProductsPage() {
                 c.en?.toLowerCase().includes(lowerQuery)
               );
               
+              console.log('[Products] 匹配国家:', matchedCountry);
+              
               if (matchedCountry) {
                 // 是国家搜索，调用国家 API（只返回 local 产品）
                 const res = await fetch(`/api/products/by-country/${matchedCountry.code}`);
                 const json = await res.json();
+                console.log('[Products] 国家产品数:', json.data?.length);
                 if (json.success && json.data) {
                   setProducts(json.data);
                 } else {
@@ -140,6 +149,7 @@ export default function ProductsPage() {
             (p.description && p.description.toLowerCase().includes(lowerQuery))
           );
           
+          console.log('[Products] 关键词搜索结果:', filtered.length);
           setProducts(filtered);
           setLoading(false);
           return;
