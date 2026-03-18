@@ -6,12 +6,12 @@ import { Globe, MapPin, Wifi, Phone } from 'lucide-react';
 import type { Product, Country } from '@/types';
 import ProductCard from '@/components/products/ProductCard';
 
-// 热门亚洲国家
+// 热门国家（根据实际产品数据）
 const POPULAR_COUNTRIES = [
-  { code: 'JP', name: '日本', flag: '🇯🇵' },
-  { code: 'KR', name: '韩国', flag: '🇰🇷' },
-  { code: 'CN', name: '中国', flag: '🇨🇳' },
-  { code: 'HK', name: '香港', flag: '🇭🇰' },
+  { code: 'BE', name: '比利时', flag: '🇧🇪' },
+  { code: 'ES', name: '西班牙', flag: '🇪🇸' },
+  { code: 'GB', name: '英国', flag: '🇬🇧' },
+  { code: 'US', name: '美国', flag: '🇺🇸' },
   { code: 'TH', name: '泰国', flag: '🇹🇭' },
   { code: 'VN', name: '越南', flag: '🇻🇳' },
   { code: 'SG', name: '新加坡', flag: '🇸🇬' },
