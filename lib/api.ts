@@ -109,6 +109,10 @@ class B2BApiClient {
   async getOrder(orderId: string): Promise<Order> {
     return this.request(`/api/v1/orders/${orderId}`);
   }
+
+  async getOrders(): Promise<Order[]> {
+    return this.request(`/api/v1/orders`);
+  }
 }
 
 export const b2bApi = new B2BApiClient();
