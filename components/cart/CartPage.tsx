@@ -41,7 +41,7 @@ export default function CartPage() {
   };
 
   const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
-  const totalPrice = cart.reduce((sum, item) => sum + parseFloat(item.product.price) * item.quantity, 0);
+  const totalPrice = cart.reduce((sum, item) => sum + Number(item.product.price || 0) * item.quantity, 0);
 
   if (loading) {
     return (
@@ -84,7 +84,7 @@ export default function CartPage() {
                 <p className="text-sm text-gray-500">
                   {formatDataSize(item.product.dataSize)} / {item.product.validDays}天
                 </p>
-                <p className="text-orange-600 font-semibold mt-1">{formatPrice(item.product.agentPrice)}</p>
+                <p className="text-orange-600 font-semibold mt-1">${Number(item.product.price || 0).toFixed(2)}</p>
               </div>
               <div className="flex flex-col items-end gap-2">
                 <button onClick={() => removeItem(item.product.id)} className="text-gray-400 hover:text-red-500">
