@@ -19,10 +19,17 @@ export default function PopularCountries() {
   useEffect(() => {
     async function loadCountries() {
       try {
-        const products = await b2bApi.getAllProducts();
-        const countryMap = new Map<string, CountryWithProducts>();
+        // 改用 API 端点，只获取前 10 页（1000 产品）
+        const allProducts: Product[] = [];
+        for (let page = 1; page <= 10; page++) {
+          const result = await b2bApi.getProducts(page, 100);
+          if (!result || !result.products) break;
+          allProducts.push(...result.products);
+          if (result.products.length < 100) break;
+        }
 
-        products.forEach((product: Product) => {
+        const countryMap = new Map<string, CountryWithProducts>();
+        allProducts.forEach((product: Product) => {
           if (product.type === 'local' && product.countries) {
             product.countries.forEach((country) => {
               if (!countryMap.has(country.code)) {

@@ -30,7 +30,7 @@ export default function ProductList({ countryCode }: ProductListProps) {
         } else {
           const res = await fetch('/api/products?limit=100');
           const json = await res.json();
-          data = json.success ? json.data.list : [];
+          data = json.success ? json.data : [];
         }
         setProducts(data);
       } catch (error) {
