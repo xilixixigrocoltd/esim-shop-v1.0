@@ -121,3 +121,10 @@ export function getCountryFlag(code: string): string {
     .map((char) => 127397 + char.charCodeAt(0));
   return String.fromCodePoint(...codePoints);
 }
+
+// 格式化流量显示
+export function formatDataSize(dataSize: number): string {
+  if (dataSize === 0) return '无限流量';
+  if (dataSize >= 1024) return `${(dataSize / 1024).toFixed(1)} GB`;
+  return `${dataSize} MB`;
+}
