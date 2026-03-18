@@ -6,16 +6,16 @@ import { Globe, MapPin, Wifi, Phone } from 'lucide-react';
 import type { Product, Country } from '@/types';
 import ProductCard from '@/components/products/ProductCard';
 
-// 热门国家（根据实际产品数据）
+// 热门国家（根据实际产品数量排序）
 const POPULAR_COUNTRIES = [
-  { code: 'BE', name: '比利时', flag: '🇧🇪' },
-  { code: 'ES', name: '西班牙', flag: '🇪🇸' },
-  { code: 'GB', name: '英国', flag: '🇬🇧' },
   { code: 'US', name: '美国', flag: '🇺🇸' },
-  { code: 'TH', name: '泰国', flag: '🇹🇭' },
-  { code: 'VN', name: '越南', flag: '🇻🇳' },
-  { code: 'SG', name: '新加坡', flag: '🇸🇬' },
-  { code: 'MY', name: '马来西亚', flag: '🇲🇾' },
+  { code: 'MX', name: '墨西哥', flag: '🇲🇽' },
+  { code: 'GB', name: '英国', flag: '🇬🇧' },
+  { code: 'NL', name: '荷兰', flag: '🇳🇱' },
+  { code: 'CA', name: '加拿大', flag: '🇨🇦' },
+  { code: 'AU', name: '澳大利亚', flag: '🇦🇺' },
+  { code: 'IE', name: '爱尔兰', flag: '🇮🇪' },
+  { code: 'HK', name: '香港', flag: '🇭🇰' },
 ];
 
 // 区域套餐 - 大洲
