@@ -22,9 +22,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       const result = await b2bApi.getProducts(page, 100);
       if (!result || !result.products) break;
       
-      // 筛选包含指定国家的所有产品（包含 local/regional/global）
+      // 筛选指定国家的本地产品（只返回 local 类型）
       const filtered = result.products.filter((p: any) => {
-        if (!p.countries) return false;
+        if (p.type !== 'local' || !p.countries) return false;
         return p.countries.some((c: any) => c.code?.toUpperCase() === countryCode.toUpperCase());
       });
       

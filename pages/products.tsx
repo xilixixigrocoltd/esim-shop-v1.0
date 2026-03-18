@@ -88,7 +88,7 @@ export default function ProductsPage() {
         // 如果有搜索关键词，先获取国家列表判断是否是国家搜索
         if (searchQuery) {
           try {
-            // 获取国家列表
+            // 获取国家列表（用于匹配国家）
             const countriesRes = await fetch('/api/countries');
             const countriesJson = await countriesRes.json();
             
@@ -106,7 +106,7 @@ export default function ProductsPage() {
               );
               
               if (matchedCountry) {
-                // 是国家搜索，直接调用国家 API（只返回 local 产品）
+                // 是国家搜索，调用国家 API（只返回 local 产品）
                 const res = await fetch(`/api/products/by-country/${matchedCountry.code}`);
                 const json = await res.json();
                 if (json.success && json.data) {
@@ -122,7 +122,7 @@ export default function ProductsPage() {
             console.error('Failed to fetch countries for search:', error);
           }
           
-          // 不是国家搜索，获取所有产品进行关键词搜索
+          // 不是国家搜索，获取所有产品进行关键词搜索（产品名称/描述）
           const allProducts: Product[] = [];
           for (let page = 1; page <= 10; page++) {
             const res = await fetch(`/api/products?page=${page}&pageSize=100`);
@@ -132,17 +132,12 @@ export default function ProductsPage() {
             if (json.data.length < 100) break;
           }
           
-          // 前端搜索过滤（产品名称/描述/国家）
+          // 前端搜索过滤（产品名称/描述）
           const lowerQuery = searchQuery.toLowerCase();
           const filtered = allProducts.filter((p: Product) => 
             p.name.toLowerCase().includes(lowerQuery) ||
             p.nameEn.toLowerCase().includes(lowerQuery) ||
-            (p.description && p.description.toLowerCase().includes(lowerQuery)) ||
-            (p.countries && p.countries.some(c => 
-              (c.cn && c.cn.toLowerCase().includes(lowerQuery)) ||
-              (c.en && c.en.toLowerCase().includes(lowerQuery)) ||
-              (c.code && c.code.toLowerCase().includes(lowerQuery))
-            ))
+            (p.description && p.description.toLowerCase().includes(lowerQuery))
           );
           
           setProducts(filtered);
