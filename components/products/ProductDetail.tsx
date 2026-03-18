@@ -64,8 +64,8 @@ export default function ProductDetail({ product }: ProductDetailProps) {
           </div>
 
           <div className="flex items-baseline gap-2 mb-6">
-            <span className="text-4xl font-bold text-orange-600">{formatPrice(product.price)}</span>
-            <span className="text-gray-400 line-through">{formatPrice(product.price)}</span>
+            <span className="text-4xl font-bold text-orange-600">${Number(product.price || 0).toFixed(2)}</span>
+            <span className="text-gray-400 line-through">${(Number(product.price || 0) * 1.5).toFixed(2)}</span>
           </div>
         </div>
       </div>
@@ -135,7 +135,7 @@ export default function ProductDetail({ product }: ProductDetailProps) {
 
           <div className="flex-1 text-right">
             <p className="text-sm text-gray-500">合计</p>
-            <p className="text-xl font-bold text-orange-600">{formatPrice(parseFloat(product.price) * quantity)}</p>
+            <p className="text-xl font-bold text-orange-600">${(Number(product.price || 0) * quantity).toFixed(2)}</p>
           </div>
 
           <button
