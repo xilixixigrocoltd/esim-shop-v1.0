@@ -15,31 +15,27 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   }
 
   try {
-    // 使用新 API 获取所有产品
-    const allProducts = await b2bApi.getAllProducts();
-    console.log(`[countries] 最终获取${allProducts.length}个产品`);
+    // 只获取前 10 页（1000 产品）来提取国家列表，避免超时
+    const allProducts: Product[] = [];
+    for (let page = 1; page <= 10; page++) {
+      const result = await b2bApi.getProducts(page, 100);
+      allProducts.push(...result.products);
+      if (result.products.length < 100) break;
+    }
+    
+    console.log(`[countries] 获取到 ${allProducts.length} 个产品`);
 
     const countryMap = new Map<string, CountryWithProducts>();
-    console.log(`[countries] 获取到 ${allProducts.length} 个产品`);
-    console.log(`[countries] 第一个产品类型：${allProducts[0]?.type}`);
-    console.log(`[countries] 第一个产品国家：${JSON.stringify(allProducts[0]?.countries)}`);
 
     allProducts.forEach((product) => {
-      console.log(`[countries] 产品 ${product.id}: type=${product.type}, countries=${!!product.countries}`);
       if (product.type === 'local' && product.countries) {
         product.countries.forEach((country: any) => {
-          // B2B API 返回的字段是 cn/en/code，不是 name/nameEn/code
           const name = country.cn || country.name || 'Unknown';
           const nameEn = country.en || country.nameEn || 'Unknown';
           const code = country.code;
           
           if (!countryMap.has(code)) {
-            countryMap.set(code, {
-              code,
-              name,
-              nameEn,
-              productCount: 0,
-            });
+            countryMap.set(code, { code, name, nameEn, productCount: 0 });
           }
           countryMap.get(code)!.productCount++;
         });
@@ -52,9 +48,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       .filter(c => c.name)
       .sort((a, b) => (a.name || '').localeCompare(b.name || '', 'zh-CN'));
     
-    console.log(`[countries] 最终国家数：${countries.length}`);
-    
-    res.setHeader('Cache-Control', 'no-store, max-age=0');
+    res.setHeader('Cache-Control', 'public, s-maxage=600, stale-while-revalidate');
     return res.status(200).json({ success: true, data: countries });
   } catch (error: any) {
     console.error('Failed to fetch countries:', error?.message || error);

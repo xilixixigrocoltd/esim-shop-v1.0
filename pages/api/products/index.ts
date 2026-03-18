@@ -7,19 +7,14 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   }
 
   try {
-    const { page = '1', pageSize = '100', country } = req.query;
+    const { page = '1', pageSize = '100' } = req.query;
+    const response = await b2bApi.getProducts(Number(page), Number(pageSize));
+    const products = response.products;
 
-    let products;
-    if (country) {
-      products = await b2bApi.getProductsByCountry(country as string);
-    } else {
-      const response = await b2bApi.getProducts(Number(page), Number(pageSize));
-      products = response.products;
-    }
-
+    res.setHeader('Cache-Control', 'public, s-maxage=300, stale-while-revalidate');
     return res.status(200).json({ success: true, data: products });
-  } catch (error) {
+  } catch (error: any) {
     console.error('Failed to fetch products:', error);
-    return res.status(500).json({ error: 'Internal server error' });
+    return res.status(500).json({ error: `获取产品失败：${error.message}` });
   }
 }

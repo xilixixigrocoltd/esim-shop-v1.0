@@ -3,25 +3,11 @@ const API_KEY = process.env.API_KEY || "";
 const API_SECRET = process.env.API_SECRET || "";
 
 import type { Product, ProductListResponse, Order } from "@/types";
+import crypto from "crypto";
 
-// HMAC-SHA256 签名
-async function hmacSha256(message: string, secret: string): Promise<string> {
-  const encoder = new TextEncoder();
-  const keyData = encoder.encode(secret);
-  const messageData = encoder.encode(message);
-  
-  const cryptoKey = await crypto.subtle.importKey(
-    "raw",
-    keyData,
-    { name: "HMAC", hash: "SHA-256" },
-    false,
-    ["sign"]
-  );
-  
-  const signature = await crypto.subtle.sign("HMAC", cryptoKey, messageData);
-  return Array.from(new Uint8Array(signature))
-    .map(b => b.toString(16).padStart(2, "0"))
-    .join("");
+// HMAC-SHA256 签名 (Node.js)
+function hmacSha256(message: string, secret: string): string {
+  return crypto.createHmac("sha256", secret).update(message).digest("hex");
 }
 
 class B2BApiClient {
@@ -94,13 +80,18 @@ class B2BApiClient {
   }
 
   async getProductsByCountry(countryCode: string): Promise<Product[]> {
-    const allProducts = await this.getAllProducts();
-    
-    return allProducts.filter(
-      (p: Product) =>
-        p.type === "local" &&
-        p.countries?.some((c) => c.code.toLowerCase() === countryCode.toLowerCase())
-    );
+    const products: Product[] = [];
+    for (let page = 1; page <= 28; page++) {
+      const result = await this.getProducts(page, 100);
+      const filtered = result.products.filter(
+        (p: Product) =>
+          p.type === "local" &&
+          p.countries?.some((c) => c.code.toLowerCase() === countryCode.toLowerCase())
+      );
+      products.push(...filtered);
+      if (result.products.length < 100) break;
+    }
+    return products;
   }
 
   async createOrder(items: Array<{ id: number; quantity: number }>): Promise<Order> {
