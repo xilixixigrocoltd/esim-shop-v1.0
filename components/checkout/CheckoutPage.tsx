@@ -25,7 +25,7 @@ export default function CheckoutPage() {
     setCart(savedCart);
   }, [router]);
 
-  const totalPrice = cart.reduce((sum, item) => sum + parseFloat(item.product.agentPrice) * item.quantity, 0);
+  const totalPrice = cart.reduce((sum, item) => sum + parseFloat(item.product.price) * item.quantity, 0);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();

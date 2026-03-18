@@ -66,6 +66,17 @@ class B2BApiClient {
       body: JSON.stringify({ items }),
     });
   }
+
+  async getOrders(): Promise<Order[]> {
+    // 获取最近订单列表（实际项目中可能需要分页）
+    const result = await this.request<{ list: Order[] }>("/agent/orders");
+    return result.list || [];
+  }
+
+  async getOrderById(orderId: string): Promise<Order | null> {
+    const orders = await this.getOrders();
+    return orders.find(o => o.orderNumber === orderId) || null;
+  }
 }
 
 export const b2bApi = new B2BApiClient();
