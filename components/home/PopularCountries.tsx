@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { ChevronRight } from 'lucide-react';
-import { b2bApi, getCountryFlag } from '@/lib/api';
+import { getCountryFlag } from '@/lib/api';
 import type { Product } from '@/types';
 
 interface CountryWithProducts {
@@ -22,10 +22,11 @@ export default function PopularCountries() {
         // 改用 API 端点，只获取前 10 页（1000 产品）
         const allProducts: Product[] = [];
         for (let page = 1; page <= 10; page++) {
-          const result = await b2bApi.getProducts(page, 100);
-          if (!result || !result.products) break;
-          allProducts.push(...result.products);
-          if (result.products.length < 100) break;
+          const res = await fetch(`/api/products?page=${page}&pageSize=100`);
+          const json = await res.json();
+          if (!json.success || !json.data) break;
+          allProducts.push(...json.data);
+          if (json.data.length < 100) break;
         }
 
         const countryMap = new Map<string, CountryWithProducts>();

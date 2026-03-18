@@ -3,7 +3,7 @@
 import { useState, useEffect, useMemo } from 'react';
 import { useRouter } from 'next/router';
 import { ChevronLeft, Filter } from 'lucide-react';
-import { b2bApi, getCountryFlag } from '@/lib/api';
+import { getCountryFlag } from '@/lib/api';
 import { DATA_SIZE_OPTIONS, VALID_DAYS_OPTIONS } from '@/lib/constants';
 import ProductCard from './ProductCard';
 import type { Product } from '@/types';

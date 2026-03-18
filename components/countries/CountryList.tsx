@@ -3,9 +3,9 @@
 import { useState, useEffect, useMemo } from 'react';
 import Link from 'next/link';
 import { Search, Globe } from 'lucide-react';
-import { b2bApi, getCountryFlag } from '@/lib/api';
+import { getCountryFlag } from '@/lib/api';
 import { REGIONS } from '@/lib/constants';
-import type { Product, Country } from '@/types';
+import type { Country } from '@/types';
 
 interface CountryWithProducts {
   code: string;

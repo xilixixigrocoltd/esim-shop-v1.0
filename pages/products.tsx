@@ -2,7 +2,6 @@
 
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
-import { b2bApi } from '@/lib/api';
 import type { Product } from '@/types';
 import ProductCard from '@/components/products/ProductCard';
 
@@ -30,37 +29,41 @@ export default function ProductsPage() {
         if (activeTab === 'all') {
           // 全部：获取前 10 页
           for (let page = 1; page <= 10; page++) {
-            const result = await b2bApi.getProducts(page, 100);
-            if (!result || !result.products) break;
-            allProducts.push(...result.products);
-            if (result.products.length < 100) break;
+            const res = await fetch(`/api/products?page=${page}&pageSize=100`);
+            const json = await res.json();
+            if (!json.success || !json.data) break;
+            allProducts.push(...json.data);
+            if (json.data.length < 100) break;
           }
         } else if (activeTab === 'popular') {
           // 热门国家：获取前 10 页，筛选 local 类型
           for (let page = 1; page <= 10; page++) {
-            const result = await b2bApi.getProducts(page, 100);
-            if (!result || !result.products) break;
-            const localProducts = result.products.filter(p => p.type === 'local');
+            const res = await fetch(`/api/products?page=${page}&pageSize=100`);
+            const json = await res.json();
+            if (!json.success || !json.data) break;
+            const localProducts = json.data.filter((p: Product) => p.type === 'local');
             allProducts.push(...localProducts);
-            if (result.products.length < 100) break;
+            if (json.data.length < 100) break;
           }
         } else if (activeTab === 'regional') {
           // 区域：获取全部，筛选 regional 类型
           for (let page = 1; page <= 28; page++) {
-            const result = await b2bApi.getProducts(page, 100);
-            if (!result || !result.products) break;
-            const regionalProducts = result.products.filter(p => p.type === 'regional');
+            const res = await fetch(`/api/products?page=${page}&pageSize=100`);
+            const json = await res.json();
+            if (!json.success || !json.data) break;
+            const regionalProducts = json.data.filter((p: Product) => p.type === 'regional');
             allProducts.push(...regionalProducts);
-            if (result.products.length < 100) break;
+            if (json.data.length < 100) break;
           }
         } else if (activeTab === 'global') {
           // 全球：获取全部，筛选 global 类型
           for (let page = 1; page <= 28; page++) {
-            const result = await b2bApi.getProducts(page, 100);
-            if (!result || !result.products) break;
-            const globalProducts = result.products.filter(p => p.type === 'global');
+            const res = await fetch(`/api/products?page=${page}&pageSize=100`);
+            const json = await res.json();
+            if (!json.success || !json.data) break;
+            const globalProducts = json.data.filter((p: Product) => p.type === 'global');
             allProducts.push(...globalProducts);
-            if (result.products.length < 100) break;
+            if (json.data.length < 100) break;
           }
         }
         
