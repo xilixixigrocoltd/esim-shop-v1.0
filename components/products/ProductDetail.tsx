@@ -2,8 +2,8 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/router';
-import { Minus, Plus, ShoppingCart, Check, Wifi, Clock, Globe, Info } from 'lucide-react';
-import { storage, CART_KEY, formatPrice } from '@/lib/utils';
+import { Minus, Plus, ShoppingCart, Check, Wifi, Clock, Globe, Info, Phone } from 'lucide-react';
+import { storage, CART_KEY } from '@/lib/utils';
 import { formatDataSize, getCountryFlag } from '@/lib/api';
 import type { Product, CartItem } from '@/types';
 
@@ -48,6 +48,22 @@ export default function ProductDetail({ product }: ProductDetailProps) {
 
           <h1 className="text-2xl md:text-3xl font-bold text-gray-900 mb-4">{product.name}</h1>
 
+          {/* 套餐类型标签 */}
+          {(() => {
+            const hasOnlyData = product.features?.some(f => f.includes('仅数据') || f.includes('仅流量'));
+            const planType = hasOnlyData 
+              ? { type: '纯数据套餐', icon: Wifi, color: 'text-blue-600 bg-blue-50 border-blue-200' }
+              : { type: '数据 + 语音 + 短信', icon: Phone, color: 'text-green-600 bg-green-50 border-green-200' };
+            const PlanIcon = planType.icon;
+            
+            return (
+              <div className={`inline-flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium mb-4 border ${planType.color}`}>
+                <PlanIcon className="w-4 h-4" />
+                <span>{planType.type}</span>
+              </div>
+            );
+          })()}
+
           <div className="flex flex-wrap gap-4 mb-6">
             <div className="flex items-center gap-2 px-4 py-2 bg-orange-50 rounded-lg">
               <Wifi className="w-5 h-5 text-orange-500" />
@@ -57,10 +73,12 @@ export default function ProductDetail({ product }: ProductDetailProps) {
               <Clock className="w-5 h-5 text-orange-500" />
               <span className="font-medium">{product.validDays} 天</span>
             </div>
-            <div className="flex items-center gap-2 px-4 py-2 bg-orange-50 rounded-lg">
-              <Globe className="w-5 h-5 text-orange-500" />
-              <span className="font-medium">{product.countries?.length || 1} 个国家/地区</span>
-            </div>
+            {product.type !== 'local' && (
+              <div className="flex items-center gap-2 px-4 py-2 bg-orange-50 rounded-lg">
+                <Globe className="w-5 h-5 text-orange-500" />
+                <span className="font-medium">{product.countries?.length || 1} 个国家/地区</span>
+              </div>
+            )}
           </div>
 
           <div className="flex items-baseline gap-2 mb-6">

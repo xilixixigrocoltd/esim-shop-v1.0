@@ -6,6 +6,18 @@ import { ChevronRight } from 'lucide-react';
 import { getCountryFlag } from '@/lib/api';
 import type { Product } from '@/types';
 
+// 热门亚洲国家/地区（固定列表）
+const POPULAR_COUNTRY_CODES = [
+  'JP', // 日本
+  'KR', // 韩国
+  'CN', // 中国
+  'HK', // 香港
+  'TH', // 泰国
+  'VN', // 越南
+  'SG', // 新加坡
+  'MY', // 马来西亚
+];
+
 interface CountryWithProducts {
   code: string;
   name: string;
@@ -19,7 +31,7 @@ export default function PopularCountries() {
   useEffect(() => {
     async function loadCountries() {
       try {
-        // 改用 API 端点，只获取前 10 页（1000 产品）
+        // 获取前 10 页产品（1000 款）
         const allProducts: Product[] = [];
         for (let page = 1; page <= 10; page++) {
           const res = await fetch(`/api/products?page=${page}&pageSize=100`);
@@ -29,19 +41,34 @@ export default function PopularCountries() {
           if (json.data.length < 100) break;
         }
 
+        // 统计热门国家的产品数量
         const countryMap = new Map<string, CountryWithProducts>();
+        const popularNames: Record<string, string> = {
+          'JP': '日本', 'KR': '韩国', 'CN': '中国', 'HK': '香港',
+          'TH': '泰国', 'VN': '越南', 'SG': '新加坡', 'MY': '马来西亚',
+        };
+
+        // 初始化热门国家
+        POPULAR_COUNTRY_CODES.forEach(code => {
+          countryMap.set(code, { code, name: popularNames[code], productCount: 0 });
+        });
+
+        // 统计产品数量
         allProducts.forEach((product: Product) => {
           if (product.type === 'local' && product.countries) {
             product.countries.forEach((country) => {
-              if (!countryMap.has(country.code)) {
-                countryMap.set(country.code, { code: country.code, name: country.name, productCount: 0 });
+              if (countryMap.has(country.code)) {
+                countryMap.get(country.code)!.productCount++;
               }
-              countryMap.get(country.code)!.productCount++;
             });
           }
         });
 
-        const sorted = Array.from(countryMap.values()).sort((a, b) => b.productCount - a.productCount).slice(0, 8);
+        // 按产品数量排序，过滤掉 0 产品的国家
+        const sorted = Array.from(countryMap.values())
+          .filter(c => c.productCount > 0)
+          .sort((a, b) => b.productCount - a.productCount);
+
         setCountries(sorted);
       } catch (error) {
         console.error('Failed to load countries:', error);
