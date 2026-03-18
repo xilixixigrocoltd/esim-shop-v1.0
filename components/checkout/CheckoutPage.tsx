@@ -95,7 +95,7 @@ export default function CheckoutPage() {
                   </p>
                 </div>
                 <div className="text-right">
-                  <p className="font-semibold">{formatPrice(parseFloat(item.product.price) * item.quantity)}</p>
+                  <p className="font-semibold">${(Number(item.product.price || 0) * item.quantity).toFixed(2)}</p>
                 </div>
               </div>
             ))}
