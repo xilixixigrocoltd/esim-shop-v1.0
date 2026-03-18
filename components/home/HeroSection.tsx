@@ -52,7 +52,7 @@ export default function HeroSection() {
           </form>
 
           <div className="flex flex-col sm:flex-row gap-4 justify-center mb-16">
-            <a href="/countries" className="px-8 py-4 bg-gradient-to-r from-orange-500 to-red-500 text-white font-semibold rounded-xl hover:opacity-90">
+            <a href="/products?tab=all" className="px-8 py-4 bg-gradient-to-r from-orange-500 to-red-500 text-white font-semibold rounded-xl hover:opacity-90">
               立即选购
             </a>
             <a href="/help" className="px-8 py-4 bg-white/10 text-white font-semibold rounded-xl hover:bg-white/20 border border-white/20">
