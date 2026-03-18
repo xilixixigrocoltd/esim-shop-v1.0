@@ -104,7 +104,7 @@ export default function ProductsPage() {
             products = products.filter((p: Product) => 
               p.name.toLowerCase().includes(query) ||
               p.nameEn.toLowerCase().includes(query) ||
-              p.description.toLowerCase().includes(query) ||
+              (p.description && p.description.toLowerCase().includes(query)) ||
               (p.countries && p.countries.some(c => 
                 c.cn.toLowerCase().includes(query) ||
                 c.en.toLowerCase().includes(query) ||
