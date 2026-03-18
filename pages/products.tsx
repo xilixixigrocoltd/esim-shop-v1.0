@@ -1,12 +1,10 @@
 'use client';
 
-import { useState, useEffect, useMemo } from 'react';
+import { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import { b2bApi } from '@/lib/api';
 import type { Product } from '@/types';
 import ProductCard from '@/components/products/ProductCard';
-import Header from '@/components/ui/Header';
-import Footer from '@/components/ui/Footer';
 
 export default function ProductsPage() {
   const router = useRouter();
@@ -15,19 +13,20 @@ export default function ProductsPage() {
   const [loading, setLoading] = useState(true);
   const [activeTab, setActiveTab] = useState('all');
 
+  // 同步 URL 参数到 activeTab
   useEffect(() => {
-    if (tab) {
+    if (tab && ['all', 'popular', 'regional', 'global'].includes(tab as string)) {
       setActiveTab(tab as string);
     }
   }, [tab]);
 
+  // 根据 activeTab 加载产品
   useEffect(() => {
     async function loadProducts() {
       try {
         setLoading(true);
         const allProducts: Product[] = [];
         
-        // 根据标签页获取不同类型的产品
         if (activeTab === 'all') {
           // 全部：获取前 10 页
           for (let page = 1; page <= 10; page++) {
@@ -37,8 +36,8 @@ export default function ProductsPage() {
             if (result.products.length < 100) break;
           }
         } else if (activeTab === 'popular') {
-          // 热门国家：获取前 5 页，然后筛选 local 类型
-          for (let page = 1; page <= 5; page++) {
+          // 热门国家：获取前 10 页，筛选 local 类型
+          for (let page = 1; page <= 10; page++) {
             const result = await b2bApi.getProducts(page, 100);
             if (!result || !result.products) break;
             const localProducts = result.products.filter(p => p.type === 'local');
@@ -46,7 +45,7 @@ export default function ProductsPage() {
             if (result.products.length < 100) break;
           }
         } else if (activeTab === 'regional') {
-          // 区域：只获取 regional 类型
+          // 区域：获取全部，筛选 regional 类型
           for (let page = 1; page <= 28; page++) {
             const result = await b2bApi.getProducts(page, 100);
             if (!result || !result.products) break;
@@ -55,7 +54,7 @@ export default function ProductsPage() {
             if (result.products.length < 100) break;
           }
         } else if (activeTab === 'global') {
-          // 全球：只获取 global 类型
+          // 全球：获取全部，筛选 global 类型
           for (let page = 1; page <= 28; page++) {
             const result = await b2bApi.getProducts(page, 100);
             if (!result || !result.products) break;
@@ -65,8 +64,9 @@ export default function ProductsPage() {
           }
         }
         
+        console.log(`[products] Loaded ${allProducts.length} products for tab: ${activeTab}`);
         setProducts(allProducts);
-      } catch (error) {
+      } catch (error: any) {
         console.error('Failed to load products:', error);
       } finally {
         setLoading(false);
@@ -82,65 +82,75 @@ export default function ProductsPage() {
     { id: 'global', label: '全球' },
   ];
 
+  const handleTabClick = (tabId: string) => {
+    setActiveTab(tabId);
+    router.push(`/products?tab=${tabId}`, undefined, { shallow: true });
+  };
+
   return (
-    <>
-      <Header />
-      <div className="min-h-screen bg-gray-50 py-8">
+    <div className="min-h-screen bg-gray-50">
+      {/* 顶部标签页导航 */}
+      <div className="sticky top-0 z-50 bg-white border-b border-gray-200 shadow-sm">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          {/* 标签页导航 */}
-          <div className="flex flex-wrap justify-center gap-2 mb-8">
-            {tabs.map((t) => (
-              <button
-                key={t.id}
-                onClick={() => {
-                  setActiveTab(t.id);
-                  router.push(`/products?tab=${t.id}`, undefined, { shallow: true });
-                }}
-                className={`px-6 py-3 rounded-full font-medium transition-all ${
-                  activeTab === t.id
-                    ? 'bg-orange-500 text-white shadow-md'
-                    : 'bg-white text-gray-600 hover:bg-gray-100 border border-gray-200'
-                }`}
-              >
-                {t.label}
-              </button>
-            ))}
-          </div>
-
-          {/* 产品数量 */}
-          <div className="text-center mb-6">
-            <p className="text-gray-600">
-              {loading ? '加载中...' : `共 ${products.length} 款产品`}
-            </p>
-          </div>
-
-          {/* 产品列表 */}
-          {loading ? (
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
-              {[...Array(8)].map((_, i) => (
-                <div key={i} className="bg-white rounded-xl p-4 border border-gray-200 animate-pulse">
-                  <div className="h-48 bg-gray-200 rounded-lg mb-4" />
-                  <div className="h-4 bg-gray-200 rounded w-3/4 mb-2" />
-                  <div className="h-4 bg-gray-200 rounded w-1/2" />
-                </div>
+          <div className="flex items-center justify-center py-4">
+            <div className="flex flex-wrap justify-center gap-2">
+              {tabs.map((t) => (
+                <button
+                  key={t.id}
+                  onClick={() => handleTabClick(t.id)}
+                  className={`px-6 py-2.5 rounded-full font-medium transition-all ${
+                    activeTab === t.id
+                      ? 'bg-gradient-to-r from-orange-500 to-red-500 text-white shadow-md'
+                      : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+                  }`}
+                >
+                  {t.label}
+                </button>
               ))}
             </div>
-          ) : (
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
-              {products.map((product) => (
-                <ProductCard key={product.id} product={product} />
-              ))}
-            </div>
-          )}
-
-          {products.length === 0 && !loading && (
-            <div className="text-center py-12">
-              <p className="text-gray-500">该分类下暂无产品</p>
-            </div>
-          )}
+          </div>
         </div>
       </div>
-      <Footer />
-    </>
+
+      {/* 产品列表 */}
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        {/* 产品数量统计 */}
+        <div className="mb-6 text-center">
+          <p className="text-gray-600">
+            {loading ? (
+              <span className="inline-flex items-center gap-2">
+                <span className="w-4 h-4 border-2 border-orange-500 border-t-transparent rounded-full animate-spin" />
+                加载中...
+              </span>
+            ) : (
+              `共 ${products.length} 款产品`
+            )}
+          </p>
+        </div>
+
+        {/* 产品网格 */}
+        {loading ? (
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+            {[...Array(8)].map((_, i) => (
+              <div key={i} className="bg-white rounded-xl p-4 border border-gray-200 animate-pulse">
+                <div className="h-48 bg-gray-200 rounded-lg mb-4" />
+                <div className="h-4 bg-gray-200 rounded w-3/4 mb-2" />
+                <div className="h-4 bg-gray-200 rounded w-1/2" />
+              </div>
+            ))}
+          </div>
+        ) : products.length > 0 ? (
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+            {products.map((product) => (
+              <ProductCard key={product.id} product={product} />
+            ))}
+          </div>
+        ) : (
+          <div className="text-center py-16">
+            <p className="text-gray-500 text-lg">该分类下暂无产品</p>
+          </div>
+        )}
+      </div>
+    </div>
   );
 }
