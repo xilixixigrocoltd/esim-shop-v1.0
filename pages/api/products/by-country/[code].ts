@@ -13,10 +13,12 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   }
 
   try {
+    console.log(`[by-country] 请求国家：${code}`);
     const products = await b2bApi.getProductsByCountry(code);
+    console.log(`[by-country] 找到产品数：${products.length}`);
     return res.status(200).json({ success: true, data: products });
-  } catch (error) {
-    console.error('Failed to fetch products by country:', error);
-    return res.status(500).json({ success: false, error: '获取产品失败' });
+  } catch (error: any) {
+    console.error('Failed to fetch products by country:', error?.message || error);
+    return res.status(500).json({ success: false, error: `获取产品失败：${error?.message || '未知错误'}` });
   }
 }
