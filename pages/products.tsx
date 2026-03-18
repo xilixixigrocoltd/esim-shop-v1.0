@@ -75,7 +75,32 @@ export default function ProductsPage() {
         
         // 如果有搜索关键词，获取所有产品后在前端过滤
         if (searchQuery) {
-          endpoint = '/api/products?page=1&pageSize=100';
+          // 获取所有产品（28 页）用于搜索
+          const allProducts: Product[] = [];
+          for (let page = 1; page <= 28; page++) {
+            const res = await fetch(`/api/products?page=${page}&pageSize=100`);
+            const json = await res.json();
+            if (!json.success || !json.data || json.data.length === 0) break;
+            allProducts.push(...json.data);
+            if (json.data.length < 100) break;
+          }
+          
+          // 前端搜索过滤
+          const query = searchQuery.toLowerCase();
+          const filtered = allProducts.filter((p: Product) => 
+            p.name.toLowerCase().includes(query) ||
+            p.nameEn.toLowerCase().includes(query) ||
+            (p.description && p.description.toLowerCase().includes(query)) ||
+            (p.countries && p.countries.some(c => 
+              (c.cn && c.cn.toLowerCase().includes(query)) ||
+              (c.en && c.en.toLowerCase().includes(query)) ||
+              (c.code && c.code.toLowerCase().includes(query))
+            ))
+          );
+          
+          setProducts(filtered);
+          setLoading(false);
+          return;
         } else if (viewMode === 'country' && selectedItem) {
           endpoint = `/api/products/by-country/${selectedItem}`;
         } else if (viewMode === 'region' && selectedItem) {
@@ -96,24 +121,7 @@ export default function ProductsPage() {
         const json = await res.json();
         
         if (json.success && json.data) {
-          let products = json.data;
-          
-          // 前端搜索过滤
-          if (searchQuery) {
-            const query = searchQuery.toLowerCase();
-            products = products.filter((p: Product) => 
-              p.name.toLowerCase().includes(query) ||
-              p.nameEn.toLowerCase().includes(query) ||
-              (p.description && p.description.toLowerCase().includes(query)) ||
-              (p.countries && p.countries.some(c => 
-                (c.cn && c.cn.toLowerCase().includes(query)) ||
-                (c.en && c.en.toLowerCase().includes(query)) ||
-                (c.code && c.code.toLowerCase().includes(query))
-              ))
-            );
-          }
-          
-          setProducts(products);
+          setProducts(json.data);
         } else {
           setProducts([]);
         }
@@ -290,19 +298,38 @@ export default function ProductsPage() {
         ) : (
           /* 产品列表 */
           <div>
+            {/* 搜索提示 */}
+            {searchQuery && (
+              <div className="mb-6 flex items-center justify-between bg-white rounded-xl p-4 border border-gray-200">
+                <div className="flex items-center gap-3">
+                  <span className="text-gray-600">搜索结果：</span>
+                  <span className="font-semibold text-orange-600">"{searchQuery}"</span>
+                  <span className="text-gray-500">（{products.length} 款产品）</span>
+                </div>
+                <button
+                  onClick={() => router.push('/products?tab=all', undefined, { shallow: true })}
+                  className="px-4 py-2 text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-lg transition-colors"
+                >
+                  清除搜索
+                </button>
+              </div>
+            )}
+
             {/* 产品数量统计 */}
-            <div className="mb-6 text-center">
-              <p className="text-gray-600">
-                {loading ? (
-                  <span className="inline-flex items-center gap-2">
-                    <span className="w-4 h-4 border-2 border-orange-500 border-t-transparent rounded-full animate-spin" />
-                    加载中...
-                  </span>
-                ) : (
-                  `共 ${products.length} 款产品`
-                )}
-              </p>
-            </div>
+            {!searchQuery && (
+              <div className="mb-6 text-center">
+                <p className="text-gray-600">
+                  {loading ? (
+                    <span className="inline-flex items-center gap-2">
+                      <span className="w-4 h-4 border-2 border-orange-500 border-t-transparent rounded-full animate-spin" />
+                      加载中...
+                    </span>
+                  ) : (
+                    `共 ${products.length} 款产品`
+                  )}
+                </p>
+              </div>
+            )}
 
             {/* 产品网格 */}
             {loading ? (
@@ -323,7 +350,14 @@ export default function ProductsPage() {
               </div>
             ) : (
               <div className="text-center py-16">
-                <p className="text-gray-500 text-lg">该分类下暂无产品</p>
+                {searchQuery ? (
+                  <>
+                    <p className="text-gray-500 text-lg mb-2">未找到与 "{searchQuery}" 相关的产品</p>
+                    <p className="text-gray-400 text-sm">试试其他国家或关键词</p>
+                  </>
+                ) : (
+                  <p className="text-gray-500 text-lg">该分类下暂无产品</p>
+                )}
               </div>
             )}
           </div>
