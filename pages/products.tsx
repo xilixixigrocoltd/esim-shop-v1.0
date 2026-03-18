@@ -73,11 +73,50 @@ export default function ProductsPage() {
         setLoading(true);
         let endpoint = '';
         
-        // 如果有搜索关键词，获取所有产品后在前端过滤
+        // 如果有搜索关键词，先判断是否是国家搜索
         if (searchQuery) {
-          // 获取所有产品（28 页）用于搜索
+          // 尝试匹配国家代码或名称
+          const query = searchQuery.trim().toUpperCase();
+          const countryMap: Record<string, string> = {
+            'JP': 'JP', '日本': 'JP', 'JAPAN': 'JP',
+            'KR': 'KR', '韩国': 'KR', 'KOREA': 'KR',
+            'CN': 'CN', '中国': 'CN', 'CHINA': 'CN',
+            'HK': 'HK', '香港': 'HK', 'HONGKONG': 'HK',
+            'US': 'US', '美国': 'US', 'USA': 'US', 'UNITED STATES': 'US',
+            'GB': 'GB', '英国': 'GB', 'UK': 'GB', 'UNITED KINGDOM': 'GB',
+            'TH': 'TH', '泰国': 'TH', 'THAILAND': 'TH',
+            'VN': 'VN', '越南': 'VN', 'VIETNAM': 'VN',
+            'SG': 'SG', '新加坡': 'SG', 'SINGAPORE': 'SG',
+            'MY': 'MY', '马来西亚': 'MY', 'MALAYSIA': 'MY',
+            'MX': 'MX', '墨西哥': 'MX', 'MEXICO': 'MX',
+            'CA': 'CA', '加拿大': 'CA', 'CANADA': 'CA',
+            'AU': 'AU', '澳大利亚': 'AU', 'AUSTRALIA': 'AU',
+            'NL': 'NL', '荷兰': 'NL', 'NETHERLANDS': 'NL',
+            'IE': 'IE', '爱尔兰': 'IE', 'IRELAND': 'IE',
+            'FR': 'FR', '法国': 'FR', 'FRANCE': 'FR',
+            'DE': 'DE', '德国': 'DE', 'GERMANY': 'DE',
+            'IT': 'IT', '意大利': 'IT', 'ITALY': 'IT',
+            'ES': 'ES', '西班牙': 'ES', 'SPAIN': 'ES',
+          };
+          
+          const countryCode = countryMap[query] || countryMap[searchQuery.toUpperCase()];
+          
+          if (countryCode) {
+            // 是国家搜索，直接调用国家 API
+            const res = await fetch(`/api/products/by-country/${countryCode}`);
+            const json = await res.json();
+            if (json.success && json.data) {
+              setProducts(json.data);
+            } else {
+              setProducts([]);
+            }
+            setLoading(false);
+            return;
+          }
+          
+          // 不是国家搜索，获取所有产品进行关键词搜索
           const allProducts: Product[] = [];
-          for (let page = 1; page <= 28; page++) {
+          for (let page = 1; page <= 10; page++) {
             const res = await fetch(`/api/products?page=${page}&pageSize=100`);
             const json = await res.json();
             if (!json.success || !json.data || json.data.length === 0) break;
@@ -85,17 +124,12 @@ export default function ProductsPage() {
             if (json.data.length < 100) break;
           }
           
-          // 前端搜索过滤
-          const query = searchQuery.toLowerCase();
+          // 前端搜索过滤（产品名称/描述）
+          const lowerQuery = searchQuery.toLowerCase();
           const filtered = allProducts.filter((p: Product) => 
-            p.name.toLowerCase().includes(query) ||
-            p.nameEn.toLowerCase().includes(query) ||
-            (p.description && p.description.toLowerCase().includes(query)) ||
-            (p.countries && p.countries.some(c => 
-              (c.cn && c.cn.toLowerCase().includes(query)) ||
-              (c.en && c.en.toLowerCase().includes(query)) ||
-              (c.code && c.code.toLowerCase().includes(query))
-            ))
+            p.name.toLowerCase().includes(lowerQuery) ||
+            p.nameEn.toLowerCase().includes(lowerQuery) ||
+            (p.description && p.description.toLowerCase().includes(lowerQuery))
           );
           
           setProducts(filtered);
@@ -302,7 +336,11 @@ export default function ProductsPage() {
             {searchQuery && (
               <div className="mb-6 flex items-center justify-between bg-white rounded-xl p-4 border border-gray-200">
                 <div className="flex items-center gap-3">
-                  <span className="text-gray-600">搜索结果：</span>
+                  <span className="text-gray-600">
+                    {['JP', 'KR', 'CN', 'HK', 'US', 'GB', 'TH', 'VN', 'SG', 'MY', 'MX', 'CA', 'AU', 'NL', 'IE', 'FR', 'DE', 'IT', 'ES'].includes(searchQuery.toUpperCase()) ||
+                     ['日本', '韩国', '中国', '香港', '美国', '英国', '泰国', '越南', '新加坡', '马来西亚', '墨西哥', '加拿大', '澳大利亚', '荷兰', '爱尔兰', '法国', '德国', '意大利', '西班牙'].includes(searchQuery)
+                      ? '国家搜索：' : '产品搜索：'}
+                  </span>
                   <span className="font-semibold text-orange-600">"{searchQuery}"</span>
                   <span className="text-gray-500">（{products.length} 款产品）</span>
                 </div>
