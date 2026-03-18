@@ -40,8 +40,9 @@ class B2BApiClient {
     }
 
     const result = await response.json();
-    if (result.code !== 0) {
-      throw new Error(result.message || "API 返回错误");
+    // 新 API 返回：{success: true, code: 200, message: {...}}
+    if (!result.success || result.code !== 200) {
+      throw new Error(result.message || result.error || "API 返回错误");
     }
     
     return result.message;

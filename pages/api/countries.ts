@@ -15,10 +15,10 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   }
 
   try {
-    // 只获取前 10 页（1000 产品）来提取国家列表，避免超时
     const allProducts: Product[] = [];
     for (let page = 1; page <= 10; page++) {
       const result = await b2bApi.getProducts(page, 100);
+      if (!result || !result.products) break;
       allProducts.push(...result.products);
       if (result.products.length < 100) break;
     }
@@ -51,7 +51,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     res.setHeader('Cache-Control', 'public, s-maxage=600, stale-while-revalidate');
     return res.status(200).json({ success: true, data: countries });
   } catch (error: any) {
-    console.error('Failed to fetch countries:', error?.message || error);
-    return res.status(500).json({ success: false, error: `获取国家列表失败：${error?.message || '未知错误'}` });
+    const errorMsg = typeof error === 'object' ? JSON.stringify(error) : (error?.message || '未知错误');
+    console.error('Failed to fetch countries:', errorMsg);
+    return res.status(500).json({ success: false, error: `获取国家列表失败：${errorMsg}` });
   }
 }
