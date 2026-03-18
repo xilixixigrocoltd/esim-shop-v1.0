@@ -27,7 +27,7 @@ async function hmacSha256(message: string, secret: string): Promise<string> {
 class B2BApiClient {
   private async request<T>(endpoint: string, method: "GET" | "POST" = "GET", data?: any): Promise<T> {
     const timestamp = Date.now().toString();
-    const nonce = Math.random().toString(36).substring(2, 15);
+    const nonce = Math.random().toString(36).substring(2, 18); // 至少 16 个字符
     const body = data ? JSON.stringify(data) : "";
     
     const signString = timestamp + nonce + method + endpoint + body;
