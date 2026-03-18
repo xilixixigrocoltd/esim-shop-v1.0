@@ -9,20 +9,9 @@ interface CountryWithProducts {
   productCount: number;
 }
 
-// 内存缓存
-let cache: { data: CountryWithProducts[]; timestamp: number } | null = null;
-const CACHE_TTL = 10 * 60 * 1000; // 10 分钟
-
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   if (req.method !== 'GET') {
     return res.status(405).json({ error: 'Method not allowed' });
-  }
-
-  // 检查缓存
-  if (cache && Date.now() - cache.timestamp < CACHE_TTL) {
-    console.log('[countries] 缓存命中');
-    res.setHeader('Cache-Control', 'public, s-maxage=600, stale-while-revalidate=900');
-    return res.status(200).json({ success: true, data: cache.data });
   }
 
   try {
@@ -63,10 +52,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       .filter(c => c.name)
       .sort((a, b) => (a.name || '').localeCompare(b.name || '', 'zh-CN'));
     
-    // 写入缓存
-    cache = { data: countries, timestamp: Date.now() };
+    console.log(`[countries] 最终国家数：${countries.length}`);
     
-    res.setHeader('Cache-Control', 'public, s-maxage=600, stale-while-revalidate=900');
+    res.setHeader('Cache-Control', 'no-store, max-age=0');
     return res.status(200).json({ success: true, data: countries });
   } catch (error: any) {
     console.error('Failed to fetch countries:', error?.message || error);
