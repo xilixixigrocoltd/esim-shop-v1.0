@@ -29,7 +29,7 @@ export async function sendOrderConfirmation(email: string, orderData: {
 }) {
   try {
     const { data, error } = await resend.emails.send({
-      from: 'SimRyoko eSIM <noreply@simryoko.com>',
+      from: 'SimRyoko eSIM <support@simryoko.com>',
       to: [email],
       subject: `✅ 订单确认 - ${orderData.orderId}`,
       html: generateEmailHtml(orderData),
@@ -57,7 +57,8 @@ function generateEmailHtml(orderData: {
   paymentMethod?: string;
 }): string {
   const now = new Date().toLocaleString('zh-CN', { timeZone: 'Asia/Shanghai' });
-  const productTags = orderData.items.map(item => {
+  
+  const productItems = orderData.items.map(item => {
     const tags: string[] = [];
     if (item.dataSize) tags.push(`📶 ${item.dataSize}`);
     if (item.validity) tags.push(`📅 ${item.validity}`);
@@ -66,18 +67,18 @@ function generateEmailHtml(orderData: {
         (item.countries.length > 3 ? `+${item.countries.length - 3}` : '');
       tags.push(`🌍 ${countryText}`);
     }
-    return tags.map(tag => `<span style="display: inline-block; background: #f3f4f6; padding: 4px 10px; border-radius: 4px; font-size: 12px; color: #4b5563; margin: 2px;">${tag}</span>`).join('');
+    const tagHtml = tags.map(tag => `<span style="display: inline-block; background: #f3f4f6; padding: 4px 10px; border-radius: 4px; font-size: 12px; color: #4b5563; margin: 2px;">${tag}</span>`).join('');
+    
+    return `
+      <tr>
+        <td style="padding: 15px;">
+          <div style="font-weight: 600; color: #1f2937; margin-bottom: 8px; font-size: 15px;">${item.name}</div>
+          <div style="font-size: 14px; color: #6b7280; margin-bottom: 10px;">数量：×${item.quantity}</div>
+          <div>${tagHtml}</div>
+        </td>
+      </tr>
+    `;
   }).join('');
-
-  const productItems = orderData.items.map(item => `
-    <tr>
-      <td style="padding: 15px;">
-        <div style="font-weight: 600; color: #1f2937; margin-bottom: 8px; font-size: 15px;">${item.name}</div>
-        <div style="font-size: 14px; color: #6b7280; margin-bottom: 10px;">数量：×${item.quantity}</div>
-        <div>${productTags}</div>
-      </td>
-    </tr>
-  `).join('');
 
   const esimSection = orderData.esimData ? `
     <tr>
@@ -103,62 +104,66 @@ function generateEmailHtml(orderData: {
           </tr>
         </table>
         
-        <table role="presentation" style="width: 100%; background: #ffffff; border-radius: 8px;">
+        <!-- 安装步骤 -->
+        <table role="presentation" style="width: 100%; background: #ffffff; border-radius: 8px; margin: 0 0 20px 0; border: 1px solid #e5e7eb;">
           <tr>
-            <td style="padding: 20px;">
-              <h4 style="color: #1f2937; font-size: 16px; margin: 0 0 15px 0;">📲 安装步骤</h4>
-              
-              <table role="presentation" style="width: 100%; margin: 0 0 15px 0;">
-                <tr>
-                  <td style="width: 36px; vertical-align: top; padding-right: 12px;">
-                    <div style="width: 28px; height: 28px; background: linear-gradient(135deg, #f97316 0%, #ea580c 100%); border-radius: 50%; text-align: center; line-height: 28px; color: #ffffff; font-weight: bold; font-size: 14px;">1</div>
-                  </td>
-                  <td style="vertical-align: top;">
-                    <div style="font-weight: 600; color: #1f2937; margin-bottom: 4px;">打开 eSIM 设置</div>
-                    <div style="font-size: 14px; color: #6b7280; line-height: 1.5;">
-                      <strong>iPhone:</strong> 设置 → 蜂窝网络 → 添加 eSIM<br/>
-                      <strong>Android:</strong> 设置 → 网络和互联网 → 移动网络 → 添加运营商
-                    </div>
-                  </td>
-                </tr>
-              </table>
-              
-              <table role="presentation" style="width: 100%; margin: 0 0 15px 0;">
-                <tr>
-                  <td style="width: 36px; vertical-align: top; padding-right: 12px;">
-                    <div style="width: 28px; height: 28px; background: linear-gradient(135deg, #f97316 0%, #ea580c 100%); border-radius: 50%; text-align: center; line-height: 28px; color: #ffffff; font-weight: bold; font-size: 14px;">2</div>
-                  </td>
-                  <td style="vertical-align: top;">
-                    <div style="font-weight: 600; color: #1f2937; margin-bottom: 4px;">扫描二维码</div>
-                    <div style="font-size: 14px; color: #6b7280; line-height: 1.5;">使用手机相机扫描上方二维码</div>
-                  </td>
-                </tr>
-              </table>
-              
-              <table role="presentation" style="width: 100%; margin: 0 0 15px 0;">
-                <tr>
-                  <td style="width: 36px; vertical-align: top; padding-right: 12px;">
-                    <div style="width: 28px; height: 28px; background: linear-gradient(135deg, #f97316 0%, #ea580c 100%); border-radius: 50%; text-align: center; line-height: 28px; color: #ffffff; font-weight: bold; font-size: 14px;">3</div>
-                  </td>
-                  <td style="vertical-align: top;">
-                    <div style="font-weight: 600; color: #1f2937; margin-bottom: 4px;">启用 eSIM</div>
-                    <div style="font-size: 14px; color: #6b7280; line-height: 1.5;">安装完成后，启用该 eSIM 用于数据，并开启"数据漫游"</div>
-                  </td>
-                </tr>
-              </table>
+            <td style="padding: 0;">
+              <h4 style="color: #1f2937; font-size: 15px; margin: 0; padding: 15px 20px; background: #f9fafb; border-bottom: 1px solid #e5e7eb; border-radius: 8px 8px 0 0;">📲 安装步骤（3 步完成）</h4>
               
               <table role="presentation" style="width: 100%;">
                 <tr>
-                  <td style="width: 36px; vertical-align: top; padding-right: 12px;">
-                    <div style="width: 28px; height: 28px; background: linear-gradient(135deg, #f97316 0%, #ea580c 100%); border-radius: 50%; text-align: center; line-height: 28px; color: #ffffff; font-weight: bold; font-size: 14px;">4</div>
+                  <td style="padding: 20px 20px 15px 20px; border-bottom: 1px solid #f3f4f6;">
+                    <table role="presentation" style="width: 100%;">
+                      <tr>
+                        <td style="width: 32px; vertical-align: top; padding-right: 12px;">
+                          <div style="width: 26px; height: 26px; background: #f97316; border-radius: 50%; text-align: center; line-height: 26px; color: #ffffff; font-weight: bold; font-size: 13px;">1</div>
+                        </td>
+                        <td style="vertical-align: top;">
+                          <div style="font-weight: 600; color: #1f2937; margin-bottom: 6px; font-size: 14px;">扫描二维码添加 eSIM</div>
+                          <div style="font-size: 13px; color: #6b7280; line-height: 1.6;">
+                            <strong>iPhone:</strong> 设置 → 蜂窝网络 → 添加 eSIM → 扫描二维码<br/>
+                            <strong>Android:</strong> 设置 → 网络和互联网 → 移动网络 → 添加运营商
+                          </div>
+                        </td>
+                      </tr>
+                    </table>
                   </td>
-                  <td style="vertical-align: top;">
-                    <div style="font-weight: 600; color: #1f2937; margin-bottom: 4px;">到达目的地</div>
-                    <div style="font-size: 14px; color: #6b7280; line-height: 1.5;">抵达后手机会自动连接当地网络</div>
+                </tr>
+                <tr>
+                  <td style="padding: 15px 20px; border-bottom: 1px solid #f3f4f6;">
+                    <table role="presentation" style="width: 100%;">
+                      <tr>
+                        <td style="width: 32px; vertical-align: top; padding-right: 12px;">
+                          <div style="width: 26px; height: 26px; background: #f97316; border-radius: 50%; text-align: center; line-height: 26px; color: #ffffff; font-weight: bold; font-size: 13px;">2</div>
+                        </td>
+                        <td style="vertical-align: top;">
+                          <div style="font-weight: 600; color: #1f2937; margin-bottom: 6px; font-size: 14px;">开启数据漫游</div>
+                          <div style="font-size: 13px; color: #6b7280; line-height: 1.6;">
+                            安装完成后 → 启用该 eSIM 用于"蜂窝数据" → 开启"数据漫游"选项
+                          </div>
+                        </td>
+                      </tr>
+                    </table>
+                  </td>
+                </tr>
+                <tr>
+                  <td style="padding: 15px 20px;">
+                    <table role="presentation" style="width: 100%;">
+                      <tr>
+                        <td style="width: 32px; vertical-align: top; padding-right: 12px;">
+                          <div style="width: 26px; height: 26px; background: #f97316; border-radius: 50%; text-align: center; line-height: 26px; color: #ffffff; font-weight: bold; font-size: 13px;">3</div>
+                        </td>
+                        <td style="vertical-align: top;">
+                          <div style="font-weight: 600; color: #1f2937; margin-bottom: 6px; font-size: 14px;">抵达后自动连接</div>
+                          <div style="font-size: 13px; color: #6b7280; line-height: 1.6;">
+                            到达目的地国家 → 手机自动连接当地网络 → 开始使用（无需其他操作）
+                          </div>
+                        </td>
+                      </tr>
+                    </table>
                   </td>
                 </tr>
               </table>
-              
             </td>
           </tr>
         </table>
@@ -255,7 +260,7 @@ function generateEmailHtml(orderData: {
                       <tr>
                         <td style="padding: 5px 0; font-size: 14px;">
                           <span style="margin-right: 8px;">📧</span>
-                          <span>邮箱：<a href="mailto:xilixi@xigrocoltd.com" style="color: #f97316; text-decoration: none; font-weight: 500;">xilixi@xigrocoltd.com</a></span>
+                          <span>邮箱：<a href="mailto:support@simryoko.com" style="color: #f97316; text-decoration: none; font-weight: 500;">support@simryoko.com</a></span>
                         </td>
                       </tr>
                       <tr>
