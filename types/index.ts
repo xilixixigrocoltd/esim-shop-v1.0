@@ -2,6 +2,8 @@ export interface Country {
   code: string;
   name: string;
   nameEn: string;
+  cn?: string;  // B2B API 返回的中文字段
+  en?: string;  // B2B API 返回的英文字段
   flag?: string;
   productCount?: number;
 }
