@@ -1,6 +1,5 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
 import { b2bApi } from '@/lib/api';
-import type { Product } from '@/types';
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   if (req.method !== 'GET') {
@@ -8,20 +7,29 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   }
 
   const { code } = req.query;
-  if (!code || typeof code !== 'string') {
-    return res.status(400).json({ error: 'Country code required' });
-  }
 
   try {
-    console.log(`[by-country] 请求国家：${code}`);
-    const products = await b2bApi.getProductsByCountry(code);
-    console.log(`[by-country] 找到产品数：${products.length}`);
+    const allProducts = [];
     
-    res.setHeader('Cache-Control', 'no-store, max-age=0');
-    
-    return res.status(200).json({ success: true, data: products });
+    // 获取前 15 页产品
+    for (let page = 1; page <= 15; page++) {
+      const result = await b2bApi.getProducts(page, 100);
+      if (!result || !result.products) break;
+      
+      // 筛选指定国家的产品
+      const filtered = result.products.filter((p: any) => {
+        if (p.type !== 'local' || !p.countries) return false;
+        return p.countries.some((c: any) => c.code === code);
+      });
+      
+      allProducts.push(...filtered);
+      if (result.products.length < 100) break;
+    }
+
+    res.setHeader('Cache-Control', 'public, s-maxage=600, stale-while-revalidate');
+    return res.status(200).json({ success: true, data: allProducts });
   } catch (error: any) {
-    console.error('Failed to fetch products by country:', error?.message || error);
-    return res.status(500).json({ success: false, error: `获取产品失败：${error?.message || '未知错误'}` });
+    console.error('Failed to fetch products by country:', error);
+    return res.status(500).json({ error: `获取产品失败：${error.message}` });
   }
 }

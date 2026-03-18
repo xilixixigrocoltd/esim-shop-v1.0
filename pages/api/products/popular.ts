@@ -9,11 +9,13 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     return res.status(405).json({ error: 'Method not allowed' });
   }
 
+  const { country } = req.query;
+
   try {
     const allProducts = [];
     
-    // 获取前 10 页产品
-    for (let page = 1; page <= 10; page++) {
+    // 获取前 15 页产品
+    for (let page = 1; page <= 15; page++) {
       const result = await b2bApi.getProducts(page, 100);
       if (!result || !result.products) break;
       
