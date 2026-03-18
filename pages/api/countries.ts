@@ -27,16 +27,21 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
     allProducts.forEach((product) => {
       if (product.type === 'local' && product.countries) {
-        product.countries.forEach((country: Country) => {
-          if (!countryMap.has(country.code)) {
-            countryMap.set(country.code, {
-              code: country.code,
-              name: country.name,
-              nameEn: country.nameEn,
+        product.countries.forEach((country: any) => {
+          // B2B API 返回的字段是 cn/en/code，不是 name/nameEn/code
+          const name = country.cn || country.name || 'Unknown';
+          const nameEn = country.en || country.nameEn || 'Unknown';
+          const code = country.code || country.code;
+          
+          if (!countryMap.has(code)) {
+            countryMap.set(code, {
+              code,
+              name,
+              nameEn,
               productCount: 0,
             });
           }
-          countryMap.get(country.code)!.productCount++;
+          countryMap.get(code)!.productCount++;
         });
       }
     });

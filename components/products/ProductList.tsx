@@ -63,7 +63,7 @@ export default function ProductList({ countryCode }: ProductListProps) {
     });
   }, [products, dataSizeFilter, daysFilter]);
 
-  const countryName = countryCode ? products[0]?.countries?.find(c => c.code.toLowerCase() === countryCode.toLowerCase())?.name : '';
+  const countryName = countryCode ? products[0]?.countries?.find(c => c.code.toLowerCase() === countryCode.toLowerCase())?.cn || products[0]?.countries?.find(c => c.code.toLowerCase() === countryCode.toLowerCase())?.name : '';
 
   if (loading) {
     return (
