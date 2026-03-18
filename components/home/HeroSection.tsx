@@ -3,6 +3,8 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { Search, Zap, Shield, Globe } from 'lucide-react';
+import { POPULAR_COUNTRIES } from '@/lib/constants';
+import { getCountryFlag } from '@/lib/api';
 import { useI18n } from '@/lib/i18n-context';
 
 export default function HeroSection() {
@@ -50,13 +52,25 @@ export default function HeroSection() {
             </div>
           </form>
 
-          <div className="flex flex-col sm:flex-row gap-4 justify-center mb-12">
+          <div className="flex flex-col sm:flex-row gap-4 justify-center mb-16">
             <a href="/products?tab=all" className="px-8 py-4 bg-gradient-to-r from-orange-500 to-red-500 text-white font-semibold rounded-xl hover:opacity-90">
               {t('home.hero.cta')}
             </a>
             <a href="/help" className="px-8 py-4 bg-white/10 text-white font-semibold rounded-xl hover:bg-white/20 border border-white/20">
               {t('home.hero.learn_more')}
             </a>
+          </div>
+
+          <div>
+            <p className="text-sm text-gray-400 mb-4">{t('home.hero.popular')}</p>
+            <div className="flex flex-wrap justify-center gap-3">
+              {POPULAR_COUNTRIES.slice(0, 6).map((country) => (
+                <a key={country.code} href={`/country/${country.code.toLowerCase()}`} className="flex items-center gap-2 px-4 py-2 bg-white/10 rounded-full hover:bg-white/20">
+                  <span className="text-2xl">{getCountryFlag(country.code)}</span>
+                  <span className="font-medium">{country.name}</span>
+                </a>
+              ))}
+            </div>
           </div>
         </div>
       </div>
