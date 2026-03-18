@@ -37,7 +37,12 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         return res.status(400).json({ success: false, error: '订单数据无效' });
       }
       
-      const order = await b2bApi.createOrder(items);
+      const { email } = req.body;
+      const orderPayload = {
+        items: items.map((item: any) => ({ productId: item.id, quantity: item.quantity })),
+        customerEmail: email || ''
+      };
+      const order = await b2bApi.createOrder(orderPayload);
       return res.status(200).json({ success: true, data: order });
     } catch (error) {
       console.error('Failed to create order:', error);
