@@ -54,8 +54,15 @@ class B2BApiClient {
   }
 
   async getProductsByCountry(countryCode: string): Promise<Product[]> {
-    const products = await this.getAllProducts();
-    return products.filter(
+    // 优化：只加载前 10 页（1000 个产品），避免超时
+    const allProducts: Product[] = [];
+    for (let page = 1; page <= 10; page++) {
+      const response = await this.getProducts(page, 100);
+      allProducts.push(...response.list);
+      if (response.list.length < 100) break;
+    }
+    
+    return allProducts.filter(
       (p: Product) =>
         p.type === "local" &&
         p.countries?.some((c) => c.code.toLowerCase() === countryCode.toLowerCase())
