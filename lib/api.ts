@@ -14,10 +14,11 @@ class B2BApiClient {
   private async request<T>(endpoint: string, method: "GET" | "POST" = "GET", data?: any): Promise<T> {
     const timestamp = Date.now().toString();
     const nonce = Math.random().toString(36).substring(2, 20) + Date.now().toString(36);
-    const body = data ? JSON.stringify(data) : "";
+    // JSON 序列化去除空格，与 API 期望格式一致
+    const body = data ? JSON.stringify(data, (_, v) => v === undefined ? null : v).replace(/\s/g, '') : "";
     
-    // 签名顺序：method + endpoint + timestamp + nonce + body
-    const signString = method + endpoint + timestamp + nonce + body;
+    // 签名顺序：method + endpoint + body + timestamp + nonce
+    const signString = method + endpoint + body + timestamp + nonce;
     const signature = await hmacSha256(signString, API_SECRET);
     
     const url = `${B2B_API_URL}${endpoint}`;
