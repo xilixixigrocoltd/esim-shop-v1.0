@@ -56,18 +56,30 @@ export default function CheckoutPage() {
       });
 
       const data = await response.json();
+      console.log('支付创建响应:', data);
+
+      if (!response.ok) {
+        setError(data.error || `HTTP ${response.status}: 支付创建失败`);
+        return;
+      }
 
       if (data.success) {
         if (paymentMethod === 'stripe' && data.paymentUrl) {
-          window.location.href = data.paymentUrl;
+          // 延迟跳转，确保用户看到成功状态
+          setTimeout(() => {
+            window.location.href = data.paymentUrl;
+          }, 500);
+          return;
         } else if (paymentMethod === 'usdt') {
           router.push(`/success?orderId=${data.orderId}&email=${encodeURIComponent(email)}`);
+          return;
         }
-      } else {
-        setError(data.error || '支付创建失败');
       }
-    } catch (err) {
-      setError('网络错误，请重试');
+      
+      setError(data.error || '支付创建失败');
+    } catch (err: any) {
+      console.error('支付创建错误:', err);
+      setError(err.message || '网络错误，请重试');
     } finally {
       setLoading(false);
     }

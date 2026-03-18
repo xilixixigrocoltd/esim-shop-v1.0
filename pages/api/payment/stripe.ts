@@ -43,8 +43,12 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
     // 重定向到 Stripe Checkout
     return res.status(303).redirect(session.url!);
-  } catch (error) {
+  } catch (error: any) {
     console.error('Stripe payment error:', error);
-    return res.status(500).json({ error: '支付创建失败' });
+    return res.status(500).json({ 
+      error: '支付创建失败', 
+      details: error.message,
+      stripeKey: process.env.STRIPE_SECRET_KEY ? 'configured' : 'missing'
+    });
   }
 }
