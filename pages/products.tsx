@@ -5,12 +5,16 @@ import { useRouter } from 'next/router';
 import type { Product } from '@/types';
 import ProductCard from '@/components/products/ProductCard';
 
+const PAGE_SIZE = 20; // 每页显示 20 个产品
+
 export default function ProductsPage() {
   const router = useRouter();
   const { tab } = router.query;
-  const [products, setProducts] = useState<Product[]>([]);
+  const [allProducts, setAllProducts] = useState<Product[]>([]);
+  const [displayedProducts, setDisplayedProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
   const [activeTab, setActiveTab] = useState('all');
+  const [page, setPage] = useState(1);
 
   // 同步 URL 参数到 activeTab
   useEffect(() => {
@@ -19,64 +23,57 @@ export default function ProductsPage() {
     }
   }, [tab]);
 
-  // 根据 activeTab 加载产品
+  // 根据 activeTab 加载产品（服务端 API）
   useEffect(() => {
     async function loadProducts() {
       try {
         setLoading(true);
-        const allProducts: Product[] = [];
+        setPage(1);
         
-        if (activeTab === 'all') {
-          // 全部：获取前 10 页
-          for (let page = 1; page <= 10; page++) {
-            const res = await fetch(`/api/products?page=${page}&pageSize=100`);
-            const json = await res.json();
-            if (!json.success || !json.data) break;
-            allProducts.push(...json.data);
-            if (json.data.length < 100) break;
-          }
-        } else if (activeTab === 'popular') {
-          // 热门国家：获取前 10 页，筛选 local 类型
-          for (let page = 1; page <= 10; page++) {
-            const res = await fetch(`/api/products?page=${page}&pageSize=100`);
-            const json = await res.json();
-            if (!json.success || !json.data) break;
-            const localProducts = json.data.filter((p: Product) => p.type === 'local');
-            allProducts.push(...localProducts);
-            if (json.data.length < 100) break;
-          }
-        } else if (activeTab === 'regional') {
-          // 区域：获取全部，筛选 regional 类型
-          for (let page = 1; page <= 28; page++) {
-            const res = await fetch(`/api/products?page=${page}&pageSize=100`);
-            const json = await res.json();
-            if (!json.success || !json.data) break;
-            const regionalProducts = json.data.filter((p: Product) => p.type === 'regional');
-            allProducts.push(...regionalProducts);
-            if (json.data.length < 100) break;
-          }
-        } else if (activeTab === 'global') {
-          // 全球：获取全部，筛选 global 类型
-          for (let page = 1; page <= 28; page++) {
-            const res = await fetch(`/api/products?page=${page}&pageSize=100`);
-            const json = await res.json();
-            if (!json.success || !json.data) break;
-            const globalProducts = json.data.filter((p: Product) => p.type === 'global');
-            allProducts.push(...globalProducts);
-            if (json.data.length < 100) break;
-          }
+        let endpoint: string;
+        switch (activeTab) {
+          case 'popular':
+            endpoint = '/api/products/popular';
+            break;
+          case 'regional':
+            endpoint = '/api/products/regional';
+            break;
+          case 'global':
+            endpoint = '/api/products/global';
+            break;
+          default:
+            endpoint = '/api/products?page=1&pageSize=100';
         }
         
-        console.log(`[products] Loaded ${allProducts.length} products for tab: ${activeTab}`);
-        setProducts(allProducts);
+        const res = await fetch(endpoint);
+        const json = await res.json();
+        
+        if (json.success && json.data) {
+          setAllProducts(json.data);
+          setDisplayedProducts(json.data.slice(0, PAGE_SIZE));
+        } else {
+          setAllProducts([]);
+          setDisplayedProducts([]);
+        }
       } catch (error: any) {
         console.error('Failed to load products:', error);
+        setAllProducts([]);
+        setDisplayedProducts([]);
       } finally {
         setLoading(false);
       }
     }
     loadProducts();
   }, [activeTab]);
+
+  // 加载更多
+  const loadMore = () => {
+    const nextPage = page + 1;
+    const startIndex = 0;
+    const endIndex = nextPage * PAGE_SIZE;
+    setDisplayedProducts(allProducts.slice(startIndex, endIndex));
+    setPage(nextPage);
+  };
 
   const tabs = [
     { id: 'all', label: '全部' },
@@ -126,7 +123,7 @@ export default function ProductsPage() {
                 加载中...
               </span>
             ) : (
-              `共 ${products.length} 款产品`
+              `显示 ${displayedProducts.length} / ${allProducts.length} 款产品`
             )}
           </p>
         </div>
@@ -142,12 +139,26 @@ export default function ProductsPage() {
               </div>
             ))}
           </div>
-        ) : products.length > 0 ? (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
-            {products.map((product) => (
-              <ProductCard key={product.id} product={product} />
-            ))}
-          </div>
+        ) : displayedProducts.length > 0 ? (
+          <>
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+              {displayedProducts.map((product) => (
+                <ProductCard key={product.id} product={product} />
+              ))}
+            </div>
+            
+            {/* 加载更多按钮 */}
+            {displayedProducts.length < allProducts.length && (
+              <div className="text-center mt-8">
+                <button
+                  onClick={loadMore}
+                  className="px-8 py-3 bg-white border-2 border-orange-500 text-orange-600 font-semibold rounded-xl hover:bg-orange-50 transition-colors"
+                >
+                  加载更多（{allProducts.length - displayedProducts.length} 款）
+                </button>
+              </div>
+            )}
+          </>
         ) : (
           <div className="text-center py-16">
             <p className="text-gray-500 text-lg">该分类下暂无产品</p>
