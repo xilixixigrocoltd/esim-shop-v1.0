@@ -95,9 +95,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
               items: [{
                 name: order.orderItems?.[0]?.productName || 'eSIM 套餐',
                 quantity: 1,
-                price: amount,
+                price: amount.toString(),
               }],
-              totalAmount: amount,
+              totalAmount: amount.toString(),
               esimData: {
                 iccid: order.esims[0].iccid,
                 qrCode: order.esims[0].qrCode,

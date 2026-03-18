@@ -23,6 +23,7 @@ export interface Product {
   agentPrice?: number | string;  // 兼容旧字段
   stock?: number;
   image?: string;
+  imageUrl?: string;  // 兼容字段
   features: string[];
   status?: 'active' | 'inactive';
   isHot?: boolean;
@@ -53,14 +54,16 @@ export interface EsimData {
 export interface Order {
   id: string;
   orderNumber: string;
-  email: string;
-  items: OrderItem[];
+  email?: string;
+  items?: OrderItem[];
+  orderItems?: OrderItem[];  // B2B API 返回字段
   totalAmount: number;
   status: 'pending' | 'paid' | 'delivered' | 'refunded';
   paymentMethod?: 'stripe' | 'usdt';
   paymentTime?: string;
   createdAt: string;
   esimData?: EsimData[];
+  esims?: any[];  // B2B API 返回字段
 }
 
 export interface ApiResponse<T> {
