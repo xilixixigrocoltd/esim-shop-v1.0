@@ -17,7 +17,9 @@ class B2BApiClient {
     });
 
     if (!response.ok) {
-      throw new Error(`API request failed: ${response.status}`);
+      const errorText = await response.text();
+      console.error(`API request failed: ${response.status}`, errorText);
+      throw new Error(`API request failed: ${response.status} - ${errorText.slice(0, 100)}`);
     }
 
     const data = await response.json();

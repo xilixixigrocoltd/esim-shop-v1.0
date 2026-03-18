@@ -15,46 +15,35 @@ interface CountryWithProducts {
 }
 
 export default function CountryList() {
-  const [products, setProducts] = useState<Product[]>([]);
+  const [countries, setCountries] = useState<CountryWithProducts[]>([]);
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedRegion, setSelectedRegion] = useState<string>('all');
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    async function loadProducts() {
+    async function loadCountries() {
       try {
-        const data = await b2bApi.getAllProducts();
-        setProducts(data);
+        const res = await fetch('/api/countries');
+        const json = await res.json();
+        if (json.success) {
+          // 将国家数据转换为带 productCount 的格式
+          const countryMap = new Map<string, CountryWithProducts>();
+          json.data.forEach((c: CountryWithProducts) => {
+            countryMap.set(c.code, c);
+          });
+          // 还需要获取产品来统计数量（简化：直接用 API 返回的 productCount）
+          setCountries(Array.from(countryMap.values()));
+        }
       } catch (error) {
-        console.error('Failed to load products:', error);
+        console.error('Failed to load countries:', error);
       } finally {
         setLoading(false);
       }
     }
-    loadProducts();
+    loadCountries();
   }, []);
 
-  const countries = useMemo(() => {
-    const countryMap = new Map<string, CountryWithProducts>();
-
-    products.forEach((product) => {
-      if (product.type === 'local' && product.countries) {
-        product.countries.forEach((country: Country) => {
-          if (!countryMap.has(country.code)) {
-            countryMap.set(country.code, {
-              code: country.code,
-              name: country.name,
-              nameEn: country.nameEn,
-              productCount: 0,
-            });
-          }
-          countryMap.get(country.code)!.productCount++;
-        });
-      }
-    });
-
-    return Array.from(countryMap.values()).sort((a, b) => a.name.localeCompare(b.name, 'zh-CN'));
-  }, [products]);
+  // countries 已经从 API 获取，不需要再计算
 
   const filteredCountries = useMemo(() => {
     let result = countries;

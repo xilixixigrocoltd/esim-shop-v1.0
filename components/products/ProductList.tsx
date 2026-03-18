@@ -24,10 +24,13 @@ export default function ProductList({ countryCode }: ProductListProps) {
       try {
         let data: Product[];
         if (countryCode) {
-          data = await b2bApi.getProductsByCountry(countryCode);
+          const res = await fetch(`/api/products/by-country/${countryCode}`);
+          const json = await res.json();
+          data = json.success ? json.data : [];
         } else {
-          const response = await b2bApi.getProducts(1, 100);
-          data = response.list;
+          const res = await fetch('/api/products?limit=100');
+          const json = await res.json();
+          data = json.success ? json.data.list : [];
         }
         setProducts(data);
       } catch (error) {
