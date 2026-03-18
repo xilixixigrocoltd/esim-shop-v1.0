@@ -1,24 +1,12 @@
 'use client';
 
-import { useState } from 'react';
-import { useRouter } from 'next/router';
-import { Search, Zap, Shield, Globe } from 'lucide-react';
+import { Zap, Shield, Globe } from 'lucide-react';
 import { POPULAR_COUNTRIES } from '@/lib/constants';
 import { getCountryFlag } from '@/lib/api';
 import { useI18n } from '@/lib/i18n-context';
 
 export default function HeroSection() {
-  const router = useRouter();
-  const [searchQuery, setSearchQuery] = useState('');
   const { t } = useI18n();
-
-  const handleSearch = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (searchQuery.trim()) {
-      // 跳转到产品列表页，使用搜索关键词
-      router.push(`/products?tab=all&search=${encodeURIComponent(searchQuery)}`);
-    }
-  };
 
   return (
     <section className="relative bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 text-white overflow-hidden">
@@ -33,25 +21,9 @@ export default function HeroSection() {
             {t('home.hero.title')}
           </h1>
 
-          <p className="text-lg md:text-xl text-gray-300 mb-8">
+          <p className="text-lg md:text-xl text-gray-300 mb-12">
             {t('home.hero.subtitle')}
           </p>
-
-          <form onSubmit={handleSearch} className="max-w-xl mx-auto mb-12">
-            <div className="relative">
-              <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
-              <input
-                type="text"
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                placeholder={t('home.hero.search_placeholder')}
-                className="w-full pl-12 pr-4 py-4 bg-white text-gray-900 rounded-2xl shadow-lg focus:ring-4 focus:ring-orange-500/30 focus:outline-none"
-              />
-              <button type="submit" className="absolute right-2 top-1/2 -translate-y-1/2 px-6 py-2 bg-gradient-to-r from-orange-500 to-red-500 text-white font-medium rounded-xl">
-                {t('common.search')}
-              </button>
-            </div>
-          </form>
 
           <div className="flex flex-col sm:flex-row gap-4 justify-center mb-16">
             <a href="/products?tab=all" className="px-8 py-4 bg-gradient-to-r from-orange-500 to-red-500 text-white font-semibold rounded-xl hover:opacity-90">

@@ -50,7 +50,9 @@ export default function ProductsPage() {
   // 同步 URL 参数
   useEffect(() => {
     if (tab) setActiveTab(tab as string);
-    if (search) setSearchQuery(search as string);
+    if (search) {
+      setSearchQuery(search as string);
+    }
     if (country) {
       setViewMode('country');
       setSelectedItem(country as string);
@@ -65,6 +67,16 @@ export default function ProductsPage() {
       setSelectedItem('');
     }
   }, [tab, country, region, planType, search]);
+
+  // 处理搜索
+  const handleSearch = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (searchQuery.trim()) {
+      router.push(`/products?tab=all&search=${encodeURIComponent(searchQuery)}`);
+    } else {
+      router.push('/products?tab=all', undefined, { shallow: true });
+    }
+  };
 
   // 加载产品
   useEffect(() => {
@@ -281,10 +293,10 @@ export default function ProductsPage() {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      {/* 顶部标签页导航 */}
+      {/* 顶部标签页导航 + 搜索框 */}
       <div className="sticky top-0 z-50 bg-white border-b border-gray-200 shadow-sm">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center justify-center py-4">
+          <div className="flex items-center justify-between py-4 gap-4">
             <div className="flex flex-wrap justify-center gap-2">
               {tabs.map((t) => (
                 <button
@@ -300,6 +312,28 @@ export default function ProductsPage() {
                 </button>
               ))}
             </div>
+
+            {/* 搜索框 */}
+            <form onSubmit={handleSearch} className="flex-shrink-0">
+              <div className="relative">
+                <input
+                  type="text"
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  placeholder="搜索国家或产品..."
+                  className="w-64 pl-4 pr-12 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-orange-500"
+                />
+                <button
+                  type="submit"
+                  className="absolute right-2 top-1/2 -translate-y-1/2 p-1 text-gray-400 hover:text-gray-600"
+                >
+                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                  </svg>
+                </button>
+              </div>
+            </form>
+          </div>
           </div>
         </div>
       </div>
@@ -333,38 +367,19 @@ export default function ProductsPage() {
         ) : (
           /* 产品列表 */
           <div>
-            {/* 搜索提示 */}
-            {searchQuery && (
-              <div className="mb-6 flex items-center justify-between bg-white rounded-xl p-4 border border-gray-200">
-                <div className="flex items-center gap-3">
-                  <span className="text-gray-600">搜索结果：</span>
-                  <span className="font-semibold text-orange-600">"{searchQuery}"</span>
-                  <span className="text-gray-500">（{products.length} 款产品）</span>
-                </div>
-                <button
-                  onClick={() => router.push('/products?tab=all', undefined, { shallow: true })}
-                  className="px-4 py-2 text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-lg transition-colors"
-                >
-                  清除搜索
-                </button>
-              </div>
-            )}
-
             {/* 产品数量统计 */}
-            {!searchQuery && (
-              <div className="mb-6 text-center">
-                <p className="text-gray-600">
-                  {loading ? (
-                    <span className="inline-flex items-center gap-2">
-                      <span className="w-4 h-4 border-2 border-orange-500 border-t-transparent rounded-full animate-spin" />
-                      加载中...
-                    </span>
-                  ) : (
-                    `共 ${products.length} 款产品`
-                  )}
-                </p>
-              </div>
-            )}
+            <div className="mb-6 text-center">
+              <p className="text-gray-600">
+                {loading ? (
+                  <span className="inline-flex items-center gap-2">
+                    <span className="w-4 h-4 border-2 border-orange-500 border-t-transparent rounded-full animate-spin" />
+                    加载中...
+                  </span>
+                ) : (
+                  `共 ${products.length} 款产品`
+                )}
+              </p>
+            </div>
 
             {/* 产品网格 */}
             {loading ? (
