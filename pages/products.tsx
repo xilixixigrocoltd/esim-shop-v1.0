@@ -334,7 +334,6 @@ export default function ProductsPage() {
               </div>
             </form>
           </div>
-          </div>
         </div>
       </div>
 
