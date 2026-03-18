@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
-import { CheckCircle, Mail, ShoppingBag, QrCode } from 'lucide-react';
+import { CheckCircle, Mail, ShoppingBag, QrCode, AlertCircle } from 'lucide-react';
 import { storage, CART_KEY } from '@/lib/utils';
 
 interface SuccessPageProps {
@@ -15,14 +15,40 @@ export default function SuccessPage({ orderId: propOrderId, email: propEmail }: 
   const router = useRouter();
   const [orderId, setOrderId] = useState<string>('');
   const [email, setEmail] = useState<string>('');
+  const [orderDetails, setOrderDetails] = useState<any>(null);
   const [loading, setLoading] = useState(true);
+  const [fetchingDetails, setFetchingDetails] = useState(false);
 
   useEffect(() => {
     // 清空购物车
     storage.remove(CART_KEY);
 
     // 从 URL 参数获取订单信息
-    const { orderId: urlOrderId, email: urlEmail } = router.query;
+    const { orderId: urlOrderId, email: urlEmail, session_id } = router.query;
+    
+    // 处理 Stripe session_id
+    if (session_id) {
+      setFetchingDetails(true);
+      fetch(`/api/payment/status?session_id=${session_id}`)
+        .then(res => res.json())
+        .then(data => {
+          if (data.success) {
+            setOrderId(data.orderId || `Stripe-${(session_id as string).slice(-8)}`);
+            setEmail(data.email || '');
+            setOrderDetails(data);
+          } else {
+            setOrderId(`Stripe-${(session_id as string).slice(-8)}`);
+          }
+        })
+        .catch(() => {
+          setOrderId(`Stripe-${(session_id as string).slice(-8)}`);
+        })
+        .finally(() => {
+          setFetchingDetails(false);
+          setLoading(false);
+        });
+      return;
+    }
     
     if (urlOrderId) {
       setOrderId(urlOrderId as string);
@@ -39,10 +65,13 @@ export default function SuccessPage({ orderId: propOrderId, email: propEmail }: 
     setLoading(false);
   }, [router.query, propOrderId, propEmail]);
 
-  if (loading) {
+  if (loading || fetchingDetails) {
     return (
       <div className="min-h-screen flex items-center justify-center">
-        <div className="animate-spin w-8 h-8 border-4 border-green-500 border-t-transparent rounded-full" />
+        <div className="text-center">
+          <div className="animate-spin w-8 h-8 border-4 border-green-500 border-t-transparent rounded-full mx-auto mb-4" />
+          <p className="text-gray-600">正在获取订单信息...</p>
+        </div>
       </div>
     );
   }
@@ -102,6 +131,38 @@ export default function SuccessPage({ orderId: propOrderId, email: propEmail }: 
             </div>
           </div>
         </div>
+
+        {orderDetails?.paymentStatus === 'paid' && (
+          <div className="bg-green-50 rounded-xl p-4 mb-6 text-left">
+            <div className="flex items-start gap-3">
+              <CheckCircle className="w-5 h-5 text-green-600 flex-shrink-0 mt-0.5" />
+              <div>
+                <p className="text-sm text-green-800 font-medium">
+                  支付已成功确认
+                </p>
+                <p className="text-sm text-green-700 mt-1">
+                  您的 eSIM 已激活，请立即查收邮件
+                </p>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {orderDetails?.paymentStatus === 'unpaid' && (
+          <div className="bg-yellow-50 rounded-xl p-4 mb-6 text-left">
+            <div className="flex items-start gap-3">
+              <AlertCircle className="w-5 h-5 text-yellow-600 flex-shrink-0 mt-0.5" />
+              <div>
+                <p className="text-sm text-yellow-800 font-medium">
+                  支付待确认
+                </p>
+                <p className="text-sm text-yellow-700 mt-1">
+                  支付成功后 eSIM 将自动发送到您的邮箱
+                </p>
+              </div>
+            </div>
+          </div>
+        )}
 
         <div className="space-y-3">
           <Link href="/countries" className="flex items-center justify-center gap-2 w-full py-3 bg-gradient-to-r from-orange-500 to-red-500 text-white font-semibold rounded-xl">

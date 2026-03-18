@@ -44,13 +44,23 @@ export default function CheckoutPage() {
     setLoading(true);
 
     try {
+      // 准备 Stripe 所需的产品信息
+      const stripeItems = cart.map(item => ({
+        id: item.product.id,
+        productId: item.product.id,
+        quantity: item.quantity,
+        productName: item.product.name,
+        dataSize: item.product.dataSize,
+        validDays: item.product.validDays,
+        imageUrl: item.product.imageUrl,
+      }));
+
       const response = await fetch('/api/payment/create', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           email,
-          items: cart.map(item => ({ id: item.product.id, quantity: item.quantity })),
-          method: paymentMethod,
+          items: stripeItems,
           amount: totalPrice,
         }),
       });
@@ -63,17 +73,16 @@ export default function CheckoutPage() {
         return;
       }
 
-      if (data.success) {
-        if (paymentMethod === 'stripe' && data.paymentUrl) {
-          // 延迟跳转，确保用户看到成功状态
-          setTimeout(() => {
-            window.location.href = data.paymentUrl;
-          }, 500);
-          return;
-        } else if (paymentMethod === 'usdt') {
-          router.push(`/success?orderId=${data.orderId}&email=${encodeURIComponent(email)}`);
-          return;
-        }
+      if (data.success && data.paymentUrl) {
+        // Stripe 支付：跳转到 Stripe Checkout
+        setTimeout(() => {
+          window.location.href = data.paymentUrl;
+        }, 500);
+        return;
+      } else if (paymentMethod === 'usdt') {
+        // USDT 支付：直接显示钱包地址（待实现）
+        router.push(`/success?orderId=USDT-${Date.now()}&email=${encodeURIComponent(email)}&method=usdt`);
+        return;
       }
       
       setError(data.error || '支付创建失败');
