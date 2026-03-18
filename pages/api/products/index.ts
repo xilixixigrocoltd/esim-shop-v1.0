@@ -14,7 +14,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       products = await b2bApi.getProductsByCountry(country as string);
     } else {
       const response = await b2bApi.getProducts(Number(page), Number(pageSize));
-      products = response.list;
+      products = response.products;
     }
 
     return res.status(200).json({ success: true, data: products });

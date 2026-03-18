@@ -7,8 +7,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     const allProducts: any[] = [];
     for (let page = 1; page <= 2; page++) {
       const response = await b2bApi.getProducts(page, 100);
-      allProducts.push(...response.list);
-      if (response.list.length < 100) break;
+      const result = await b2bApi.getProducts(page, 100);
+      allProducts.push(...result.products);
+      if (result.products.length < 100) break;
     }
 
     console.log(`[test-countries] 获取到 ${allProducts.length} 个产品`);
