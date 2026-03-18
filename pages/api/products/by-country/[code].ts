@@ -7,6 +7,12 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   }
 
   const { code } = req.query;
+  
+  // 确保 code 是字符串且转为大写
+  const countryCode = Array.isArray(code) ? code[0] : code;
+  if (!countryCode) {
+    return res.status(400).json({ success: false, error: '国家代码不能为空' });
+  }
 
   try {
     const allProducts = [];
@@ -16,10 +22,10 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       const result = await b2bApi.getProducts(page, 100);
       if (!result || !result.products) break;
       
-      // 筛选指定国家的产品
+      // 筛选指定国家的产品（代码转大写比较）
       const filtered = result.products.filter((p: any) => {
         if (p.type !== 'local' || !p.countries) return false;
-        return p.countries.some((c: any) => c.code === code);
+        return p.countries.some((c: any) => c.code?.toUpperCase() === countryCode.toUpperCase());
       });
       
       allProducts.push(...filtered);
