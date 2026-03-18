@@ -41,6 +41,9 @@ export interface OrderItem {
   productName: string;
   quantity: number;
   price: number;
+  dataSize?: number;
+  validDays?: number;
+  countries?: Country[];
 }
 
 export interface EsimData {

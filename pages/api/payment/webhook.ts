@@ -1,6 +1,6 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
 import Stripe from 'stripe';
-import { b2bApi } from '@/lib/api';
+import { b2bApi, formatDataSize } from '@/lib/api';
 import { sendOrderConfirmation } from '@/lib/email';
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY || '', {
@@ -90,18 +90,28 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         // 3. 发送确认邮件（包含 eSIM 信息）
         if (order.esims && order.esims.length > 0) {
           try {
+            const esim = order.esims[0];
+            const product = order.orderItems?.[0];
+            
             await sendOrderConfirmation(email, {
               orderId,
+              customerEmail: email,
               items: [{
-                name: order.orderItems?.[0]?.productName || 'eSIM 套餐',
+                name: product?.productName || 'eSIM 套餐',
                 quantity: 1,
                 price: amount.toString(),
+                dataSize: product?.dataSize ? `${formatDataSize(product.dataSize)}` : undefined,
+                validity: product?.validDays ? `${product.validDays}天` : undefined,
+                countries: product?.countries?.map((c: any) => c.name) || [],
               }],
               totalAmount: amount.toString(),
+              paymentMethod: '信用卡',
               esimData: {
-                iccid: order.esims[0].iccid,
-                qrCode: order.esims[0].qrCode,
-                activationCode: order.esims[0].activationCode,
+                iccid: esim.iccid,
+                qrCode: esim.qrCode || esim.activationCode || '',
+                activationCode: esim.activationCode || '',
+                dataAmount: product?.dataSize ? `${formatDataSize(product.dataSize)}` : 'N/A',
+                validityDays: product?.validDays || 0,
               },
             });
             console.log('Confirmation email sent to:', email);
