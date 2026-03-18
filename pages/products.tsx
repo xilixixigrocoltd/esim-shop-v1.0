@@ -296,7 +296,7 @@ export default function ProductsPage() {
       {/* 顶部标签页导航 + 搜索框 */}
       <div className="sticky top-0 z-50 bg-white border-b border-gray-200 shadow-sm">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center justify-between py-4 gap-4">
+          <div className="flex flex-col sm:flex-row items-center justify-between py-4 gap-4">
             <div className="flex flex-wrap justify-center gap-2">
               {tabs.map((t) => (
                 <button
@@ -314,14 +314,14 @@ export default function ProductsPage() {
             </div>
 
             {/* 搜索框 */}
-            <form onSubmit={handleSearch} className="flex-shrink-0">
+            <form onSubmit={handleSearch} className="w-full sm:w-auto flex-shrink-0">
               <div className="relative">
                 <input
                   type="text"
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
                   placeholder="搜索国家或产品..."
-                  className="w-64 pl-4 pr-12 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-orange-500"
+                  className="w-full sm:w-64 pl-4 pr-12 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-orange-500"
                 />
                 <button
                   type="submit"
