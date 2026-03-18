@@ -173,6 +173,22 @@ export default function CheckoutPage() {
           </div>
 
           <div className="bg-white rounded-xl p-6 shadow-sm">
+            <h2 className="font-semibold text-gray-900 mb-4">购买须知</h2>
+            
+            <div className="bg-red-50 border-2 border-red-200 rounded-xl p-4 mb-4">
+              <div className="flex items-start gap-3">
+                <AlertCircle className="w-5 h-5 text-red-600 mt-0.5 flex-shrink-0" />
+                <div className="text-sm text-red-800">
+                  <p className="font-bold mb-1">⚠️ 重要提示：中国国行手机无法使用</p>
+                  <p className="font-semibold mb-2">中国大陆版本 iPhone 为实体双卡，不支持 eSIM 功能。</p>
+                  <p className="font-bold mb-1">⚠️ Important: China Mainland iPhone NOT Compatible</p>
+                  <p className="font-semibold">China mainland version iPhone uses dual physical SIM cards and does NOT support eSIM functionality.</p>
+                  <p className="mt-2 text-red-700">请确认您的设备支持 eSIM 后再购买，非国行设备（如港版、美版、日版等）可正常使用。</p>
+                  <p className="text-red-700">Please confirm your device supports eSIM before purchasing. Non-China versions (HK, US, JP, etc.) work normally.</p>
+                </div>
+              </div>
+            </div>
+
             <label className="flex items-start gap-3 cursor-pointer">
               <input type="checkbox" checked={agreed} onChange={(e) => setAgreed(e.target.checked)} className="mt-1 w-5 h-5 text-orange-500 rounded focus:ring-orange-500" />
               <div className="text-sm text-gray-600">
