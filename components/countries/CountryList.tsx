@@ -14,9 +14,13 @@ interface CountryWithProducts {
   productCount: number;
 }
 
-export default function CountryList() {
+interface CountryListProps {
+  initialSearch?: string;
+}
+
+export default function CountryList({ initialSearch = '' }: CountryListProps) {
   const [countries, setCountries] = useState<CountryWithProducts[]>([]);
-  const [searchQuery, setSearchQuery] = useState('');
+  const [searchQuery, setSearchQuery] = useState(initialSearch || '');
   const [selectedRegion, setSelectedRegion] = useState<string>('all');
   const [loading, setLoading] = useState(true);
 
