@@ -3,15 +3,10 @@ import { b2bApi } from '@/lib/api';
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   try {
-    // 测试获取第 1 页
-    const firstPage = await b2bApi.getProducts(1, 100);
-    console.log('[test] 第 1 页产品数:', firstPage.products.length);
-    console.log('[test] 分页信息:', JSON.stringify(firstPage.pagination));
-    
     // 获取所有产品
     const allProducts = await b2bApi.getAllProducts();
     
-    // 统计
+    // 统计类型
     const typeCount = {
       local: allProducts.filter(p => p.type === 'local').length,
       regional: allProducts.filter(p => p.type === 'regional').length,
@@ -26,13 +21,23 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       }
     });
     
+    // 按类型分组示例产品
+    const sampleByType: any = {};
+    ['local', 'regional', 'global'].forEach(type => {
+      const products = allProducts.filter(p => p.type === type);
+      sampleByType[type] = products.slice(0, 3).map(p => ({
+        name: p.name,
+        countries: p.countries?.map(c => c.cn).slice(0, 3),
+        price: p.price,
+      }));
+    });
+    
     return res.status(200).json({
       success: true,
       totalProducts: allProducts.length,
-      pagination: firstPage.pagination,
       typeCount,
       countriesCount: countrySet.size,
-      sampleProduct: allProducts[0],
+      sampleByType,
     });
   } catch (error: any) {
     return res.status(500).json({
