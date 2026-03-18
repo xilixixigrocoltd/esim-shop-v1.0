@@ -46,7 +46,7 @@ export default function ProductCard({ product }: ProductCardProps) {
 
         <div className="flex items-center justify-between pt-3 border-t border-gray-100">
           <div>
-            <span className="text-2xl font-bold text-orange-600">{formatPrice(product.agentPrice)}</span>
+            <span className="text-2xl font-bold text-orange-600">${Number(product.price || 0).toFixed(2)}</span>
           </div>
           <span className="px-4 py-2 bg-orange-50 text-orange-600 font-medium rounded-lg group-hover:bg-orange-500 group-hover:text-white transition-colors">
             选购

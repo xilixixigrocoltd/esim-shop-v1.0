@@ -18,14 +18,16 @@ export interface Product {
   countries: Country[];
   dataSize: number;
   validDays: number;
-  price: string;
-  agentPrice: string;
-  stock: number;
+  price: number | string;
+  costPrice?: number | string;
+  agentPrice?: number | string;  // 兼容旧字段
+  stock?: number;
   image?: string;
   features: string[];
-  status: 'active' | 'inactive';
+  status?: 'active' | 'inactive';
   isHot?: boolean;
   isRecommend?: boolean;
+  sortOrder?: number;
 }
 
 export interface CartItem {
