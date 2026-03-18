@@ -17,8 +17,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   try {
     const allProducts = [];
     
-    // 获取前 15 页产品
-    for (let page = 1; page <= 15; page++) {
+    // 获取所有产品（28 页）
+    for (let page = 1; page <= 28; page++) {
       const result = await b2bApi.getProducts(page, 100);
       if (!result || !result.products) break;
       
