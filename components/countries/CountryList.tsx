@@ -46,7 +46,7 @@ export default function CountryList() {
   // countries 已经从 API 获取，不需要再计算
 
   const filteredCountries = useMemo(() => {
-    let result = countries;
+    let result = countries.filter(c => c.name); // 确保有 name
 
     if (selectedRegion !== 'all') {
       const region = REGIONS.find(r => r.id === selectedRegion);
@@ -58,8 +58,8 @@ export default function CountryList() {
     if (searchQuery) {
       const query = searchQuery.toLowerCase();
       result = result.filter(c => 
-        c.name.toLowerCase().includes(query) || 
-        c.nameEn.toLowerCase().includes(query) ||
+        (c.name || '').toLowerCase().includes(query) || 
+        (c.nameEn || '').toLowerCase().includes(query) ||
         c.code.toLowerCase().includes(query)
       );
     }

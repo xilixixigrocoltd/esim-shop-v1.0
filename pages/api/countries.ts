@@ -41,7 +41,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       }
     });
 
-    const countries = Array.from(countryMap.values()).sort((a, b) => a.name.localeCompare(b.name, 'zh-CN'));
+    const countries = Array.from(countryMap.values())
+      .filter(c => c.name) // 过滤掉没有 name 的国家
+      .sort((a, b) => (a.name || '').localeCompare(b.name || '', 'zh-CN'));
     return res.status(200).json({ success: true, data: countries });
   } catch (error: any) {
     console.error('Failed to fetch countries:', error?.message || error);
