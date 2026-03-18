@@ -1,19 +1,49 @@
-const B2B_API_URL = process.env.B2B_API_URL || "https://ciuh32wky.xigrocoltd.com/api";
-const B2B_API_TOKEN = process.env.B2B_API_TOKEN || "";
+const B2B_API_URL = process.env.B2B_API_URL || "https://api.xigrocoltd.com";
+const API_KEY = process.env.API_KEY || "";
+const API_SECRET = process.env.API_SECRET || "";
 
 import type { Product, ProductListResponse, Order } from "@/types";
 
+// HMAC-SHA256 签名
+async function hmacSha256(message: string, secret: string): Promise<string> {
+  const encoder = new TextEncoder();
+  const keyData = encoder.encode(secret);
+  const messageData = encoder.encode(message);
+  
+  const cryptoKey = await crypto.subtle.importKey(
+    "raw",
+    keyData,
+    { name: "HMAC", hash: "SHA-256" },
+    false,
+    ["sign"]
+  );
+  
+  const signature = await crypto.subtle.sign("HMAC", cryptoKey, messageData);
+  return Array.from(new Uint8Array(signature))
+    .map(b => b.toString(16).padStart(2, "0"))
+    .join("");
+}
+
 class B2BApiClient {
-  private async request<T>(endpoint: string, options?: RequestInit): Promise<T> {
+  private async request<T>(endpoint: string, method: "GET" | "POST" = "GET", data?: any): Promise<T> {
+    const timestamp = Date.now().toString();
+    const nonce = Math.random().toString(36).substring(2, 15);
+    const body = data ? JSON.stringify(data) : "";
+    
+    const signString = timestamp + nonce + method + endpoint + body;
+    const signature = await hmacSha256(signString, API_SECRET);
+    
     const url = `${B2B_API_URL}${endpoint}`;
     const response = await fetch(url, {
-      ...options,
+      method,
       headers: {
-        Authorization: `Bearer ${B2B_API_TOKEN}`,
-        "User-Agent": "Mozilla/5.0",
+        "x-api-key": API_KEY,
+        "x-timestamp": timestamp,
+        "x-nonce": nonce,
+        "x-signature": signature,
         "Content-Type": "application/json",
-        ...options?.headers,
       },
+      body: data ? body : undefined,
     });
 
     if (!response.ok) {
@@ -22,25 +52,34 @@ class B2BApiClient {
       throw new Error(`API request failed: ${response.status} - ${errorText.slice(0, 100)}`);
     }
 
-    const data = await response.json();
-    return data.data;
+    const result = await response.json();
+    if (result.code !== 0) {
+      throw new Error(result.message || "API 返回错误");
+    }
+    
+    return result.message;
   }
 
-  async getProducts(page = 1, pageSize = 100): Promise<ProductListResponse> {
-    return this.request(`/agent/products?page=${page}&pageSize=${pageSize}`);
+  async getProducts(page = 1, limit = 100): Promise<{ products: Product[]; pagination: any }> {
+    return this.request(`/api/v1/products?limit=${limit}&page=${page}`);
   }
 
   async getAllProducts(): Promise<Product[]> {
     const allProducts: Product[] = [];
     let page = 1;
-    const pageSize = 100;
+    const limit = 100;
+    let hasMore = true;
 
-    while (true) {
-      const response = await this.getProducts(page, pageSize);
-      allProducts.push(...response.list);
-      if (response.list.length < pageSize) break;
-      page++;
-      if (page > 30) break;
+    while (hasMore) {
+      const result = await this.getProducts(page, limit);
+      allProducts.push(...result.products);
+      
+      const totalPages = result.pagination?.totalPages || 1;
+      if (page >= totalPages || result.products.length < limit) {
+        hasMore = false;
+      } else {
+        page++;
+      }
     }
 
     return allProducts;
@@ -54,13 +93,7 @@ class B2BApiClient {
   }
 
   async getProductsByCountry(countryCode: string): Promise<Product[]> {
-    // B2B API 每页只返回 10 个产品，获取前 100 页（1000 个产品）
-    const allProducts: Product[] = [];
-    for (let page = 1; page <= 100; page++) {
-      const response = await this.getProducts(page, 100);
-      allProducts.push(...response.list);
-      if (response.list.length < 10) break; // B2B API 每页 10 个
-    }
+    const allProducts = await this.getAllProducts();
     
     return allProducts.filter(
       (p: Product) =>
@@ -69,41 +102,22 @@ class B2BApiClient {
     );
   }
 
-  async createOrder(items: { id: number; quantity: number }[]): Promise<Order> {
-    return this.request("/agent/orders", {
-      method: "POST",
-      body: JSON.stringify({ items }),
-    });
+  async createOrder(items: Array<{ id: number; quantity: number }>): Promise<Order> {
+    return this.request("/api/v1/orders", "POST", { items });
   }
 
-  async getOrders(): Promise<Order[]> {
-    // 获取最近订单列表（实际项目中可能需要分页）
-    const result = await this.request<{ list: Order[] }>("/agent/orders");
-    return result.list || [];
-  }
-
-  async getOrderById(orderId: string): Promise<Order | null> {
-    const orders = await this.getOrders();
-    return orders.find(o => o.orderNumber === orderId) || null;
+  async getOrder(orderId: string): Promise<Order> {
+    return this.request(`/api/v1/orders/${orderId}`);
   }
 }
 
 export const b2bApi = new B2BApiClient();
 
-export function formatDataSize(mb: number): string {
-  if (mb >= 1024) return `${(mb / 1024).toFixed(1)}GB`;
-  return `${mb}MB`;
-}
-
+// 获取国家旗帜
 export function getCountryFlag(code: string): string {
-  const flags: Record<string, string> = {
-    CN: "🇨🇳", JP: "🇯🇵", KR: "🇰🇷", TH: "🇹🇭", SG: "🇸🇬", MY: "🇲🇾",
-    US: "🇺🇸", GB: "🇬🇧", DE: "🇩🇪", FR: "🇫🇷", IT: "🇮🇹", ES: "🇪🇸",
-    AU: "🇦🇺", CA: "🇨🇦", NZ: "🇳🇿", HK: "🇭🇰", TW: "🇹🇼", MO: "🇲🇴",
-    ID: "🇮🇩", PH: "🇵🇭", VN: "🇻🇳", IN: "🇮🇳", AE: "🇦🇪", SA: "🇸🇦",
-    TR: "🇹🇷", NL: "🇳🇱", CH: "🇨🇭", AT: "🇦🇹", BE: "🇧🇪", DK: "🇩🇰",
-    SE: "🇸🇪", NO: "🇳🇴", FI: "🇫🇮", PL: "🇵🇱", CZ: "🇨🇿", HU: "🇭🇺",
-    GR: "🇬🇷", PT: "🇵🇹", IE: "🇮🇪", BR: "🇧🇷", MX: "🇲🇽", AR: "🇦🇷",
-  };
-  return flags[code.toUpperCase()] || "🏳️";
+  const codePoints = code
+    .toUpperCase()
+    .split("")
+    .map((char) => 127397 + char.charCodeAt(0));
+  return String.fromCodePoint(...codePoints);
 }

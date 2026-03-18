@@ -33,7 +33,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     // 写入缓存
     cache.set(cacheKey, { data: products, timestamp: Date.now() });
     
-    // 设置缓存头
     res.setHeader('Cache-Control', 'public, s-maxage=300, stale-while-revalidate=600');
     
     return res.status(200).json({ success: true, data: products });

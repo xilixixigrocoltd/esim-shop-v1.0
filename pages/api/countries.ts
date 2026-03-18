@@ -26,17 +26,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   }
 
   try {
-    // B2B API 每页只返回 10 个产品，总共 2720 个 = 272 页
-    // 优化：只获取前 100 页（1000 个产品）用于国家列表，平衡性能和覆盖率
-    const allProducts: Product[] = [];
-    for (let page = 1; page <= 100; page++) {
-      const response = await b2bApi.getProducts(page, 100);
-      allProducts.push(...response.list);
-      if (page % 20 === 0) {
-        console.log(`[countries] 第${page}页：累计${allProducts.length}个产品`);
-      }
-      if (response.list.length < 10) break; // B2B API 每页 10 个
-    }
+    // 使用新 API 获取所有产品
+    const allProducts = await b2bApi.getAllProducts();
     console.log(`[countries] 最终获取${allProducts.length}个产品`);
 
     const countryMap = new Map<string, CountryWithProducts>();
