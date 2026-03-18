@@ -14,6 +14,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     return res.status(405).json({ error: 'Method not allowed' });
   }
 
+  // 禁用缓存，确保每次获取最新数据
+  res.setHeader('Cache-Control', 'no-store, max-age=0, must-revalidate');
+
   try {
     // 获取所有产品（约 2600+，27 页）
     const allProducts: Product[] = [];
