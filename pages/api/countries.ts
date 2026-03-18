@@ -24,14 +24,18 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     }
 
     const countryMap = new Map<string, CountryWithProducts>();
+    console.log(`[countries] 获取到 ${allProducts.length} 个产品`);
+    console.log(`[countries] 第一个产品类型：${allProducts[0]?.type}`);
+    console.log(`[countries] 第一个产品国家：${JSON.stringify(allProducts[0]?.countries)}`);
 
     allProducts.forEach((product) => {
+      console.log(`[countries] 产品 ${product.id}: type=${product.type}, countries=${!!product.countries}`);
       if (product.type === 'local' && product.countries) {
         product.countries.forEach((country: any) => {
           // B2B API 返回的字段是 cn/en/code，不是 name/nameEn/code
           const name = country.cn || country.name || 'Unknown';
           const nameEn = country.en || country.nameEn || 'Unknown';
-          const code = country.code || country.code;
+          const code = country.code;
           
           if (!countryMap.has(code)) {
             countryMap.set(code, {
@@ -45,6 +49,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         });
       }
     });
+    
+    console.log(`[countries] 最终国家数：${countryMap.size}`);
 
     const countries = Array.from(countryMap.values())
       .filter(c => c.name) // 过滤掉没有 name 的国家
