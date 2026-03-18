@@ -35,10 +35,10 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
           orderId,
           items: productDetails,
           totalAmount: amount,
-          esimData: order.esimData ? {
-            iccid: order.esimData.iccid,
-            qrCode: order.esimData.qrCode,
-            activationCode: order.esimData.activationCode,
+          esimData: order.esimData && order.esimData.length > 0 ? {
+            iccid: order.esimData[0].iccid,
+            qrCode: order.esimData[0].qrCode,
+            activationCode: order.esimData[0].activationCode,
           } : undefined,
         });
       } catch (emailError) {
