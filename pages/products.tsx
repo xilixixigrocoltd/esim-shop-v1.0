@@ -106,9 +106,9 @@ export default function ProductsPage() {
               p.nameEn.toLowerCase().includes(query) ||
               (p.description && p.description.toLowerCase().includes(query)) ||
               (p.countries && p.countries.some(c => 
-                c.cn.toLowerCase().includes(query) ||
-                c.en.toLowerCase().includes(query) ||
-                c.code.toLowerCase().includes(query)
+                (c.cn && c.cn.toLowerCase().includes(query)) ||
+                (c.en && c.en.toLowerCase().includes(query)) ||
+                (c.code && c.code.toLowerCase().includes(query))
               ))
             );
           }
