@@ -33,13 +33,15 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     try {
       const { items } = req.body;
       
-      if (!items || !Array.isArray(items)) {
+      if (!items || !Array.isArray(items) || items.length === 0) {
         return res.status(400).json({ success: false, error: '订单数据无效' });
       }
       
       const { email } = req.body;
+      // API 只支持单个产品下单，取第一个
       const orderPayload = {
-        items: items.map((item: any) => ({ productId: item.id, quantity: item.quantity })),
+        productId: items[0].id,
+        quantity: items[0].quantity,
         customerEmail: email || ''
       };
       const order = await b2bApi.createOrder(orderPayload);

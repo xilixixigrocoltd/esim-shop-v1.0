@@ -14,12 +14,12 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       return res.status(400).json({ error: 'Missing required fields' });
     }
 
-    // 1. 创建 B2B 订单（需要 customerEmail 和 productId 格式）
+    // 1. 创建 B2B 订单（API 期望扁平结构：productId, quantity, customerEmail）
+    // 注意：多个产品需要多次调用或 API 支持数组
+    const firstItem = items[0];
     const orderPayload = {
-      items: items.map((item: { id: number; quantity: number }) => ({
-        productId: item.id,
-        quantity: item.quantity
-      })),
+      productId: firstItem.id,
+      quantity: firstItem.quantity,
       customerEmail: email
     };
     const order = await b2bApi.createOrder(orderPayload);

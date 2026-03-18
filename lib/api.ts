@@ -96,7 +96,7 @@ class B2BApiClient {
     return products;
   }
 
-  async createOrder(payload: { items: Array<{ productId: number; quantity: number }>; customerEmail: string }): Promise<Order> {
+  async createOrder(payload: { productId: number; quantity: number; customerEmail: string }): Promise<Order> {
     return this.request("/api/v1/orders", "POST", payload);
   }
 
