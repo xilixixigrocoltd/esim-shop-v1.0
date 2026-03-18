@@ -106,7 +106,7 @@ export default function ProductsPage() {
               );
               
               if (matchedCountry) {
-                // 是国家搜索，直接调用国家 API
+                // 是国家搜索，直接调用国家 API（只返回 local 产品）
                 const res = await fetch(`/api/products/by-country/${matchedCountry.code}`);
                 const json = await res.json();
                 if (json.success && json.data) {
