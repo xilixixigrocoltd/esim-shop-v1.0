@@ -15,7 +15,8 @@ export default function HeroSection() {
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
     if (searchQuery.trim()) {
-      router.push(`/countries?q=${encodeURIComponent(searchQuery)}`);
+      // 跳转到产品列表页，使用搜索关键词
+      router.push(`/products?tab=all&search=${encodeURIComponent(searchQuery)}`);
     }
   };
 

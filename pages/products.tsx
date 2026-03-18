@@ -38,17 +38,19 @@ type ViewMode = 'list' | 'country' | 'region' | 'plan-type';
 
 export default function ProductsPage() {
   const router = useRouter();
-  const { tab, country, region, planType } = router.query;
+  const { tab, country, region, planType, search } = router.query;
   
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
   const [activeTab, setActiveTab] = useState('all');
   const [viewMode, setViewMode] = useState<ViewMode>('list');
   const [selectedItem, setSelectedItem] = useState<string>('');
+  const [searchQuery, setSearchQuery] = useState('');
 
   // 同步 URL 参数
   useEffect(() => {
     if (tab) setActiveTab(tab as string);
+    if (search) setSearchQuery(search as string);
     if (country) {
       setViewMode('country');
       setSelectedItem(country as string);
@@ -62,7 +64,7 @@ export default function ProductsPage() {
       setViewMode('list');
       setSelectedItem('');
     }
-  }, [tab, country, region, planType]);
+  }, [tab, country, region, planType, search]);
 
   // 加载产品
   useEffect(() => {
@@ -71,7 +73,10 @@ export default function ProductsPage() {
         setLoading(true);
         let endpoint = '';
         
-        if (viewMode === 'country' && selectedItem) {
+        // 如果有搜索关键词，获取所有产品后在前端过滤
+        if (searchQuery) {
+          endpoint = '/api/products?page=1&pageSize=100';
+        } else if (viewMode === 'country' && selectedItem) {
           endpoint = `/api/products/by-country/${selectedItem}`;
         } else if (viewMode === 'region' && selectedItem) {
           endpoint = `/api/products/region/${selectedItem}`;
@@ -91,7 +96,24 @@ export default function ProductsPage() {
         const json = await res.json();
         
         if (json.success && json.data) {
-          setProducts(json.data);
+          let products = json.data;
+          
+          // 前端搜索过滤
+          if (searchQuery) {
+            const query = searchQuery.toLowerCase();
+            products = products.filter((p: Product) => 
+              p.name.toLowerCase().includes(query) ||
+              p.nameEn.toLowerCase().includes(query) ||
+              p.description.toLowerCase().includes(query) ||
+              (p.countries && p.countries.some(c => 
+                c.cn.toLowerCase().includes(query) ||
+                c.en.toLowerCase().includes(query) ||
+                c.code.toLowerCase().includes(query)
+              ))
+            );
+          }
+          
+          setProducts(products);
         } else {
           setProducts([]);
         }
