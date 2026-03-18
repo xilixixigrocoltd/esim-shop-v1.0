@@ -14,7 +14,7 @@ export default function CartPage() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const savedCart = storage.get(CART_KEY) || [];
+    const savedCart = storage.get(CART_KEY) as CartItem[] || [];
     setCart(savedCart);
     setLoading(false);
   }, []);

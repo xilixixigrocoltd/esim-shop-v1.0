@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import Header from './Header';
 import Footer from './Footer';
 import { storage, CART_KEY } from '@/lib/utils';
+import type { CartItem } from '@/types';
 
 interface LayoutProps {
   children: React.ReactNode;
@@ -13,8 +14,8 @@ export default function Layout({ children }: LayoutProps) {
   const [cartCount, setCartCount] = useState(0);
 
   useEffect(() => {
-    const cart = storage.get(CART_KEY) || [];
-    const count = cart.reduce((sum: number, item: any) => sum + item.quantity, 0);
+    const cart = (storage.get(CART_KEY) as CartItem[]) || [];
+    const count = cart.reduce((sum: number, item: CartItem) => sum + item.quantity, 0);
     setCartCount(count);
   }, []);
 

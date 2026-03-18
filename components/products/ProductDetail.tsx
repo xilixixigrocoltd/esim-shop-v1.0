@@ -17,7 +17,7 @@ export default function ProductDetail({ product }: ProductDetailProps) {
   const [added, setAdded] = useState(false);
 
   const addToCart = () => {
-    const cart: CartItem[] = storage.get(CART_KEY) || [];
+    const cart = (storage.get(CART_KEY) as CartItem[]) || [];
     const existingIndex = cart.findIndex(item => item.product.id === product.id);
 
     if (existingIndex >= 0) {

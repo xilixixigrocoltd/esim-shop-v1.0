@@ -17,7 +17,7 @@ export default function CheckoutPage() {
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    const savedCart = storage.get(CART_KEY) || [];
+    const savedCart = storage.get(CART_KEY) as CartItem[] || [];
     if (savedCart.length === 0) {
       router.push('/cart');
       return;
