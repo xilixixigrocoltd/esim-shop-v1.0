@@ -105,10 +105,10 @@ export default function ProductsPage() {
               // 在国家列表中查找匹配（代码/中文名/英文名）
               const matchedCountry = countriesJson.data.find((c: any) => 
                 c.code?.toUpperCase() === query ||
-                c.cn?.toLowerCase() === lowerQuery ||
-                c.en?.toLowerCase() === lowerQuery ||
-                c.cn?.toLowerCase().includes(lowerQuery) ||
-                c.en?.toLowerCase().includes(lowerQuery)
+                c.name?.toLowerCase() === lowerQuery ||
+                c.nameEn?.toLowerCase() === lowerQuery ||
+                c.name?.toLowerCase().includes(lowerQuery) ||
+                c.nameEn?.toLowerCase().includes(lowerQuery)
               );
               
               console.log('[Products] 匹配国家:', matchedCountry);
