@@ -5,10 +5,12 @@ import { useRouter } from 'next/navigation';
 import { Search, Zap, Shield, Globe } from 'lucide-react';
 import { POPULAR_COUNTRIES } from '@/lib/constants';
 import { getCountryFlag } from '@/lib/api';
+import { useI18n } from '@/lib/i18n-context';
 
 export default function HeroSection() {
   const router = useRouter();
   const [searchQuery, setSearchQuery] = useState('');
+  const { t } = useI18n();
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
@@ -23,16 +25,15 @@ export default function HeroSection() {
         <div className="text-center max-w-3xl mx-auto">
           <div className="inline-flex items-center gap-2 px-4 py-2 bg-white/10 rounded-full text-sm font-medium mb-6">
             <Zap className="w-4 h-4 text-orange-400" />
-            <span>即买即用，无需等待</span>
+            <span>{t('home.hero.instant')}</span>
           </div>
 
           <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 leading-tight">
-            全球<span className="text-transparent bg-clip-text bg-gradient-to-r from-orange-400 to-red-400">eSIM</span>，
-            <br />即时连接
+            {t('home.hero.title')}
           </h1>
 
           <p className="text-lg md:text-xl text-gray-300 mb-8">
-            覆盖150+国家，即买即用，无需实体SIM卡
+            {t('home.hero.subtitle')}
           </p>
 
           <form onSubmit={handleSearch} className="max-w-xl mx-auto mb-12">
@@ -42,26 +43,26 @@ export default function HeroSection() {
                 type="text"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                placeholder="搜索国家或地区..."
+                placeholder={t('home.hero.search_placeholder')}
                 className="w-full pl-12 pr-4 py-4 bg-white text-gray-900 rounded-2xl shadow-lg focus:ring-4 focus:ring-orange-500/30 focus:outline-none"
               />
               <button type="submit" className="absolute right-2 top-1/2 -translate-y-1/2 px-6 py-2 bg-gradient-to-r from-orange-500 to-red-500 text-white font-medium rounded-xl">
-                搜索
+                {t('common.search')}
               </button>
             </div>
           </form>
 
           <div className="flex flex-col sm:flex-row gap-4 justify-center mb-16">
             <a href="/products?tab=all" className="px-8 py-4 bg-gradient-to-r from-orange-500 to-red-500 text-white font-semibold rounded-xl hover:opacity-90">
-              立即选购
+              {t('home.hero.cta')}
             </a>
             <a href="/help" className="px-8 py-4 bg-white/10 text-white font-semibold rounded-xl hover:bg-white/20 border border-white/20">
-              了解更多
+              {t('home.hero.learn_more')}
             </a>
           </div>
 
           <div>
-            <p className="text-sm text-gray-400 mb-4">热门目的地</p>
+            <p className="text-sm text-gray-400 mb-4">{t('home.hero.popular')}</p>
             <div className="flex flex-wrap justify-center gap-3">
               {POPULAR_COUNTRIES.slice(0, 6).map((country) => (
                 <a key={country.code} href={`/country/${country.code.toLowerCase()}`} className="flex items-center gap-2 px-4 py-2 bg-white/10 rounded-full hover:bg-white/20">
@@ -82,8 +83,8 @@ export default function HeroSection() {
                 <Globe className="w-6 h-6 text-orange-400" />
               </div>
               <div>
-                <h3 className="font-semibold">150+国家</h3>
-                <p className="text-sm text-gray-400">全球覆盖</p>
+                <h3 className="font-semibold">{t('home.features.countries')}</h3>
+                <p className="text-sm text-gray-400">{t('home.features.global')}</p>
               </div>
             </div>
             <div className="flex items-center gap-4">
@@ -91,8 +92,8 @@ export default function HeroSection() {
                 <Zap className="w-6 h-6 text-orange-400" />
               </div>
               <div>
-                <h3 className="font-semibold">即时送达</h3>
-                <p className="text-sm text-gray-400">邮件秒发</p>
+                <h3 className="font-semibold">{t('home.features.instant')}</h3>
+                <p className="text-sm text-gray-400">{t('home.features.delivery')}</p>
               </div>
             </div>
             <div className="flex items-center gap-4">
@@ -100,8 +101,8 @@ export default function HeroSection() {
                 <Shield className="w-6 h-6 text-orange-400" />
               </div>
               <div>
-                <h3 className="font-semibold">7天退款</h3>
-                <p className="text-sm text-gray-400">未激活可退</p>
+                <h3 className="font-semibold">{t('home.features.refund')}</h3>
+                <p className="text-sm text-gray-400">{t('home.features.unused')}</p>
               </div>
             </div>
           </div>
