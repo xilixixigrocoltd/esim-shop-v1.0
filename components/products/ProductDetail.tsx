@@ -133,42 +133,88 @@ export default function ProductDetail({ product }: ProductDetailProps) {
         </div>
       </div>
 
-      <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 p-4">
-        <div className="max-w-4xl mx-auto flex items-center gap-4">
-          <div className="flex items-center gap-2">
-            <button
-              onClick={() => setQuantity(Math.max(1, quantity - 1))}
-              className="w-10 h-10 bg-gray-100 rounded-lg flex items-center justify-center hover:bg-gray-200"
-            >
-              <Minus className="w-5 h-5" />
-            </button>
-            <span className="w-12 text-center font-semibold text-lg">{quantity}</span>
-            <button
-              onClick={() => setQuantity(quantity + 1)}
-              className="w-10 h-10 bg-gray-100 rounded-lg flex items-center justify-center hover:bg-gray-200"
-            >
-              <Plus className="w-5 h-5" />
-            </button>
+      <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 p-4 pb-6 md:pb-4">
+        <div className="max-w-4xl mx-auto">
+          {/* 移动端：垂直布局 */}
+          <div className="flex flex-col gap-3 md:hidden">
+            {/* 数量 + 总价 */}
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-2">
+                <button
+                  onClick={() => setQuantity(Math.max(1, quantity - 1))}
+                  className="w-10 h-10 bg-gray-100 rounded-lg flex items-center justify-center hover:bg-gray-200"
+                >
+                  <Minus className="w-5 h-5" />
+                </button>
+                <span className="w-12 text-center font-semibold text-lg">{quantity}</span>
+                <button
+                  onClick={() => setQuantity(quantity + 1)}
+                  className="w-10 h-10 bg-gray-100 rounded-lg flex items-center justify-center hover:bg-gray-200"
+                >
+                  <Plus className="w-5 h-5" />
+                </button>
+              </div>
+              <div className="text-right">
+                <p className="text-sm text-gray-500">合计</p>
+                <p className="text-xl font-bold text-orange-600">${(Number(product.price || 0) * quantity).toFixed(2)}</p>
+              </div>
+            </div>
+            
+            {/* 按钮：全宽垂直排列 */}
+            <div className="flex flex-col gap-2">
+              <button
+                onClick={addToCart}
+                className={`w-full py-3 rounded-xl font-semibold flex items-center justify-center gap-2 ${added ? 'bg-green-500 text-white' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'}`}
+              >
+                {added ? <><Check className="w-5 h-5" /> 已添加</> : <><ShoppingCart className="w-5 h-5" /> 加入购物车</>}
+              </button>
+              
+              <button
+                onClick={buyNow}
+                className="w-full py-3 bg-gradient-to-r from-orange-500 to-red-500 text-white font-semibold rounded-xl hover:opacity-90"
+              >
+                立即购买
+              </button>
+            </div>
           </div>
 
-          <div className="flex-1 text-right">
-            <p className="text-sm text-gray-500">合计</p>
-            <p className="text-xl font-bold text-orange-600">${(Number(product.price || 0) * quantity).toFixed(2)}</p>
+          {/* 桌面端：水平布局 */}
+          <div className="hidden md:flex items-center gap-4">
+            <div className="flex items-center gap-2">
+              <button
+                onClick={() => setQuantity(Math.max(1, quantity - 1))}
+                className="w-10 h-10 bg-gray-100 rounded-lg flex items-center justify-center hover:bg-gray-200"
+              >
+                <Minus className="w-5 h-5" />
+              </button>
+              <span className="w-12 text-center font-semibold text-lg">{quantity}</span>
+              <button
+                onClick={() => setQuantity(quantity + 1)}
+                className="w-10 h-10 bg-gray-100 rounded-lg flex items-center justify-center hover:bg-gray-200"
+              >
+                <Plus className="w-5 h-5" />
+              </button>
+            </div>
+
+            <div className="flex-1 text-right">
+              <p className="text-sm text-gray-500">合计</p>
+              <p className="text-xl font-bold text-orange-600">${(Number(product.price || 0) * quantity).toFixed(2)}</p>
+            </div>
+
+            <button
+              onClick={addToCart}
+              className={`px-6 py-3 rounded-xl font-semibold flex items-center gap-2 ${added ? 'bg-green-500 text-white' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'}`}
+            >
+              {added ? <><Check className="w-5 h-5" /> 已添加</> : <><ShoppingCart className="w-5 h-5" /> 加入购物车</>}
+            </button>
+
+            <button
+              onClick={buyNow}
+              className="px-6 py-3 bg-gradient-to-r from-orange-500 to-red-500 text-white font-semibold rounded-xl hover:opacity-90"
+            >
+              立即购买
+            </button>
           </div>
-
-          <button
-            onClick={addToCart}
-            className={`px-6 py-3 rounded-xl font-semibold flex items-center gap-2 ${added ? 'bg-green-500 text-white' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'}`}
-          >
-            {added ? <><Check className="w-5 h-5" /> 已添加</> : <><ShoppingCart className="w-5 h-5" /> 加入购物车</>}
-          </button>
-
-          <button
-            onClick={buyNow}
-            className="px-6 py-3 bg-gradient-to-r from-orange-500 to-red-500 text-white font-semibold rounded-xl hover:opacity-90"
-          >
-            立即购买
-          </button>
         </div>
       </div>
 
