@@ -4,7 +4,7 @@
 const fs = require('fs');
 const path = require('path');
 
-const BASE_URL = 'https://esim-shop-v1.vercel.app';
+const BASE_URL = 'https://simryoko.com';
 const today = new Date().toISOString().split('T')[0];
 
 let xml = `<?xml version="1.0" encoding="UTF-8"?>

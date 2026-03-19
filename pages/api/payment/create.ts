@@ -35,8 +35,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         },
       ],
       mode: 'payment',
-      success_url: `${process.env.NEXT_PUBLIC_SITE_URL || 'https://esim-shop-v1.vercel.app'}/success?session_id={CHECKOUT_SESSION_ID}`,
-      cancel_url: `${process.env.NEXT_PUBLIC_SITE_URL || 'https://esim-shop-v1.vercel.app'}/checkout?canceled=true`,
+      success_url: `${process.env.NEXT_PUBLIC_SITE_URL || 'https://simryoko.com'}/success?session_id={CHECKOUT_SESSION_ID}`,
+      cancel_url: `${process.env.NEXT_PUBLIC_SITE_URL || 'https://simryoko.com'}/checkout?canceled=true`,
       customer_email: email,
       metadata: {
         email,

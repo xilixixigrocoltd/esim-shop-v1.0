@@ -15,7 +15,7 @@ export default function SEO({
   ogImage = '/og-default.jpg',
   noIndex = false 
 }: SEOProps) {
-  const siteUrl = 'https://esim-shop-v1.vercel.app';
+  const siteUrl = 'https://simryoko.com';
   const fullTitle = `${title} | SimRyoko`;
   const fullCanonical = canonical ? `${siteUrl}${canonical}` : siteUrl;
 
