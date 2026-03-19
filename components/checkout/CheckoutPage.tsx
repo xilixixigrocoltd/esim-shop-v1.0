@@ -173,6 +173,8 @@ export default function CheckoutPage() {
           </div>
 
           <div className="bg-white rounded-xl p-6 shadow-sm">
+            <h2 className="font-semibold text-gray-900 mb-4">购买须知</h2>
+            
             <div className="bg-red-50 border-2 border-red-200 rounded-xl p-4 mb-4">
               <div className="flex items-start gap-3">
                 <AlertCircle className="w-5 h-5 text-red-600 mt-0.5 flex-shrink-0" />
