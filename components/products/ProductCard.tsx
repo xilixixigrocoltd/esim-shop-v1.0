@@ -63,7 +63,7 @@ export default function ProductCard({ product }: ProductCardProps) {
           </div>
           <div className="flex items-center gap-2">
             <Clock className="w-4 h-4 text-orange-500" />
-            <span>{t('product.days', { days: product.validDays })}</span>
+            <span>{product.validDays + ' 天'}</span>
           </div>
           {product.type !== 'local' && (
             <div className="flex items-center gap-2">

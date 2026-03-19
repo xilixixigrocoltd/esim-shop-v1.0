@@ -165,78 +165,6 @@ export const translations = {
     'lang.zh': '中文',
     'lang.en': 'English',
     'lang.switch': '切换语言',
-    
-    // 产品详情页
-    'product.detail.title': '产品详情',
-    'product.detail.data': '数据流量',
-    'product.detail.validity': '有效期',
-    'product.detail.price': '价格',
-    'product.detail.coverage': '覆盖国家',
-    'product.detail.network': '网络运营商',
-    'product.detail.features': '套餐特点',
-    'product.detail.description': '套餐说明',
-    'product.detail.installation': '安装说明',
-    'product.detail.terms': '购买须知',
-    'product.detail.warning.china': '⚠️ 重要提示：中国国行手机无法使用',
-    'product.detail.warning.china.desc': '中国大陆版本 iPhone 为实体双卡，不支持 eSIM 功能。',
-    'product.detail.warning.china.note': '请确认您的设备支持 eSIM 后再购买，非国行设备（如港版、美版、日版等）可正常使用。',
-    'product.detail.terms.item1': '即买即用，邮件秒发 eSIM 二维码',
-    'product.detail.terms.item2': '支持热点共享',
-    'product.detail.terms.item3': '无需实名认证',
-    'product.detail.terms.item4': '7 天未激活可退款',
-    'product.detail.terms.item5': '请确保设备支持 eSIM 功能',
-    'product.detail.add_to_cart': '加入购物车',
-    'product.detail.buy_now': '立即购买',
-    'product.detail.back': '返回',
-    
-    // 购物车页
-    'cart.item': '商品',
-    'cart.items': '商品',
-    'cart.empty.title': '购物车是空的',
-    'cart.empty.desc': '快去挑选心仪的 eSIM 套餐吧',
-    'cart.continue_shopping': '继续购物',
-    'cart.checkout': '去结账',
-    'cart.remove': '移除',
-    'cart.quantity': '数量',
-    'cart.total': '总计',
-    
-    // 结算页
-    'checkout.contact': '联系邮箱',
-    'checkout.payment_method': '支付方式',
-    'checkout.payment.card': '信用卡/借记卡',
-    'checkout.payment.card.desc': '支持 Visa, MasterCard',
-    'checkout.payment.usdt': 'USDT',
-    'checkout.payment.usdt.desc': 'TRC-20 网络',
-    'checkout.agree': '我已阅读并同意',
-    'checkout.terms': '购买须知',
-    'checkout.confirm_device': '，确认我的设备支持 eSIM 功能',
-    'checkout.processing': '处理中...',
-    'checkout.confirm_pay': '确认支付',
-    
-    // 成功页
-    'success.email.sent': 'eSIM 信息已发送到您的邮箱',
-    'success.email.check': '请检查邮箱（包括垃圾邮件箱）',
-    'success.email.resend': '未收到邮件？',
-    'success.email.contact': '联系客服',
-    'success.order.details': '订单详情',
-    'success.back_home': '返回首页',
-    
-    // 帮助页
-    'help.subtitle': '如有其他问题，请随时联系我们',
-    'help.install.title': '如何安装 eSIM',
-    'help.install.iphone': 'iPhone 用户',
-    'help.install.android': 'Android 用户',
-    'help.install.step': '步骤 {step}',
-    'help.contact.title': '联系我们',
-    'help.contact.desc': '如有任何问题，请通过以下方式联系我们',
-    'help.contact.email': '邮箱',
-    'help.contact.telegram': 'Telegram',
-    
-    // 国家列表页
-    'countries.all': '全部',
-    'countries.popular': '热门',
-    'countries.search_placeholder': '搜索国家...',
-    'countries.no_results': '未找到匹配的国家',
   },
   en: {
     // 导航
@@ -426,15 +354,6 @@ export const translations = {
     'product.detail.back': 'Back',
     
     // 购物车页
-    'cart.item': 'Item',
-    'cart.items': 'Items',
-    'cart.empty.title': 'Your cart is empty',
-    'cart.empty.desc': 'Start shopping for eSIM plans',
-    'cart.continue_shopping': 'Continue Shopping',
-    'cart.checkout': 'Checkout',
-    'cart.remove': 'Remove',
-    'cart.quantity': 'Quantity',
-    'cart.total': 'Total',
     
     // 结算页
     'checkout.contact': 'Contact Email',
@@ -455,7 +374,6 @@ export const translations = {
     'success.email.resend': "Didn't receive email?",
     'success.email.contact': 'Contact Support',
     'success.order.details': 'Order Details',
-    'success.back_home': 'Back to Home',
     
     // 帮助页
     'help.subtitle': 'Contact us if you have other questions',

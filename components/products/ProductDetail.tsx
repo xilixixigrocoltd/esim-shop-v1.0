@@ -69,7 +69,7 @@ export default function ProductDetail({ product }: ProductDetailProps) {
             </div>
             <div className="flex items-center gap-2 px-4 py-2 bg-orange-50 rounded-lg">
               <Clock className="w-5 h-5 text-orange-500" />
-              <span className="font-medium">{t('product.days', { days: product.validDays })}</span>
+              <span className="font-medium">{product.validDays + ' 天'}</span>
             </div>
             {product.type !== 'local' && (
               <div className="flex items-center gap-2 px-4 py-2 bg-orange-50 rounded-lg">

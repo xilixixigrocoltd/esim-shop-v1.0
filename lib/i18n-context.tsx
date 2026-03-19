@@ -27,8 +27,14 @@ export function I18nProvider({ children }: { children: ReactNode }) {
     localStorage.setItem('simryoko_locale', newLocale);
   };
 
-  const t = (key: string): string => {
-    return translations[locale][key as keyof typeof translations.zh] || key;
+  const t = (key: string, params?: Record<string, any>): string => {
+    let value = translations[locale][key as keyof typeof translations.zh] || key;
+    if (params) {
+      Object.entries(params).forEach(([k, v]) => {
+        value = value.replace(new RegExp(`\\{${k}\\}`, 'g'), String(v));
+      });
+    }
+    return value;
   };
 
   return (
