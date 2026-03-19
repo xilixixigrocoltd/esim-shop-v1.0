@@ -3,6 +3,7 @@
 import Link from 'next/link';
 import { Wifi, Clock, MapPin, Phone, MessageSquare } from 'lucide-react';
 import { formatDataSize, getCountryFlag } from '@/lib/api';
+import { useI18n } from '@/lib/i18n-context';
 import type { Product } from '@/types';
 
 interface ProductCardProps {
@@ -10,18 +11,19 @@ interface ProductCardProps {
 }
 
 // 判断套餐类型
-function getPlanType(product: Product): { type: string; icon: any; color: string } {
+function getPlanType(product: Product, t: any): { type: string; icon: any; color: string } {
   const hasOnlyData = product.features?.some(f => f.includes('仅数据') || f.includes('仅流量'));
   
   if (hasOnlyData) {
-    return { type: '纯数据', icon: Wifi, color: 'text-blue-600 bg-blue-50' };
+    return { type: t('products.type.data_only'), icon: Wifi, color: 'text-blue-600 bg-blue-50' };
   } else {
-    return { type: '数据 + 语音 + 短信', icon: Phone, color: 'text-green-600 bg-green-50' };
+    return { type: t('products.type.data_voice_sms'), icon: Phone, color: 'text-green-600 bg-green-50' };
   }
 }
 
 export default function ProductCard({ product }: ProductCardProps) {
-  const planType = getPlanType(product);
+  const { t } = useI18n();
+  const planType = getPlanType(product, t);
   const PlanIcon = planType.icon;
 
   return (
@@ -61,12 +63,12 @@ export default function ProductCard({ product }: ProductCardProps) {
           </div>
           <div className="flex items-center gap-2">
             <Clock className="w-4 h-4 text-orange-500" />
-            <span>{product.validDays} 天</span>
+            <span>{t('product.days', { days: product.validDays })}</span>
           </div>
           {product.type !== 'local' && (
             <div className="flex items-center gap-2">
               <MapPin className="w-4 h-4 text-orange-500" />
-              <span>{product.countries?.length || 1} 个国家/地区</span>
+              <span>{product.countries?.length || 1} {t('product.countries')}</span>
             </div>
           )}
         </div>
@@ -77,7 +79,7 @@ export default function ProductCard({ product }: ProductCardProps) {
             <span className="text-2xl font-bold text-orange-600">${Number(product.price || 0).toFixed(2)}</span>
           </div>
           <span className="px-4 py-2 bg-orange-50 text-orange-600 font-medium rounded-lg group-hover:bg-orange-500 group-hover:text-white transition-colors">
-            选购
+            {t('product.buy_now')}
           </span>
         </div>
       </div>
