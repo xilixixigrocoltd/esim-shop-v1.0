@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react';
 import Header from './Header';
 import Footer from './Footer';
+import PWAInstallPrompt from './PWAInstallPrompt';
 import { storage, CART_KEY } from '@/lib/utils';
 import type { CartItem } from '@/types';
 
@@ -24,6 +25,7 @@ export default function Layout({ children }: LayoutProps) {
       <Header cartCount={cartCount} />
       <main className="flex-1">{children}</main>
       <Footer />
+      <PWAInstallPrompt />
     </div>
   );
 }
