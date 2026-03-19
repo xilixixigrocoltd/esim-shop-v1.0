@@ -18,14 +18,16 @@ export default async function handler(
     // 获取当前用户会话
     const session = await getServerSession(req, res, authOptions);
     
-    if (!session || !session.user) {
+    if (!session || !(session as any).user) {
       return res.status(401).json({ success: false, error: "Unauthorized" });
     }
+
+    const userId = (session as any).user.id as string;
 
     // 查询用户订单（按创建时间倒序）
     const orders = await prisma.order.findMany({
       where: {
-        userId: session.user.id,
+        userId,
       },
       orderBy: {
         createdAt: "desc",
