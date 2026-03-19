@@ -107,6 +107,31 @@ class B2BApiClient {
   async getOrders(): Promise<Order[]> {
     return this.request(`/api/v1/orders`);
   }
+
+  // 库存查询
+  async getInventory(productId: number): Promise<{ productId: number; stock: number; available: boolean; status: string }> {
+    return this.request(`/api/v1/inventory/${productId}`);
+  }
+
+  // 订单续费
+  async topupOrder(orderId: string, packageId: number): Promise<Order> {
+    return this.request(`/api/v1/orders/${orderId}/topup`, 'POST', { packageId });
+  }
+
+  // 流量使用查询
+  async getEsimUsage(iccid: string): Promise<{
+    iccid: string;
+    totalMB: number;
+    usedMB: number;
+    remainingMB: number;
+    usedPercent: number;
+    expiryDate: string;
+    daysLeft: number;
+    lowData: boolean;
+    expiringSoon: boolean;
+  }> {
+    return this.request(`/api/v1/esim/${iccid}/usage`);
+  }
 }
 
 export const b2bApi = new B2BApiClient();
