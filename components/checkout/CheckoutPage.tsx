@@ -5,10 +5,12 @@ import { useRouter } from 'next/router';
 import { CreditCard, Wallet, Mail, AlertCircle, Check } from 'lucide-react';
 import { storage, CART_KEY, formatPrice, isValidEmail } from '@/lib/utils';
 import { formatDataSize, getCountryFlag } from '@/lib/api';
+import { useI18n } from '@/lib/i18n-context';
 import type { CartItem } from '@/types';
 
 export default function CheckoutPage() {
   const router = useRouter();
+  const { t } = useI18n();
   const [cart, setCart] = useState<CartItem[]>([]);
   const [email, setEmail] = useState('');
   const [paymentMethod, setPaymentMethod] = useState<'stripe' | 'usdt'>('stripe');
@@ -32,19 +34,18 @@ export default function CheckoutPage() {
     setError('');
 
     if (!isValidEmail(email)) {
-      setError('请输入有效的邮箱地址');
+      setError(t('checkout.email.placeholder'));
       return;
     }
 
     if (!agreed) {
-      setError('请同意购买须知');
+      setError(t('checkout.agree'));
       return;
     }
 
     setLoading(true);
 
     try {
-      // 准备 Stripe 所需的产品信息
       const stripeItems = cart.map(item => ({
         id: item.product.id,
         productId: item.product.id,
@@ -66,29 +67,26 @@ export default function CheckoutPage() {
       });
 
       const data = await response.json();
-      console.log('支付创建响应:', data);
 
       if (!response.ok) {
-        setError(data.error || `HTTP ${response.status}: 支付创建失败`);
+        setError(data.error || `HTTP ${response.status}: ${t('checkout.processing')}`);
         return;
       }
 
       if (data.success && data.paymentUrl) {
-        // Stripe 支付：跳转到 Stripe Checkout
         setTimeout(() => {
           window.location.href = data.paymentUrl;
         }, 500);
         return;
       } else if (paymentMethod === 'usdt') {
-        // USDT 支付：直接显示钱包地址（待实现）
         router.push(`/success?orderId=USDT-${Date.now()}&email=${encodeURIComponent(email)}&method=usdt`);
         return;
       }
       
-      setError(data.error || '支付创建失败');
+      setError(data.error || t('checkout.processing'));
     } catch (err: any) {
       console.error('支付创建错误:', err);
-      setError(err.message || '网络错误，请重试');
+      setError(err.message || t('common.error'));
     } finally {
       setLoading(false);
     }
@@ -99,10 +97,10 @@ export default function CheckoutPage() {
   return (
     <div className="min-h-screen bg-gray-50 py-8">
       <div className="max-w-2xl mx-auto px-4">
-        <h1 className="text-2xl font-bold text-gray-900 mb-6">结算</h1>
+        <h1 className="text-2xl font-bold text-gray-900 mb-6">{t('checkout.title')}</h1>
 
         <div className="bg-white rounded-xl p-6 shadow-sm mb-6">
-          <h2 className="font-semibold text-gray-900 mb-4">订单商品</h2>
+          <h2 className="font-semibold text-gray-900 mb-4">{t('checkout.order_summary')}</h2>
           <div className="space-y-4">
             {cart.map((item) => (
               <div key={item.product.id} className="flex gap-4">
@@ -112,7 +110,7 @@ export default function CheckoutPage() {
                 <div className="flex-1">
                   <h3 className="font-medium text-gray-900">{item.product.name}</h3>
                   <p className="text-sm text-gray-500">
-                    {formatDataSize(item.product.dataSize)} / {item.product.validDays}天 x {item.quantity}
+                    {formatDataSize(item.product.dataSize)} / {item.product.validDays}{天} x {item.quantity}
                   </p>
                 </div>
                 <div className="text-right">
@@ -122,21 +120,21 @@ export default function CheckoutPage() {
             ))}
           </div>
           <div className="border-t mt-4 pt-4 flex justify-between items-center">
-            <span className="font-semibold">总计</span>
+            <span className="font-semibold">{t('cart.total')}</span>
             <span className="text-xl font-bold text-orange-600">{formatPrice(totalPrice)}</span>
           </div>
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-6">
           <div className="bg-white rounded-xl p-6 shadow-sm">
-            <h2 className="font-semibold text-gray-900 mb-4">联系邮箱</h2>
+            <h2 className="font-semibold text-gray-900 mb-4">{t('checkout.contact')}</h2>
             <div className="relative">
               <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
               <input
                 type="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                placeholder="用于接收eSIM二维码"
+                placeholder={t('checkout.email.placeholder')}
                 className="w-full pl-10 pr-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-orange-500 focus:border-transparent"
                 required
               />
@@ -144,7 +142,7 @@ export default function CheckoutPage() {
           </div>
 
           <div className="bg-white rounded-xl p-6 shadow-sm">
-            <h2 className="font-semibold text-gray-900 mb-4">支付方式</h2>
+            <h2 className="font-semibold text-gray-900 mb-4">{t('checkout.payment_method')}</h2>
             <div className="space-y-3">
               <label className={`flex items-center gap-4 p-4 border rounded-xl cursor-pointer ${paymentMethod === 'stripe' ? 'border-orange-500 bg-orange-50' : 'border-gray-200'}`}>
                 <input type="radio" name="payment" value="stripe" checked={paymentMethod === 'stripe'} onChange={() => setPaymentMethod('stripe')} className="hidden" />
@@ -152,8 +150,8 @@ export default function CheckoutPage() {
                   <CreditCard className="w-5 h-5 text-blue-600" />
                 </div>
                 <div className="flex-1">
-                  <p className="font-medium">信用卡/借记卡</p>
-                  <p className="text-sm text-gray-500">支持 Visa, MasterCard</p>
+                  <p className="font-medium">{t('checkout.payment.card')}</p>
+                  <p className="text-sm text-gray-500">{t('checkout.payment.card.desc')}</p>
                 </div>
                 {paymentMethod === 'stripe' && <Check className="w-5 h-5 text-orange-500" />}
               </label>
@@ -164,8 +162,8 @@ export default function CheckoutPage() {
                   <Wallet className="w-5 h-5 text-green-600" />
                 </div>
                 <div className="flex-1">
-                  <p className="font-medium">USDT</p>
-                  <p className="text-sm text-gray-500">TRC-20 网络</p>
+                  <p className="font-medium">{t('checkout.payment.usdt')}</p>
+                  <p className="text-sm text-gray-500">{t('checkout.payment.usdt.desc')}</p>
                 </div>
                 {paymentMethod === 'usdt' && <Check className="w-5 h-5 text-orange-500" />}
               </label>
@@ -173,18 +171,17 @@ export default function CheckoutPage() {
           </div>
 
           <div className="bg-white rounded-xl p-6 shadow-sm">
-            <h2 className="font-semibold text-gray-900 mb-4">购买须知</h2>
+            <h2 className="font-semibold text-gray-900 mb-4">{t('checkout.terms')}</h2>
             
             <div className="bg-red-50 border-2 border-red-200 rounded-xl p-4 mb-4">
               <div className="flex items-start gap-3">
                 <AlertCircle className="w-5 h-5 text-red-600 mt-0.5 flex-shrink-0" />
                 <div className="text-sm text-red-800">
-                  <p className="font-bold mb-1">⚠️ 重要提示：中国国行手机无法使用</p>
-                  <p className="font-semibold mb-2">中国大陆版本 iPhone 为实体双卡，不支持 eSIM 功能。</p>
-                  <p className="font-bold mb-1">⚠️ Important: China Mainland iPhone NOT Compatible</p>
-                  <p className="font-semibold">China mainland version iPhone uses dual physical SIM cards and does NOT support eSIM functionality.</p>
-                  <p className="mt-2 text-red-700">请确认您的设备支持 eSIM 后再购买，非国行设备（如港版、美版、日版等）可正常使用。</p>
-                  <p className="text-red-700">Please confirm your device supports eSIM before purchasing. Non-China versions (HK, US, JP, etc.) work normally.</p>
+                  <p className="font-bold mb-1">{t('product.detail.warning.china')}</p>
+                  <p className="font-semibold mb-2">{t('product.detail.warning.china.desc')}</p>
+                  <p className="font-bold mb-1">{t('product.detail.warning.china').replace('⚠️ ', '')}</p>
+                  <p className="font-semibold">{t('product.detail.warning.china.desc')}</p>
+                  <p className="mt-2 text-red-700">{t('product.detail.warning.china.note')}</p>
                 </div>
               </div>
             </div>
@@ -192,9 +189,9 @@ export default function CheckoutPage() {
             <label className="flex items-start gap-3 cursor-pointer">
               <input type="checkbox" checked={agreed} onChange={(e) => setAgreed(e.target.checked)} className="mt-1 w-5 h-5 text-orange-500 rounded focus:ring-orange-500" />
               <div className="text-sm text-gray-600">
-                我已阅读并同意
-                <a href="/help" target="_blank" className="text-orange-600 hover:underline">购买须知</a>
-                ，确认我的设备支持eSIM功能
+                {t('checkout.agree')}
+                <a href="/help" target="_blank" className="text-orange-600 hover:underline">{t('checkout.terms')}</a>
+                {t('checkout.confirm_device')}
               </div>
             </label>
           </div>
@@ -211,7 +208,7 @@ export default function CheckoutPage() {
             disabled={loading}
             className="w-full py-4 bg-gradient-to-r from-orange-500 to-red-500 text-white font-semibold rounded-xl hover:opacity-90 disabled:opacity-50"
           >
-            {loading ? '处理中...' : `确认支付 ${formatPrice(totalPrice)}`}
+            {loading ? t('checkout.processing') : `${t('checkout.confirm_pay')} ${formatPrice(totalPrice)}`}
           </button>
         </form>
       </div>

@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { Search, Globe } from 'lucide-react';
 import { getCountryFlag } from '@/lib/api';
 import { REGIONS } from '@/lib/constants';
+import { useI18n } from '@/lib/i18n-context';
 import type { Country } from '@/types';
 
 interface CountryWithProducts {
@@ -19,6 +20,7 @@ interface CountryListProps {
 }
 
 export default function CountryList({ initialSearch = '' }: CountryListProps) {
+  const { t } = useI18n();
   const [countries, setCountries] = useState<CountryWithProducts[]>([]);
   const [searchQuery, setSearchQuery] = useState(initialSearch || '');
   const [selectedRegion, setSelectedRegion] = useState<string>('all');
@@ -30,12 +32,10 @@ export default function CountryList({ initialSearch = '' }: CountryListProps) {
         const res = await fetch('/api/countries');
         const json = await res.json();
         if (json.success) {
-          // 将国家数据转换为带 productCount 的格式
           const countryMap = new Map<string, CountryWithProducts>();
           json.data.forEach((c: CountryWithProducts) => {
             countryMap.set(c.code, c);
           });
-          // 还需要获取产品来统计数量（简化：直接用 API 返回的 productCount）
           setCountries(Array.from(countryMap.values()));
         }
       } catch (error) {
@@ -47,10 +47,8 @@ export default function CountryList({ initialSearch = '' }: CountryListProps) {
     loadCountries();
   }, []);
 
-  // countries 已经从 API 获取，不需要再计算
-
   const filteredCountries = useMemo(() => {
-    let result = countries.filter(c => c.name); // 确保有 name
+    let result = countries.filter(c => c.name);
 
     if (selectedRegion !== 'all') {
       const region = REGIONS.find(r => r.id === selectedRegion);
@@ -83,8 +81,8 @@ export default function CountryList({ initialSearch = '' }: CountryListProps) {
     <div className="min-h-screen bg-gray-50 py-8">
       <div className="max-w-6xl mx-auto px-4">
         <div className="text-center mb-8">
-          <h1 className="text-3xl font-bold text-gray-900 mb-2">选择目的地</h1>
-          <p className="text-gray-600">覆盖 {countries.length} 个国家和地区</p>
+          <h1 className="text-3xl font-bold text-gray-900 mb-2">{t('countries.title')}</h1>
+          <p className="text-gray-600">{countries.length + ' 个'}</p>
         </div>
 
         <div className="mb-6">
@@ -94,7 +92,7 @@ export default function CountryList({ initialSearch = '' }: CountryListProps) {
               type="text"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              placeholder="搜索国家或地区..."
+              placeholder={t('countries.search_placeholder')}
               className="w-full pl-12 pr-4 py-3 bg-white border border-gray-200 rounded-xl focus:ring-2 focus:ring-orange-500 focus:border-transparent"
             />
           </div>
@@ -105,7 +103,7 @@ export default function CountryList({ initialSearch = '' }: CountryListProps) {
             onClick={() => setSelectedRegion('all')}
             className={`px-4 py-2 rounded-full font-medium ${selectedRegion === 'all' ? 'bg-orange-500 text-white' : 'bg-white text-gray-600 hover:bg-gray-100'}`}
           >
-            全部
+            {t('countries.all')}
           </button>
           {REGIONS.map((region) => (
             <button
@@ -127,7 +125,7 @@ export default function CountryList({ initialSearch = '' }: CountryListProps) {
             >
               <span className="text-4xl mb-2 block">{getCountryFlag(country.code)}</span>
               <h3 className="font-semibold text-gray-900 mb-1">{country.name}</h3>
-              <p className="text-xs text-gray-500">{country.productCount} 款产品</p>
+              <p className="text-xs text-gray-500">{country.productCount} {款}</p>
             </Link>
           ))}
         </div>
@@ -135,7 +133,7 @@ export default function CountryList({ initialSearch = '' }: CountryListProps) {
         {filteredCountries.length === 0 && (
           <div className="text-center py-12">
             <Globe className="w-12 h-12 text-gray-300 mx-auto mb-4" />
-            <p className="text-gray-500">没有找到匹配的国家</p>
+            <p className="text-gray-500">{t('countries.no_results')}</p>
           </div>
         )}
       </div>

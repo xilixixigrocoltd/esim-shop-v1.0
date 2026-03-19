@@ -6,10 +6,12 @@ import { useRouter } from 'next/router';
 import { Trash2, Plus, Minus, ShoppingBag, ArrowRight } from 'lucide-react';
 import { storage, CART_KEY, formatPrice } from '@/lib/utils';
 import { getCountryFlag, formatDataSize } from '@/lib/api';
+import { useI18n } from '@/lib/i18n-context';
 import type { CartItem } from '@/types';
 
 export default function CartPage() {
   const router = useRouter();
+  const { t } = useI18n();
   const [cart, setCart] = useState<CartItem[]>([]);
   const [loading, setLoading] = useState(true);
 
@@ -58,10 +60,10 @@ export default function CartPage() {
           <div className="w-24 h-24 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-6">
             <ShoppingBag className="w-12 h-12 text-gray-400" />
           </div>
-          <h1 className="text-2xl font-bold text-gray-900 mb-2">购物车是空的</h1>
-          <p className="text-gray-500 mb-8">快去选购心仪的eSIM套餐吧</p>
+          <h1 className="text-2xl font-bold text-gray-900 mb-2">{t('cart.empty.title')}</h1>
+          <p className="text-gray-500 mb-8">{t('cart.empty.desc')}</p>
           <Link href="/countries" className="inline-flex items-center gap-2 px-8 py-3 bg-gradient-to-r from-orange-500 to-red-500 text-white font-semibold rounded-xl">
-            去选购 <ArrowRight className="w-5 h-5" />
+            {t('cart.continue_shopping')} <ArrowRight className="w-5 h-5" />
           </Link>
         </div>
       </div>
@@ -71,7 +73,7 @@ export default function CartPage() {
   return (
     <div className="min-h-screen bg-gray-50 py-8">
       <div className="max-w-4xl mx-auto px-4">
-        <h1 className="text-2xl font-bold text-gray-900 mb-6">购物车 ({totalItems})</h1>
+        <h1 className="text-2xl font-bold text-gray-900 mb-6">{t('cart.title')} ({totalItems})</h1>
 
         <div className="space-y-4">
           {cart.map((item) => (
@@ -82,12 +84,12 @@ export default function CartPage() {
               <div className="flex-1">
                 <h3 className="font-semibold text-gray-900">{item.product.name}</h3>
                 <p className="text-sm text-gray-500">
-                  {formatDataSize(item.product.dataSize)} / {item.product.validDays}天
+                  {formatDataSize(item.product.dataSize)} / {item.product.validDays} {t('product.days', { days: '' }).trim()}
                 </p>
                 <p className="text-orange-600 font-semibold mt-1">${Number(item.product.price || 0).toFixed(2)}</p>
               </div>
               <div className="flex flex-col items-end gap-2">
-                <button onClick={() => removeItem(item.product.id)} className="text-gray-400 hover:text-red-500">
+                <button onClick={() => removeItem(item.product.id)} className="text-gray-400 hover:text-red-500" aria-label={t('cart.remove')}>
                   <Trash2 className="w-5 h-5" />
                 </button>
                 <div className="flex items-center gap-2">
@@ -106,18 +108,18 @@ export default function CartPage() {
 
         <div className="mt-8 bg-white rounded-xl p-6 shadow-sm">
           <div className="flex justify-between items-center mb-4">
-            <span className="text-gray-600">小计</span>
+            <span className="text-gray-600">{t('cart.total')}</span>
             <span className="font-semibold">{formatPrice(totalPrice)}</span>
           </div>
           <div className="flex justify-between items-center text-lg font-bold">
-            <span>总计</span>
+            <span>{t('cart.total')}</span>
             <span className="text-orange-600">{formatPrice(totalPrice)}</span>
           </div>
           <button 
             onClick={() => router.push('/checkout')}
             className="w-full mt-6 py-3 bg-gradient-to-r from-orange-500 to-red-500 text-white font-semibold rounded-xl hover:opacity-90"
           >
-            去结算
+            {t('cart.checkout')}
           </button>
         </div>
       </div>
