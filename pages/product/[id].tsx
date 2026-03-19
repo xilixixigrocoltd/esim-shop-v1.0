@@ -1,6 +1,7 @@
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import ProductDetail from '@/components/products/ProductDetail';
+import SEO from '@/components/ui/SEO';
 import type { Product } from '@/types';
 
 export default function ProductPage() {
@@ -45,5 +46,20 @@ export default function ProductPage() {
     );
   }
 
-  return <ProductDetail product={product} />;
+  // 生成动态 SEO 信息
+  const countryName = product.countries?.[0]?.name || '全球';
+  const dataSize = product.dataSize >= 1024 ? `${(product.dataSize / 1024).toFixed(0)}GB` : `${product.dataSize}MB`;
+  const seoTitle = `${countryName} ${product.validDays}天${dataSize} eSIM - $${product.price}`;
+  const seoDesc = `${countryName}eSIM 套餐，${product.validDays}天${dataSize}流量，即买即用，无需实体 SIM 卡。支持${product.features?.includes('Voice') ? '语音 + 短信 + 数据' : '纯数据'}，${product.countries?.length || 1}个国家可用。`;
+
+  return (
+    <>
+      <SEO
+        title={seoTitle}
+        description={seoDesc}
+        canonical={`/product/${id}`}
+      />
+      <ProductDetail product={product} />
+    </>
+  );
 }

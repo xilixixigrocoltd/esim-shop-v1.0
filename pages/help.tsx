@@ -1,11 +1,18 @@
 import { Mail, MessageCircle } from 'lucide-react';
 import { useI18n } from '@/lib/i18n-context';
+import SEO from '@/components/ui/SEO';
 
 export default function HelpPage() {
   const { t } = useI18n();
 
   return (
-    <div className="min-h-screen bg-gray-50 py-12">
+    <>
+      <SEO
+        title="帮助中心 - eSIM 安装教程与常见问题"
+        description="SimRyoko 帮助中心，提供 eSIM 安装教程、设备兼容性查询、退款政策说明。遇到问题？联系我们的 24 小时客服。"
+        canonical="/help"
+      />
+      <div className="min-h-screen bg-gray-50 py-12">
       <div className="max-w-3xl mx-auto px-4">
         <h1 className="text-3xl font-bold text-gray-900 text-center mb-8">{t('help.title')}</h1>
 
@@ -67,5 +74,6 @@ export default function HelpPage() {
         </div>
       </div>
     </div>
+    </>
   );
 }

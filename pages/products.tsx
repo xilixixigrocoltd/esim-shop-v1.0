@@ -5,6 +5,7 @@ import { useRouter } from 'next/router';
 import { Globe, MapPin, Wifi, Phone } from 'lucide-react';
 import type { Product, Country } from '@/types';
 import ProductCard from '@/components/products/ProductCard';
+import SEO from '@/components/ui/SEO';
 
 // 热门国家（根据实际产品数量排序）
 const POPULAR_COUNTRIES = [
@@ -297,7 +298,13 @@ export default function ProductsPage() {
   ];
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <>
+      <SEO
+        title="全部 eSIM 套餐 - 150+ 国家"
+        description="浏览 SimRyoko 所有 eSIM 套餐，覆盖日本、韩国、欧洲、美国等 150+ 国家。本地套餐、区域套餐、全球套餐，价格从$1.50 起，即买即用。"
+        canonical="/products"
+      />
+      <div className="min-h-screen bg-gray-50">
       {/* 顶部标签页导航 + 搜索框 */}
       <div className="sticky top-0 z-50 bg-white border-b border-gray-200 shadow-sm">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -418,5 +425,6 @@ export default function ProductsPage() {
         )}
       </div>
     </div>
+    </>
   );
 }
