@@ -6,8 +6,8 @@ set -e
 echo "🔍 检查环境变量..."
 
 # 从 Vercel API 获取环境变量
-VERCEL_PROJECT_ID="prj_CjJEEcniXHvZNIWVXIEZC64xzpH7"
-VERCEL_TOKEN="VCP_YOUR_VERCEL_TOKEN_HERE"
+VERCEL_PROJECT_ID="${VERCEL_PROJECT_ID:-prj_CjJEEcniXHvZNIWVXIEZC64xzpH7}"
+VERCEL_TOKEN="${VERCEL_TOKEN:-}"
 
 echo "从 Vercel 获取环境变量..."
 ENV_VARS=$(curl -s "https://api.vercel.com/v9/projects/${VERCEL_PROJECT_ID}/env?configuration=production" \

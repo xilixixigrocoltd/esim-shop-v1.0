@@ -5,8 +5,8 @@ set -e
 
 echo "🔍 Vercel 部署验证..."
 
-VERCEL_PROJECT_ID="prj_CjJEEcniXHvZNIWVXIEZC64xzpH7"
-VERCEL_TOKEN="VCP_YOUR_VERCEL_TOKEN_HERE"
+VERCEL_PROJECT_ID="${VERCEL_PROJECT_ID:-prj_CjJEEcniXHvZNIWVXIEZC64xzpH7}"
+VERCEL_TOKEN="${VERCEL_TOKEN:-}"
 
 # 获取最新部署状态
 echo "获取最新部署状态..."
