@@ -272,7 +272,7 @@ git push
 npx vercel --prod
 ```
 
-**生产地址**: https://esim-shop-v1.vercel.app
+**生产地址**: https://simryoko.com
 
 ---
 

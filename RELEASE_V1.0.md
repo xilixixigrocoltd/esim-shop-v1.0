@@ -1,7 +1,7 @@
 # SimRyoko eSIM Shop v1.0.0 - 发布说明
 
 **发布日期**: 2026-03-19  
-**生产地址**: https://esim-shop-v1.vercel.app  
+**生产地址**: https://simryoko.com  
 **GitHub**: https://github.com/xilixixigrocoltd/esim-shop-v1.0
 
 ---
@@ -107,7 +107,7 @@
 npx vercel deploy --prod --token <token>
 
 # 查看部署状态
-https://esim-shop-v1.vercel.app
+https://simryoko.com
 ```
 
 ---

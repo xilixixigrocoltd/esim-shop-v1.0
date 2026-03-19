@@ -2,7 +2,7 @@
 
 **检验时间**: 2026-03-18 23:29 CST  
 **检验范围**: 前端页面、API 端点、支付流程、安全机制、监控系统  
-**测试站点**: https://esim-shop-v1.vercel.app
+**测试站点**: https://simryoko.com
 
 ---
 
@@ -114,7 +114,7 @@
 | 项目 | 值 |
 |------|------|
 | **Webhook ID** | `we_1TCLlhRygZrd4CKKMkQrGNKk` |
-| **URL** | `https://esim-shop-v1.vercel.app/api/payment/webhook` |
+| **URL** | `https://simryoko.com/api/payment/webhook` |
 | **状态** | ✅ enabled |
 | **事件** | `checkout.session.completed` |
 | **模式** | Live ✅ |

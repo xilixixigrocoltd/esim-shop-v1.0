@@ -82,7 +82,7 @@ export FAILED_ORDER_THRESHOLD=3
 ### Webhook 不触发
 1. 检查 Stripe Dashboard → Webhooks → Events
 2. 查看 Vercel 日志：`npx vercel logs`
-3. 测试 webhook 端点：`curl -X POST https://esim-shop-v1.vercel.app/api/payment/webhook`
+3. 测试 webhook 端点：`curl -X POST https://simryoko.com/api/payment/webhook`
 
 ### 告警未发送
 1. 检查 Telegram Bot Token 是否有效

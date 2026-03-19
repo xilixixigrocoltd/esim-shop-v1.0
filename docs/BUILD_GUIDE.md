@@ -3,7 +3,7 @@
 **项目时间**: 2026-02-25 ~ 2026-03-19  
 **技术栈**: Next.js 14 + TypeScript + Tailwind CSS + Stripe + Vercel  
 **生产地址**: https://simryoko.com  
-**电商地址**: https://esim-shop-v1.vercel.app
+**电商地址**: https://simryoko.com
 
 ---
 
@@ -154,7 +154,7 @@ B2B_API_URL=https://api.xigrocoltd.com
 RESEND_API_KEY=re_***
 
 # 站点配置
-NEXT_PUBLIC_SITE_URL=https://esim-shop-v1.vercel.app
+NEXT_PUBLIC_SITE_URL=https://simryoko.com
 ```
 
 ### 3. 类型定义
@@ -309,7 +309,7 @@ export default async function handler(req, res) {
 ### 3. 配置 Stripe Webhook
 ```bash
 Stripe Dashboard → Developers → Webhooks
-- URL: https://esim-shop-v1.vercel.app/api/payment/webhook
+- URL: https://simryoko.com/api/payment/webhook
 - Events: checkout.session.completed
 - Secret: whsec_*** (保存到 Vercel 环境变量)
 ```
@@ -386,7 +386,7 @@ STRIPE_WEBHOOK_SECRET=whsec_***
 B2B_API_KEY=ak_***
 B2B_API_SECRET=***
 RESEND_API_KEY=re_***
-NEXT_PUBLIC_SITE_URL=https://esim-shop-v1.vercel.app
+NEXT_PUBLIC_SITE_URL=https://simryoko.com
 ```
 
 ### 4. 域名配置

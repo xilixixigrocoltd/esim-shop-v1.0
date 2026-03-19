@@ -424,4 +424,4 @@ Timestamp: 毫秒级
 
 **生成时间**: 2026-03-19 02:30 AM (Asia/Shanghai)
 **项目版本**: esim-shop-v1.0
-**生产地址**: https://esim-shop-v1.vercel.app
+**生产地址**: https://simryoko.com

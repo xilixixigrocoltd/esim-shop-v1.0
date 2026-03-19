@@ -13,7 +13,7 @@
 | `STRIPE_SECRET_KEY` | `sk_live_...` | Stripe Live Secret Key |
 | `USDT_WALLET_ADDRESS` | `TBuhpRpFPV1HkdfaPEdxsKgTE43jV911rL` | USDT TRC-20 收款地址 |
 | `RESEND_API_KEY` | `re_...` | Resend 邮件 API Key |
-| `NEXT_PUBLIC_SITE_URL` | `https://esim-shop-v1.vercel.app` | 网站 URL |
+| `NEXT_PUBLIC_SITE_URL` | `https://simryoko.com` | 网站 URL |
 
 ### 预览环境 (Preview) - 可选
 
@@ -30,7 +30,7 @@
 1. `git push origin main`
 2. Vercel 自动构建
 3. 等待 2-3 分钟
-4. 访问 https://esim-shop-v1.vercel.app 验证
+4. 访问 https://simryoko.com 验证
 
 ### 手动部署
 
@@ -106,7 +106,7 @@ vercel --prod
 - **Commit**: 最新 main 分支
 - **构建**: Next.js 14.2.0
 - **部署**: Vercel (自动)
-- **域名**: https://esim-shop-v1.vercel.app
+- **域名**: https://simryoko.com
 
 ---
 
