@@ -27,15 +27,15 @@ export default function HelpPage() {
           <h2 className="text-xl font-bold text-gray-900 mb-6">{t('home.faq.title')}</h2>
           <div className="space-y-6">
             <div>
-              <h3 className="font-semibold text-gray-900 mb-2">什么是 eSIM？</h3>
-              <p className="text-gray-600">eSIM 是嵌入式 SIM 卡，无需实体卡片，通过二维码即可激活使用。</p>
+              <h3 className="font-semibold text-gray-900 mb-2">{t('faq.what_is_esim.q')}</h3>
+              <p className="text-gray-600">{t('faq.what_is_esim.a')}</p>
             </div>
             <div>
-              <h3 className="font-semibold text-gray-900 mb-2">我的设备支持 eSIM 吗？</h3>
-              <p className="text-gray-600">iPhone XS 及更新机型、iPad Pro/Air/Mini (蜂窝版)、Google Pixel 3+、Samsung Galaxy S20+ 等设备支持。</p>
+              <h3 className="font-semibold text-gray-900 mb-2">{t('faq.check_compatibility.q')}</h3>
+              <p className="text-gray-600">{t('faq.check_compatibility.a')}</p>
             </div>
             <div>
-              <h3 className="font-semibold text-gray-900 mb-2">{t('help.install.title')}</h3>
+              <h3 className="font-semibold text-gray-900 mb-2">{t('faq.installation.q')}</h3>
               <ol className="list-decimal list-inside text-gray-600 mt-2 space-y-1">
                 <li>{t('product.detail.terms.item1')}</li>
                 <li>{t('help.install.iphone')}</li>
@@ -44,8 +44,8 @@ export default function HelpPage() {
               </ol>
             </div>
             <div>
-              <h3 className="font-semibold text-gray-900 mb-2">可以退款吗？</h3>
-              <p className="text-gray-600">未激活的 eSIM 可在 7 天内申请退款。已安装或已激活的 eSIM 不可退款。</p>
+              <h3 className="font-semibold text-gray-900 mb-2">{t('faq.refund.q')}</h3>
+              <p className="text-gray-600">{t('faq.refund.a')}</p>
             </div>
           </div>
         </div>

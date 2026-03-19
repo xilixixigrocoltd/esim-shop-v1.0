@@ -151,6 +151,26 @@ export const translations = {
     'countries.search': '搜索国家...',
     'countries.count': '{count} 个国家/地区',
     
+    // FAQ - 常见问题
+    'faq.what_is_esim.q': '什么是 eSIM？',
+    'faq.what_is_esim.a': 'eSIM 是嵌入式 SIM 卡，无需实体卡片，通过扫描二维码即可激活。您的手机必须支持 eSIM 功能才能使用。',
+    'faq.check_compatibility.q': '如何确认我的手机支持 eSIM？',
+    'faq.check_compatibility.a': 'iPhone XR/XS 及以上型号全部支持。安卓手机请查看设置中是否有「添加 eSIM」或「添加移动套餐」选项。常见支持机型：三星 S20 及以上、Google Pixel 3 及以上、华为 P40 Pro 等。',
+    'faq.delivery.q': '购买后如何收到 eSIM？',
+    'faq.delivery.a': '支付成功后，eSIM 二维码和激活说明会立即发送到您提供的邮箱。同时也可以在订单页面查看。',
+    'faq.installation.q': 'eSIM 如何安装？',
+    'faq.installation.a': '收到邮件后，打开手机相机扫描二维码，或手动输入激活码。详细教程请查看帮助中心。',
+    'faq.usage.q': '到达目的地后如何使用？',
+    'faq.usage.a': '到达后在手机设置中开启 eSIM，启用「数据漫游」。手机会自动连接当地合作网络，无需其他操作。',
+    'faq.refund.q': '可以退款吗？',
+    'faq.refund.a': 'eSIM 未激活前可全额退款。一旦扫描二维码或手动激活，将无法退款。',
+    'faq.topup.q': '流量用完后可以充值吗？',
+    'faq.topup.a': '部分套餐支持充值，请在产品页面查看具体说明。不支持充值的套餐可重新购买新套餐。',
+    'faq.contact.q': '如何联系客服？',
+    'faq.contact.a': '点击网站右下角的 Telegram 图标，或发送邮件至 xilixi@xigrocoltd.com，我们会在 24 小时内回复。',
+    'faq.contact_us': '没有找到答案？',
+    'faq.contact_support': '联系在线客服',
+    
     // 通用
     'common.loading': '加载中...',
     'common.error': '出错了',
@@ -391,6 +411,26 @@ export const translations = {
     'countries.popular': 'Popular',
     'countries.search_placeholder': 'Search countries...',
     'countries.no_results': 'No countries found',
+    
+    // FAQ - 常见问题
+    'faq.what_is_esim.q': 'What is eSIM?',
+    'faq.what_is_esim.a': 'eSIM is an embedded SIM card that doesn\'t require a physical card. Simply scan the QR code to activate. Your phone must support eSIM functionality.',
+    'faq.check_compatibility.q': 'How to check if my phone supports eSIM?',
+    'faq.check_compatibility.a': 'iPhone XR/XS and newer models all support eSIM. For Android, check Settings for "Add eSIM" or "Add Mobile Plan". Common supported models: Samsung S20+, Google Pixel 3+, Huawei P40 Pro, etc.',
+    'faq.delivery.q': 'How do I receive eSIM after purchase?',
+    'faq.delivery.a': 'After payment, the eSIM QR code and activation instructions are sent to your email immediately. You can also view them in the Orders page.',
+    'faq.installation.q': 'How to install eSIM?',
+    'faq.installation.a': 'After receiving the email, open your phone\'s camera to scan the QR code, or enter the activation code manually. See Help Center for detailed tutorial.',
+    'faq.usage.q': 'How to use eSIM at destination?',
+    'faq.usage.a': 'Upon arrival, enable the eSIM in Settings and turn on "Data Roaming". Your phone will automatically connect to local partner networks.',
+    'faq.refund.q': 'Can I get a refund?',
+    'faq.refund.a': 'Full refund available before eSIM activation. Once QR code is scanned or manually activated, refund is not possible.',
+    'faq.topup.q': 'Can I top up after data runs out?',
+    'faq.topup.a': 'Some plans support top-up. Check product page for details. For plans without top-up, you can purchase a new plan.',
+    'faq.contact.q': 'How to contact support?',
+    'faq.contact.a': 'Click the Telegram icon at bottom right, or email xilixi@xigrocoltd.com. We respond within 24 hours.',
+    'faq.contact_us': 'Didn\'t find your answer?',
+    'faq.contact_support': 'Contact Support',
   },
 };
 
