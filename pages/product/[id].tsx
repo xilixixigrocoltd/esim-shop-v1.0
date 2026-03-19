@@ -2,6 +2,7 @@ import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import ProductDetail from '@/components/products/ProductDetail';
 import SEO from '@/components/ui/SEO';
+import Breadcrumb from '@/components/ui/Breadcrumb';
 import type { Product } from '@/types';
 
 export default function ProductPage() {
@@ -59,6 +60,12 @@ export default function ProductPage() {
         description={seoDesc}
         canonical={`/product/${id}`}
       />
+      <div className="max-w-4xl mx-auto px-4 py-4">
+        <Breadcrumb items={[
+          { label: '全部产品', href: '/products' },
+          { label: product.countries?.[0]?.name || '产品详情' }
+        ]} />
+      </div>
       <ProductDetail product={product} />
     </>
   );

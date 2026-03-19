@@ -1,0 +1,26 @@
+# robots.txt for SimRyoko eSIM Shop
+# https://esim-shop-v1.vercel.app
+
+User-agent: *
+Allow: /
+
+# 禁止爬取 API 接口
+Disallow: /api/
+
+# 禁止爬取购物车和结算页（用户隐私）
+Disallow: /cart
+Disallow: /checkout
+
+# 禁止爬取成功页（订单隐私）
+Disallow: /success
+
+# 允许爬取主要页面
+Allow: /
+Allow: /products
+Allow: /countries
+Allow: /country/
+Allow: /product/
+Allow: /help
+
+# 站点地图位置
+Sitemap: https://esim-shop-v1.vercel.app/sitemap.xml

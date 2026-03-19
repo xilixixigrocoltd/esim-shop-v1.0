@@ -1,6 +1,7 @@
 import { useRouter } from 'next/router';
 import ProductList from '@/components/products/ProductList';
 import SEO from '@/components/ui/SEO';
+import Breadcrumb from '@/components/ui/Breadcrumb';
 
 export default function CountryPage() {
   const router = useRouter();
@@ -23,6 +24,12 @@ export default function CountryPage() {
         description={`SimRyoko 提供${countryName}eSIM 套餐，本地运营商网络，即买即用。多种流量套餐可选，价格优惠， instant delivery。`}
         canonical={`/country/${code}`}
       />
+      <div className="max-w-6xl mx-auto px-4 py-4">
+        <Breadcrumb items={[
+          { label: '国家列表', href: '/countries' },
+          { label: countryName }
+        ]} />
+      </div>
       <ProductList countryCode={code as string} />
     </>
   );

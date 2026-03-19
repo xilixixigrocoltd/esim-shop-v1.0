@@ -44,8 +44,53 @@ export default function ProductDetail({ product }: ProductDetailProps) {
     : { type: t('products.type.data_voice_sms'), icon: Phone, color: 'text-green-600 bg-green-50 border-green-200' };
   const PlanIcon = planType.icon;
 
+  // 结构化数据（Schema.org Product）
+  const structuredData = {
+    "@context": "https://schema.org",
+    "@type": "Product",
+    "name": product.name,
+    "description": `${product.name} - ${formatDataSize(product.dataSize)}流量，${product.validDays}天有效期`,
+    "image": product.imageUrl,
+    "brand": {
+      "@type": "Brand",
+      "name": "SimRyoko"
+    },
+    "offers": {
+      "@type": "Offer",
+      "price": product.price,
+      "priceCurrency": "USD",
+      "availability": "https://schema.org/InStock",
+      "seller": {
+        "@type": "Organization",
+        "name": "SimRyoko"
+      }
+    },
+    "additionalProperty": [
+      {
+        "@type": "PropertyValue",
+        "name": "Data Size",
+        "value": formatDataSize(product.dataSize)
+      },
+      {
+        "@type": "PropertyValue",
+        "name": "Validity",
+        "value": `${product.validDays} days`
+      },
+      {
+        "@type": "PropertyValue",
+        "name": "Plan Type",
+        "value": planType.type
+      }
+    ]
+  };
+
   return (
-    <div className="min-h-screen bg-gray-50">
+    <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
+      />
+      <div className="min-h-screen bg-gray-50">
       <div className="bg-white">
         <div className="max-w-4xl mx-auto px-4 py-8">
           <div className="flex items-center gap-2 mb-4">
@@ -229,5 +274,6 @@ export default function ProductDetail({ product }: ProductDetailProps) {
 
       <div className="h-24" />
     </div>
+    </>
   );
 }
