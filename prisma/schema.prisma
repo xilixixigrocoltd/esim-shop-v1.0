@@ -1,0 +1,186 @@
+// Prisma Schema for SimRyoko User Center
+// 数据库：Vercel Postgres
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// 用户表
+model User {
+  id            String    @id @default(cuid())
+  email         String    @unique
+  emailVerified DateTime?
+  name          String?
+  image         String?
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+  
+  // 关联
+  accounts      Account[]
+  sessions      Session[]
+  orders        Order[]
+  referrals     Referral[] @relation("ReferralReferrer")
+  referredBy    Referral[] @relation("ReferralReferred")
+  
+  // 推荐码（6 位字母数字）
+  referralCode  String    @unique @default(cuid())
+  referralEarnings Float   @default(0) // 累计佣金（USD）
+}
+
+// NextAuth.js 标准表
+model Account {
+  id                String  @id @default(cuid())
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String? @db.Text
+  access_token      String? @db.Text
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String? @db.Text
+  session_state     String?
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+  @@index([userId])
+}
+
+model Session {
+  id           String   @id @default(cuid())
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+}
+
+model VerificationToken {
+  identifier String
+  token      String   @unique
+  expires    DateTime
+
+  @@unique([identifier, token])
+}
+
+// 订单表（本地缓存，用于用户中心查询）
+model Order {
+  id              String   @id @default(cuid())
+  orderId         String   @unique // B2B 订单号 ESM260319123456
+  userId          String
+  user            User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  // 订单信息
+  status          String   // pending, paid, completed, cancelled, refunded
+  totalAmount     Float    // USD
+  currency        String   @default("USD")
+  
+  // Stripe 信息
+  stripeSessionId String?  @unique
+  stripePaymentId String?
+  
+  // B2B API 信息
+  b2bOrderId      String?  // B2B 订单号
+  items           Json     // [{productId, quantity, price, name}]
+  
+  // 客户信息
+  customerEmail   String
+  customerName    String?
+  
+  // eSIM 信息
+  iccids          String[] // ICCID 列表（可能多个）
+  
+  // 时间
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+  paidAt          DateTime?
+  completedAt     DateTime?
+  
+  // 索引
+  @@index([userId])
+  @@index([orderId])
+  @@index([stripeSessionId])
+  @@index([status])
+}
+
+// 推荐记录
+model Referral {
+  id        String   @id @default(cuid())
+  referrerId String
+  referredId String
+  createdAt DateTime @default(now())
+  
+  // 推荐人
+  referrer User @relation(fields: [referrerId], references: [id], onDelete: Cascade, map: "referral_referrerId_fkey", name: "ReferralReferrer")
+  
+  // 被推荐人
+  referred User @relation(fields: [referredId], references: [id], onDelete: Cascade, map: "referral_referredId_fkey", name: "ReferralReferred")
+  
+  // 佣金信息
+  commissionAmount Float @default(0) // 佣金金额（USD）
+  commissionStatus String @default("pending") // pending, paid, cancelled
+  
+  // 关联订单
+  orderId String?
+  
+  @@unique([referrerId, referredId])
+  @@index([referrerId])
+  @@index([referredId])
+}
+
+// 优惠码
+model Coupon {
+  id        String   @id @default(cuid())
+  code      String   @unique // 优惠码（如 WELCOME10）
+  type      String   // percentage, fixed
+  value     Float    // 折扣值（10 表示 10% 或$10）
+  minAmount Float?   // 最低消费金额
+  maxDiscount Float? // 最大折扣金额（percentage 类型用）
+  
+  // 使用限制
+  usageLimit Int?    // 总使用次数限制
+  usageCount Int     @default(0) // 已使用次数
+  userLimit  Int?    // 每用户限制
+  
+  // 有效期
+  startsAt  DateTime?
+  expiresAt DateTime?
+  
+  // 状态
+  active    Boolean  @default(true)
+  
+  // 适用产品（空表示全部适用）
+  applicableProducts Int[] // 产品 ID 列表
+  
+  // 使用记录
+  usages    CouponUsage[]
+  
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  
+  @@index([code])
+  @@index([active])
+}
+
+// 优惠码使用记录
+model CouponUsage {
+  id        String   @id @default(cuid())
+  couponId  String
+  coupon    Coupon   @relation(fields: [couponId], references: [id], onDelete: Cascade)
+  userId    String
+  orderId   String   // 订单 ID
+  discount  Float    // 折扣金额（USD）
+  createdAt DateTime @default(now())
+  
+  @@unique([orderId]) // 一个订单只能用一次优惠码
+  @@index([userId])
+  @@index([couponId])
+}
