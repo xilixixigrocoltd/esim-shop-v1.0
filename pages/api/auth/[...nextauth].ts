@@ -1,7 +1,6 @@
 import NextAuth, { NextAuthOptions } from "next-auth";
 import { PrismaAdapter } from "@next-auth/prisma-adapter";
 import EmailProvider from "next-auth/providers/email";
-import GoogleProvider from "next-auth/providers/google";
 import { PrismaClient } from "@prisma/client";
 
 const prisma = new PrismaClient();
@@ -10,7 +9,7 @@ export const authOptions: NextAuthOptions = {
   adapter: PrismaAdapter(prisma) as any,
   
   providers: [
-    // 邮箱登录（无密码，魔法链接）
+    // 邮箱登录（无密码，魔法链接）- 使用 Resend
     EmailProvider({
       server: {
         host: "smtp.resend.com",
@@ -22,12 +21,11 @@ export const authOptions: NextAuthOptions = {
       },
       from: "SimRyoko <noreply@simryoko.com>",
     }),
-    
-    // Google 登录
-    GoogleProvider({
-      clientId: process.env.GOOGLE_CLIENT_ID || "",
-      clientSecret: process.env.GOOGLE_CLIENT_SECRET || "",
-    }),
+    // Google 登录暂不启用（待配置）
+    // GoogleProvider({
+    //   clientId: process.env.GOOGLE_CLIENT_ID || "",
+    //   clientSecret: process.env.GOOGLE_CLIENT_SECRET || "",
+    // }),
   ],
   
   // 自定义 JWT（用于追踪推荐码等）
