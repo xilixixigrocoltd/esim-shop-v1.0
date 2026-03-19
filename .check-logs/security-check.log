@@ -1,0 +1,19 @@
+🔍 安全扫描...
+检查硬编码密钥...
+✅ 无硬编码密钥
+检查 XSS 风险...
+⚠️ 发现 dangerouslySetInnerHTML 使用:
+pages/blog/[slug].tsx:            dangerouslySetInnerHTML={{ __html: post.content.replace(/\n/g, "<br/>") }}
+components/products/ProductDetail.tsx:        dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
+components/analytics/GoogleAnalytics.tsx:        dangerouslySetInnerHTML={{
+ℹ️ 请确认已正确转义
+✅ XSS 检查完成
+检查敏感信息泄露...
+⚠️ 发现敏感词汇使用（请确认非硬编码）:
+pages/api/auth/[...nextauth].ts:    async jwt({ token, user }: any) {
+pages/api/auth/[...nextauth].ts:        token.id = user.id;
+pages/api/auth/[...nextauth].ts:        token.referralCode = user.referralCode;
+pages/api/auth/[...nextauth].ts:      return token;
+pages/products.tsx:              key={c.code}
+✅ 敏感信息检查完成
+✅ 安全扫描完成

@@ -1,0 +1,18 @@
+🔍 API 验证...
+测试 Countries API...
+⚠️ Countries API 返回异常
+<html>
+<head><title>404 Not Found</title></head>
+<body>
+<center><h1>404 Not Found</h1></center>
+<hr><center>nginx/1.18.0 (Ubuntu)</center>
+测试 Products API...
+✅ Products API 正常（或返回预期错误）
+测试 Blog API...
+⚠️ Blog API 返回异常
+<html>
+<head><title>404 Not Found</title></head>
+<body>
+<center><h1>404 Not Found</h1></center>
+<hr><center>nginx/1.18.0 (Ubuntu)</center>
+✅ API 验证完成
