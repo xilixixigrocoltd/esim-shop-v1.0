@@ -5,8 +5,8 @@ set -e
 
 echo "🔍 检查 Git 状态..."
 
-# 检查是否有未提交变更
-UNCOMMITTED=$(git status --porcelain)
+# 检查是否有未提交变更（排除 .check-logs）
+UNCOMMITTED=$(git status --porcelain | grep -v "^?? .check-logs/" || true)
 if [ ! -z "$UNCOMMITTED" ]; then
     echo "❌ 发现未提交变更:"
     echo "$UNCOMMITTED"
