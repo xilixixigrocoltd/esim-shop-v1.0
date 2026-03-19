@@ -1,2 +1,16 @@
 🔍 TypeScript 类型检查...
-tee: /tmp/tsc-output.log: No such file or directory
+lib/products-cache.ts(17,17): error TS2741: Property 'nameEn' is missing in type '{ code: string; name: string; flag: string; }' but required in type 'Country'.
+lib/products-cache.ts(36,17): error TS2741: Property 'nameEn' is missing in type '{ code: string; name: string; flag: string; }' but required in type 'Country'.
+lib/products-cache.ts(56,7): error TS2741: Property 'nameEn' is missing in type '{ code: string; name: string; flag: string; }' but required in type 'Country'.
+lib/products-cache.ts(57,7): error TS2741: Property 'nameEn' is missing in type '{ code: string; name: string; flag: string; }' but required in type 'Country'.
+lib/products-cache.ts(58,7): error TS2741: Property 'nameEn' is missing in type '{ code: string; name: string; flag: string; }' but required in type 'Country'.
+lib/products-cache.ts(59,7): error TS2741: Property 'nameEn' is missing in type '{ code: string; name: string; flag: string; }' but required in type 'Country'.
+lib/products-cache.ts(60,7): error TS2741: Property 'nameEn' is missing in type '{ code: string; name: string; flag: string; }' but required in type 'Country'.
+❌ TypeScript 类型错误:
+lib/products-cache.ts(17,17): error TS2741: Property 'nameEn' is missing in type '{ code: string; name: string; flag: string; }' but required in type 'Country'.
+lib/products-cache.ts(36,17): error TS2741: Property 'nameEn' is missing in type '{ code: string; name: string; flag: string; }' but required in type 'Country'.
+lib/products-cache.ts(56,7): error TS2741: Property 'nameEn' is missing in type '{ code: string; name: string; flag: string; }' but required in type 'Country'.
+lib/products-cache.ts(57,7): error TS2741: Property 'nameEn' is missing in type '{ code: string; name: string; flag: string; }' but required in type 'Country'.
+lib/products-cache.ts(58,7): error TS2741: Property 'nameEn' is missing in type '{ code: string; name: string; flag: string; }' but required in type 'Country'.
+lib/products-cache.ts(59,7): error TS2741: Property 'nameEn' is missing in type '{ code: string; name: string; flag: string; }' but required in type 'Country'.
+lib/products-cache.ts(60,7): error TS2741: Property 'nameEn' is missing in type '{ code: string; name: string; flag: string; }' but required in type 'Country'.

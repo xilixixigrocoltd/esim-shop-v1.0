@@ -4,8 +4,8 @@
 就绪状态：READY
 ✅ 部署状态正常
 部署 Commit: c78f802646eaa0e96c756a530393e6293fa03d5a
-最新 Commit: 4d13076ea7ef01332e415e519a5efd9bf1c2c936
+最新 Commit: 574ee1703c257bd5799b780d63b32b586842518f
 ⚠️ 部署落后于最新 Commit
    部署：c78f802646eaa0e96c756a530393e6293fa03d5a
-   最新：4d13076ea7ef01332e415e519a5efd9bf1c2c936
+   最新：574ee1703c257bd5799b780d63b32b586842518f
 ✅ Vercel 部署验证通过

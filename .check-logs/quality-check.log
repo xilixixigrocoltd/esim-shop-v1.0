@@ -2,7 +2,7 @@
 检查 TODO/FIXME 标记...
 ✅ 无 TODO/FIXME 标记
 检查 Console.log...
-ℹ️ 发现 46 处 console 调用（API 端点允许）
+ℹ️ 发现 48 处 console 调用（API 端点允许）
 检查 Any 类型...
-✅ Any 类型数量合理：52
+✅ Any 类型数量合理：55
 ✅ 代码质量检查完成

@@ -1,5 +1,3 @@
 🔍 检查 Git 状态...
 ❌ 发现未提交变更:
- M scripts/generate-report.sh
- M scripts/run-full-check.sh
-?? .check-logs/
+ M .check-logs/git-check.log

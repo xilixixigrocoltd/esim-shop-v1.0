@@ -1,8 +1,8 @@
 # 🔍 SimRyoko 项目排查报告
 
-**排查日期**: 2026-03-19 19:16:34  
+**排查日期**: 2026-03-19 19:25:25  
 **排查版本**: v2.0 (Ultimate)  
-**执行耗时**: 未知 秒
+**执行耗时**: 19 秒
 
 ---
 
@@ -29,9 +29,7 @@
 ```
 🔍 检查 Git 状态...
 ❌ 发现未提交变更:
- M scripts/generate-report.sh
- M scripts/run-full-check.sh
-?? .check-logs/
+ M .check-logs/git-check.log
 ```
 
 ### 1.2 依赖包
@@ -80,7 +78,21 @@
 ### 2.1 TypeScript 类型检查
 ```
 🔍 TypeScript 类型检查...
-tee: /tmp/tsc-output.log: No such file or directory
+lib/products-cache.ts(17,17): error TS2741: Property 'nameEn' is missing in type '{ code: string; name: string; flag: string; }' but required in type 'Country'.
+lib/products-cache.ts(36,17): error TS2741: Property 'nameEn' is missing in type '{ code: string; name: string; flag: string; }' but required in type 'Country'.
+lib/products-cache.ts(56,7): error TS2741: Property 'nameEn' is missing in type '{ code: string; name: string; flag: string; }' but required in type 'Country'.
+lib/products-cache.ts(57,7): error TS2741: Property 'nameEn' is missing in type '{ code: string; name: string; flag: string; }' but required in type 'Country'.
+lib/products-cache.ts(58,7): error TS2741: Property 'nameEn' is missing in type '{ code: string; name: string; flag: string; }' but required in type 'Country'.
+lib/products-cache.ts(59,7): error TS2741: Property 'nameEn' is missing in type '{ code: string; name: string; flag: string; }' but required in type 'Country'.
+lib/products-cache.ts(60,7): error TS2741: Property 'nameEn' is missing in type '{ code: string; name: string; flag: string; }' but required in type 'Country'.
+❌ TypeScript 类型错误:
+lib/products-cache.ts(17,17): error TS2741: Property 'nameEn' is missing in type '{ code: string; name: string; flag: string; }' but required in type 'Country'.
+lib/products-cache.ts(36,17): error TS2741: Property 'nameEn' is missing in type '{ code: string; name: string; flag: string; }' but required in type 'Country'.
+lib/products-cache.ts(56,7): error TS2741: Property 'nameEn' is missing in type '{ code: string; name: string; flag: string; }' but required in type 'Country'.
+lib/products-cache.ts(57,7): error TS2741: Property 'nameEn' is missing in type '{ code: string; name: string; flag: string; }' but required in type 'Country'.
+lib/products-cache.ts(58,7): error TS2741: Property 'nameEn' is missing in type '{ code: string; name: string; flag: string; }' but required in type 'Country'.
+lib/products-cache.ts(59,7): error TS2741: Property 'nameEn' is missing in type '{ code: string; name: string; flag: string; }' but required in type 'Country'.
+lib/products-cache.ts(60,7): error TS2741: Property 'nameEn' is missing in type '{ code: string; name: string; flag: string; }' but required in type 'Country'.
 ```
 
 ### 2.2 代码质量检查
@@ -89,9 +101,9 @@ tee: /tmp/tsc-output.log: No such file or directory
 检查 TODO/FIXME 标记...
 ✅ 无 TODO/FIXME 标记
 检查 Console.log...
-ℹ️ 发现 46 处 console 调用（API 端点允许）
+ℹ️ 发现 48 处 console 调用（API 端点允许）
 检查 Any 类型...
-✅ Any 类型数量合理：52
+✅ Any 类型数量合理：55
 ✅ 代码质量检查完成
 ```
 
@@ -142,10 +154,10 @@ pages/products.tsx:              key={c.code}
 就绪状态：READY
 ✅ 部署状态正常
 部署 Commit: c78f802646eaa0e96c756a530393e6293fa03d5a
-最新 Commit: 4d13076ea7ef01332e415e519a5efd9bf1c2c936
+最新 Commit: 574ee1703c257bd5799b780d63b32b586842518f
 ⚠️ 部署落后于最新 Commit
    部署：c78f802646eaa0e96c756a530393e6293fa03d5a
-   最新：4d13076ea7ef01332e415e519a5efd9bf1c2c936
+   最新：574ee1703c257bd5799b780d63b32b586842518f
 ✅ Vercel 部署验证通过
 ```
 
@@ -189,6 +201,7 @@ pages/products.tsx:              key={c.code}
 ### 严重问题（P0）
 .check-logs/functionality-check.log:❌ 产品页返回 404
 .check-logs/git-check.log:❌ 发现未提交变更:
+.check-logs/typescript-check.log:❌ TypeScript 类型错误:
 
 ### 警告问题（P1）
 .check-logs/api-check.log:⚠️ Countries API 返回异常
@@ -210,12 +223,12 @@ pages/products.tsx:              key={c.code}
 | **检查阶段** | 4 个 |
 | **检查脚本** | 11 个 |
 | **发现问题** | P0: 1, P1: 1, P2: 0 |
-| **耗时** | 未知 秒 |
+| **耗时** | 19 秒 |
 
 ---
 
 **报告结束**
 
-*排查时间：2026-03-19 19:16:34*  
+*排查时间：2026-03-19 19:25:25*  
 *版本：v2.0 (Ultimate)*  
 *作者：AI Team*
