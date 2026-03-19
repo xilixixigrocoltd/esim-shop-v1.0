@@ -14,6 +14,9 @@ export default function App({ Component, pageProps }: AppProps) {
           <title>SimRyoko - 全球 eSIM，即时连接</title>
           <meta name="description" content="覆盖 150+ 国家的 eSIM 服务，即买即用，无需实体 SIM 卡" />
           <meta name="viewport" content="width=device-width, initial-scale=1" />
+          <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+          <link rel="manifest" href="/manifest.json" />
+          <meta name="theme-color" content="#2563eb" />
         </Head>
         <GoogleAnalytics />
         <Layout>

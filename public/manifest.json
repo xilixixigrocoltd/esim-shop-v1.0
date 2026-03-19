@@ -1,0 +1,20 @@
+{
+  "name": "SimRyoko eSIM",
+  "short_name": "SimRyoko",
+  "description": "全球 eSIM 数据套餐 - 无需实体 SIM 卡，即买即用",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#2563eb",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "/favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ],
+  "categories": ["travel", "utilities"],
+  "lang": "zh-CN"
+}
