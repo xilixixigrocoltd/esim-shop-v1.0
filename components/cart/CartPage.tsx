@@ -84,7 +84,7 @@ export default function CartPage() {
               <div className="flex-1">
                 <h3 className="font-semibold text-gray-900">{item.product.name}</h3>
                 <p className="text-sm text-gray-500">
-                  {formatDataSize(item.product.dataSize)} / {item.product.validDays} {t('product.days', { days: '' }).trim()}
+                  {formatDataSize(item.product.dataSize)} / {item.product.validDays} 天
                 </p>
                 <p className="text-orange-600 font-semibold mt-1">${Number(item.product.price || 0).toFixed(2)}</p>
               </div>

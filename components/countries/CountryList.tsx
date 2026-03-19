@@ -125,7 +125,7 @@ export default function CountryList({ initialSearch = '' }: CountryListProps) {
             >
               <span className="text-4xl mb-2 block">{getCountryFlag(country.code)}</span>
               <h3 className="font-semibold text-gray-900 mb-1">{country.name}</h3>
-              <p className="text-xs text-gray-500">{country.productCount} {款}</p>
+              <p className="text-xs text-gray-500">{country.productCount} '款'</p>
             </Link>
           ))}
         </div>

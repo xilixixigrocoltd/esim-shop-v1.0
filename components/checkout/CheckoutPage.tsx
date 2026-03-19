@@ -110,7 +110,7 @@ export default function CheckoutPage() {
                 <div className="flex-1">
                   <h3 className="font-medium text-gray-900">{item.product.name}</h3>
                   <p className="text-sm text-gray-500">
-                    {formatDataSize(item.product.dataSize)} / {item.product.validDays}{天} x {item.quantity}
+                    {formatDataSize(item.product.dataSize)} / {item.product.validDays}'天' x {item.quantity}
                   </p>
                 </div>
                 <div className="text-right">
