@@ -1,5 +1,5 @@
 // 产品数据缓存（当 B2B API 不可用时使用）
-// 最后更新：2026-03-19
+// 最后更新：2026-03-21
 
 import type { Product } from '@/types';
 
@@ -8,65 +8,53 @@ export const POPULAR_PRODUCTS: Product[] = [
   {
     id: 1,
     name: "日本 7 天 3GB 数据",
+    nameEn: "Japan 7 Days 3GB Data",
     price: 4.50,
-    originalPrice: 5.00,
-    currency: "USD",
-    dataAmount: "3GB",
-    validityDays: 7,
+    dataSize: 3,
+    validDays: 7,
     type: "local",
-    countries: [{ code: "JP", name: "日本", flag: "🇯🇵" }],
-    planType: "data-only",
-    coverage: "Japan",
+    countries: [{ code: "JP", name: "日本", nameEn: "Japan", flag: "🇯🇵" }],
     description: "日本 7 天 3GB 数据套餐，支持热点分享",
+    descriptionEn: "Japan 7 days 3GB data plan with hotspot support",
     features: ["3GB 高速流量", "7 天有效期", "支持热点", "即买即用"],
-    image: "/images/products/japan-7d-3gb.jpg",
-    inStock: true,
-    createdAt: new Date().toISOString(),
-    updatedAt: new Date().toISOString()
+    isHot: true,
+    status: "active",
   },
   {
     id: 2,
     name: "韩国 5 天 2GB 数据",
+    nameEn: "Korea 5 Days 2GB Data",
     price: 3.50,
-    originalPrice: 4.00,
-    currency: "USD",
-    dataAmount: "2GB",
-    validityDays: 5,
+    dataSize: 2,
+    validDays: 5,
     type: "local",
-    countries: [{ code: "KR", name: "韩国", flag: "🇰🇷" }],
-    planType: "data-only",
-    coverage: "South Korea",
+    countries: [{ code: "KR", name: "韩国", nameEn: "South Korea", flag: "🇰🇷" }],
     description: "韩国 5 天 2GB 数据套餐，首尔釜山全覆盖",
+    descriptionEn: "Korea 5 days 2GB data plan, Seoul and Busan coverage",
     features: ["2GB 高速流量", "5 天有效期", "支持热点", "即买即用"],
-    image: "/images/products/korea-5d-2gb.jpg",
-    inStock: true,
-    createdAt: new Date().toISOString(),
-    updatedAt: new Date().toISOString()
+    isHot: true,
+    status: "active",
   },
   {
     id: 3,
     name: "欧洲 30 天 5GB 数据",
+    nameEn: "Europe 30 Days 5GB Data",
     price: 12.00,
-    originalPrice: 15.00,
-    currency: "USD",
-    dataAmount: "5GB",
-    validityDays: 30,
+    dataSize: 5,
+    validDays: 30,
     type: "regional",
     countries: [
-      { code: "FR", name: "法国", flag: "🇫🇷" },
-      { code: "DE", name: "德国", flag: "🇩🇪" },
-      { code: "IT", name: "意大利", flag: "🇮🇹" },
-      { code: "ES", name: "西班牙", flag: "🇪🇸" },
-      { code: "GB", name: "英国", flag: "🇬🇧" }
+      { code: "FR", name: "法国", nameEn: "France", flag: "🇫🇷" },
+      { code: "DE", name: "德国", nameEn: "Germany", flag: "🇩🇪" },
+      { code: "IT", name: "意大利", nameEn: "Italy", flag: "🇮🇹" },
+      { code: "ES", name: "西班牙", nameEn: "Spain", flag: "🇪🇸" },
+      { code: "GB", name: "英国", nameEn: "United Kingdom", flag: "🇬🇧" }
     ],
-    planType: "data-only",
-    coverage: "33 个欧洲国家",
     description: "欧洲 33 国通用 30 天 5GB 数据套餐",
+    descriptionEn: "Europe 33 countries 30 days 5GB data plan",
     features: ["5GB 高速流量", "30 天有效期", "33 国通用", "支持热点"],
-    image: "/images/products/europe-30d-5gb.jpg",
-    inStock: true,
-    createdAt: new Date().toISOString(),
-    updatedAt: new Date().toISOString()
+    isHot: true,
+    status: "active",
   }
 ];
 
