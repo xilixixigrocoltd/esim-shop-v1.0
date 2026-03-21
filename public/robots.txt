@@ -1,5 +1,5 @@
 # robots.txt for SimRyoko eSIM Shop
-# https://esim-shop-v1.vercel.app
+# https://simryoko.com
 
 User-agent: *
 Allow: /
@@ -23,4 +23,4 @@ Allow: /product/
 Allow: /help
 
 # 站点地图位置
-Sitemap: https://esim-shop-v1.vercel.app/sitemap.xml
+Sitemap: https://simryoko.com/sitemap.xml
