@@ -29,21 +29,21 @@ export default function NotFound() {
             404
           </h1>
           <p className="text-xl text-slate-600 mb-2">
-            {t('error.pageNotFound.title') || '页面未找到'}
+            {t('error.pageNotFound.title')}
           </p>
           <p className="text-slate-500 mb-8">
-            {t('error.pageNotFound.description') || '抱歉，您访问的页面不存在或已被移除'}
+            {t('error.pageNotFound.description')}
           </p>
 
           {/* 可能原因 */}
           <div className="bg-white rounded-lg shadow-sm p-4 mb-8">
             <p className="text-sm text-slate-600 font-medium mb-2">
-              {t('error.pageNotFound.possibleReasons') || '可能的原因：'}
+              {t('error.pageNotFound.possibleReasons')}
             </p>
             <ul className="text-sm text-slate-500 text-left space-y-1">
-              <li>• {t('error.pageNotFound.reason1') || '网址输入错误'}</li>
-              <li>• {t('error.pageNotFound.reason2') || '页面已被移除或更改'}</li>
-              <li>• {t('error.pageNotFound.reason3') || '链接已过期'}</li>
+              <li>• {t('error.pageNotFound.reason1')}</li>
+              <li>• {t('error.pageNotFound.reason2')}</li>
+              <li>• {t('error.pageNotFound.reason3')}</li>
             </ul>
           </div>
 
@@ -54,42 +54,42 @@ export default function NotFound() {
               className="inline-flex items-center justify-center px-6 py-3 bg-white border border-slate-300 rounded-lg text-slate-700 hover:bg-slate-50 transition-colors"
             >
               <ArrowLeft className="w-4 h-4 mr-2" />
-              {t('error.pageNotFound.goBack') || '返回上一页'}
+              {t('error.pageNotFound.goBack')}
             </button>
             <button
               onClick={() => router.push('/')}
               className="inline-flex items-center justify-center px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
             >
               <Home className="w-4 h-4 mr-2" />
-              {t('error.pageNotFound.goHome') || '返回首页'}
+              {t('error.pageNotFound.goHome')}
             </button>
           </div>
 
           {/* 帮助链接 */}
           <div className="mt-8">
             <p className="text-sm text-slate-500 mb-3">
-              {t('error.pageNotFound.needHelp') || '需要帮助？'}
+              {t('error.pageNotFound.needHelp')}
             </p>
             <div className="flex gap-4 justify-center text-sm">
               <a
                 href="/help"
                 className="text-blue-600 hover:text-blue-700 hover:underline"
               >
-                {t('navigation.help') || '帮助中心'}
+                {t('nav.help')}
               </a>
               <span className="text-slate-300">|</span>
               <a
                 href="/products"
                 className="text-blue-600 hover:text-blue-700 hover:underline"
               >
-                {t('navigation.products') || '浏览产品'}
+                {t('nav.products')}
               </a>
               <span className="text-slate-300">|</span>
               <a
                 href="/blog"
                 className="text-blue-600 hover:text-blue-700 hover:underline"
               >
-                {t('navigation.blog') || '博客'}
+                {t('nav.blog') || '博客'}
               </a>
             </div>
           </div>

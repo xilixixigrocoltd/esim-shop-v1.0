@@ -9,6 +9,7 @@ export const translations = {
     'nav.countries': '国家',
     'nav.help': '帮助',
     'nav.cart': '购物车',
+    'nav.blog': '博客',
     
     // 首页 Hero
     'home.hero.title': '全球 eSIM，即时连接',
@@ -229,6 +230,7 @@ export const translations = {
     'nav.countries': 'Countries',
     'nav.help': 'Help',
     'nav.cart': 'Cart',
+    'nav.blog': 'Blog',
     
     // 首页 Hero
     'home.hero.title': 'Global eSIM, Instant Connection',
