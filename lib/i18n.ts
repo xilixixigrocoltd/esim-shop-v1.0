@@ -179,6 +179,7 @@ export const translations = {
     'help.title': '帮助中心',
     'help.how_to_install': '如何安装 eSIM',
     'help.contact': '联系我们',
+    'help.contact.title': '联系我们',
     'help.iphone': 'iPhone 用户',
     'help.android': 'Android 用户',
     'help.step': '步骤 {step}',
