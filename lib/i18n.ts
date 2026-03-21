@@ -182,6 +182,11 @@ export const translations = {
     'help.iphone': 'iPhone 用户',
     'help.android': 'Android 用户',
     'help.step': '步骤 {step}',
+    'help.install.iphone': 'iPhone 用户',
+    'help.install.android': 'Android 用户',
+    'product.detail.terms.item1': '确保手机支持 eSIM 功能',
+    'product.detail.installation': '扫描二维码或手动输入激活码',
+    'product.detail.coverage': '到达目的地后开启数据漫游',
     
     // 国家列表页
     'countries.title': '所有国家/地区',
@@ -502,6 +507,11 @@ export const translations = {
     'help.contact.desc': 'Contact us through any of these channels',
     'help.contact.email': 'Email',
     'help.contact.telegram': 'Telegram',
+    'help.install.iphone': 'iPhone Users',
+    'help.install.android': 'Android Users',
+    'product.detail.terms.item1': 'Ensure your phone supports eSIM',
+    'product.detail.installation': 'Scan QR code or enter activation code manually',
+    'product.detail.coverage': 'Enable data roaming at destination',
     
     // 国家列表页
     'countries.all': 'All',
