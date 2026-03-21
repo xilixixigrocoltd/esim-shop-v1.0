@@ -507,11 +507,6 @@ export const translations = {
     'help.contact.desc': 'Contact us through any of these channels',
     'help.contact.email': 'Email',
     'help.contact.telegram': 'Telegram',
-    'help.install.iphone': 'iPhone Users',
-    'help.install.android': 'Android Users',
-    'product.detail.terms.item1': 'Ensure your phone supports eSIM',
-    'product.detail.installation': 'Scan QR code or enter activation code manually',
-    'product.detail.coverage': 'Enable data roaming at destination',
     
     // 国家列表页
     'countries.all': 'All',
