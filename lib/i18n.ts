@@ -222,6 +222,29 @@ export const translations = {
     'lang.zh': '中文',
     'lang.en': 'English',
     'lang.switch': '切换语言',
+    
+    // 错误页面
+    'error.pageNotFound.title': '页面未找到',
+    'error.pageNotFound.description': '抱歉，您访问的页面不存在或已被移除',
+    'error.pageNotFound.possibleReasons': '可能的原因：',
+    'error.pageNotFound.reason1': '网址输入错误',
+    'error.pageNotFound.reason2': '页面已被移除或更改',
+    'error.pageNotFound.reason3': '链接已过期',
+    'error.pageNotFound.goBack': '返回上一页',
+    'error.pageNotFound.goHome': '返回首页',
+    'error.pageNotFound.needHelp': '需要帮助？',
+    
+    'error.serverError.title': '服务器错误',
+    'error.serverError.description': '抱歉，服务器遇到了一些问题，请稍后重试',
+    'error.serverError.whatHappened': '发生了什么？',
+    'error.serverError.explanation': '我们的服务器暂时无法处理您的请求。这可能是由于：',
+    'error.serverError.reason1': '服务器临时维护',
+    'error.serverError.reason2': '访问量过大',
+    'error.serverError.reason3': '技术故障',
+    'error.serverError.retry': '重试',
+    'error.serverError.goHome': '返回首页',
+    'error.serverError.stillNeedHelp': '仍然需要帮助？',
+    'error.serverError.responseTime': '我们通常会在 24 小时内回复',
   },
   en: {
     // 导航
