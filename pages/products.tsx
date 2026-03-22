@@ -1,446 +1,385 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { useRouter } from 'next/router';
-import { Globe, MapPin, Wifi, Phone } from 'lucide-react';
-import type { Product, Country } from '@/types';
-import ProductCard from '@/components/products/ProductCard';
+import { Search, ChevronLeft, Wifi, Clock, MapPin, Globe } from 'lucide-react';
+import type { Product } from '@/types';
 import SEO from '@/components/ui/SEO';
+import Link from 'next/link';
 
-// 热门国家（根据实际产品数量排序）
-const POPULAR_COUNTRIES = [
-  { code: 'US', name: '美国', flag: '🇺🇸' },
-  { code: 'MX', name: '墨西哥', flag: '🇲🇽' },
-  { code: 'GB', name: '英国', flag: '🇬🇧' },
-  { code: 'NL', name: '荷兰', flag: '🇳🇱' },
-  { code: 'CA', name: '加拿大', flag: '🇨🇦' },
-  { code: 'AU', name: '澳大利亚', flag: '🇦🇺' },
-  { code: 'IE', name: '爱尔兰', flag: '🇮🇪' },
-  { code: 'HK', name: '香港', flag: '🇭🇰' },
+// 大洲分类
+const CONTINENTS = [
+  {
+    id: 'asia', name: '亚洲', icon: '🌏',
+    countries: [
+      { code: 'JP', name: '日本', flag: '🇯🇵' },
+      { code: 'KR', name: '韩国', flag: '🇰🇷' },
+      { code: 'TH', name: '泰国', flag: '🇹🇭' },
+      { code: 'SG', name: '新加坡', flag: '🇸🇬' },
+      { code: 'MY', name: '马来西亚', flag: '🇲🇾' },
+      { code: 'VN', name: '越南', flag: '🇻🇳' },
+      { code: 'ID', name: '印度尼西亚', flag: '🇮🇩' },
+      { code: 'PH', name: '菲律宾', flag: '🇵🇭' },
+      { code: 'IN', name: '印度', flag: '🇮🇳' },
+      { code: 'HK', name: '香港', flag: '🇭🇰' },
+      { code: 'TW', name: '台湾', flag: '🇹🇼' },
+      { code: 'MO', name: '澳门', flag: '🇲🇴' },
+      { code: 'KH', name: '柬埔寨', flag: '🇰🇭' },
+      { code: 'MM', name: '缅甸', flag: '🇲🇲' },
+      { code: 'LK', name: '斯里兰卡', flag: '🇱🇰' },
+    ]
+  },
+  {
+    id: 'europe', name: '欧洲', icon: '🇪🇺',
+    countries: [
+      { code: 'GB', name: '英国', flag: '🇬🇧' },
+      { code: 'FR', name: '法国', flag: '🇫🇷' },
+      { code: 'DE', name: '德国', flag: '🇩🇪' },
+      { code: 'IT', name: '意大利', flag: '🇮🇹' },
+      { code: 'ES', name: '西班牙', flag: '🇪🇸' },
+      { code: 'PT', name: '葡萄牙', flag: '🇵🇹' },
+      { code: 'NL', name: '荷兰', flag: '🇳🇱' },
+      { code: 'CH', name: '瑞士', flag: '🇨🇭' },
+      { code: 'AT', name: '奥地利', flag: '🇦🇹' },
+      { code: 'GR', name: '希腊', flag: '🇬🇷' },
+      { code: 'SE', name: '瑞典', flag: '🇸🇪' },
+      { code: 'NO', name: '挪威', flag: '🇳🇴' },
+      { code: 'TR', name: '土耳其', flag: '🇹🇷' },
+    ]
+  },
+  {
+    id: 'americas', name: '美洲', icon: '🌎',
+    countries: [
+      { code: 'US', name: '美国', flag: '🇺🇸' },
+      { code: 'CA', name: '加拿大', flag: '🇨🇦' },
+      { code: 'MX', name: '墨西哥', flag: '🇲🇽' },
+      { code: 'BR', name: '巴西', flag: '🇧🇷' },
+      { code: 'AR', name: '阿根廷', flag: '🇦🇷' },
+      { code: 'CL', name: '智利', flag: '🇨🇱' },
+      { code: 'CO', name: '哥伦比亚', flag: '🇨🇴' },
+    ]
+  },
+  {
+    id: 'mideast', name: '中东', icon: '🕌',
+    countries: [
+      { code: 'AE', name: '阿联酋', flag: '🇦🇪' },
+      { code: 'SA', name: '沙特', flag: '🇸🇦' },
+      { code: 'IL', name: '以色列', flag: '🇮🇱' },
+      { code: 'QA', name: '卡塔尔', flag: '🇶🇦' },
+      { code: 'KW', name: '科威特', flag: '🇰🇼' },
+      { code: 'BH', name: '巴林', flag: '🇧🇭' },
+      { code: 'OM', name: '阿曼', flag: '🇴🇲' },
+    ]
+  },
+  {
+    id: 'africa', name: '非洲', icon: '🌍',
+    countries: [
+      { code: 'ZA', name: '南非', flag: '🇿🇦' },
+      { code: 'EG', name: '埃及', flag: '🇪🇬' },
+      { code: 'KE', name: '肯尼亚', flag: '🇰🇪' },
+      { code: 'MA', name: '摩洛哥', flag: '🇲🇦' },
+    ]
+  },
+  {
+    id: 'oceania', name: '大洋洲', icon: '🏝️',
+    countries: [
+      { code: 'AU', name: '澳大利亚', flag: '🇦🇺' },
+      { code: 'NZ', name: '新西兰', flag: '🇳🇿' },
+    ]
+  },
+  {
+    id: 'global', name: '全球套餐', icon: '🌐',
+    countries: []
+  },
 ];
 
-// 区域套餐 - 大洲
-const REGIONS = [
-  { id: 'asia', name: '亚洲', icon: '🌏', countries: ['JP', 'KR', 'CN', 'HK', 'TH', 'VN', 'SG', 'MY', 'IN', 'ID', 'KH', 'LA', 'MO', 'BD', 'MM'] },
-  { id: 'europe', name: '欧洲', icon: '🇪🇺', countries: ['GB', 'FR', 'DE', 'IT', 'ES', 'PT', 'NL', 'BE', 'AT', 'CH', 'GR', 'CZ', 'PL', 'HU', 'SE', 'NO', 'DK', 'FI', 'IE', 'IS'] },
-  { id: 'americas', name: '美洲', icon: '🌎', countries: ['US', 'CA', 'MX', 'BR', 'AR', 'CL', 'CO', 'PE', 'CR', 'SV'] },
-  { id: 'middle-east', name: '中东', icon: '🕌', countries: ['AE', 'SA', 'IL', 'TR', 'QA', 'KW', 'BH', 'OM'] },
-  { id: 'africa', name: '非洲', icon: '🌍', countries: ['ZA', 'EG', 'KE', 'NG', 'MA', 'TZ', 'UG', 'GH'] },
-  { id: 'oceania', name: '大洋洲', icon: '🏝️', countries: ['AU', 'NZ', 'FJ', 'PG'] },
-];
+type Level = 'continent' | 'country' | 'products';
 
-// 套餐类型
-const PLAN_TYPES = [
-  { id: 'data-only', name: '纯数据', icon: Wifi, color: 'from-blue-500 to-blue-600', desc: '仅流量，无语音短信' },
-  { id: 'data-voice-sms', name: '数据 + 语音 + 短信', icon: Phone, color: 'from-green-500 to-green-600', desc: '全功能套餐' },
-];
-
-type ViewMode = 'list' | 'country' | 'region' | 'plan-type';
+function formatData(size: number) {
+  if (!size) return '无限';
+  if (size >= 1024) return `${(size / 1024).toFixed(0)}GB`;
+  return `${size}MB`;
+}
 
 export default function ProductsPage() {
-  const router = useRouter();
-  const { tab, country, region, planType, search } = router.query;
-  
-  const [products, setProducts] = useState<Product[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [activeTab, setActiveTab] = useState('all');
-  const [viewMode, setViewMode] = useState<ViewMode>('list');
-  const [selectedItem, setSelectedItem] = useState<string>('');
-  const [searchQuery, setSearchQuery] = useState('');
+  const [level, setLevel] = useState<Level>('continent');
+  const [selectedContinent, setSelectedContinent] = useState<typeof CONTINENTS[0] | null>(null);
+  const [selectedCountry, setSelectedCountry] = useState<{ code: string; name: string; flag: string } | null>(null);
+  const [products, setProducts] = useState<{ local: Product[], regional: Product[], global: Product[] }>({ local: [], regional: [], global: [] });
+  const [loading, setLoading] = useState(false);
+  const [search, setSearch] = useState('');
+  const [searchResults, setSearchResults] = useState<Product[] | null>(null);
+  const [activeType, setActiveType] = useState<'local' | 'regional' | 'global'>('local');
 
-  // 同步 URL 参数
-  useEffect(() => {
-    if (tab) setActiveTab(tab as string);
-    if (search) {
-      setSearchQuery(search as string);
-    }
-    if (country) {
-      setViewMode('country');
-      setSelectedItem(country as string);
-    } else if (region) {
-      setViewMode('region');
-      setSelectedItem(region as string);
-    } else if (planType) {
-      setViewMode('plan-type');
-      setSelectedItem(planType as string);
+  // 选择大洲
+  const selectContinent = (c: typeof CONTINENTS[0]) => {
+    if (c.id === 'global') {
+      setSelectedContinent(c);
+      setLevel('products');
+      loadGlobal();
     } else {
-      setViewMode('list');
-      setSelectedItem('');
-    }
-  }, [tab, country, region, planType, search]);
-
-  // 搜索提交处理
-  const handleSearch = (e: React.FormEvent) => {
-    e.preventDefault();
-    const query = searchQuery.trim();
-    if (query) {
-      router.push(`/products?tab=all&search=${encodeURIComponent(query)}`);
-    } else {
-      router.push('/products?tab=all', undefined, { shallow: true });
+      setSelectedContinent(c);
+      setLevel('country');
     }
   };
 
-  // 加载产品
-  useEffect(() => {
-    async function loadProducts() {
-      // 如果没有任何筛选条件，不加载
-      if (!search && !viewMode && !activeTab) return;
-      
-      try {
-        setLoading(true);
-        let endpoint = '';
-        
-        // 如果有搜索关键词（从 URL 参数），先获取国家列表判断是否是国家搜索
-        if (search) {
-          console.log('[Products] 搜索:', search);
-          try {
-            // 获取国家列表（用于匹配国家）
-            const countriesRes = await fetch('/api/countries');
-            const countriesJson = await countriesRes.json();
-            console.log('[Products] 国家列表:', countriesJson.data?.length);
-            
-            if (countriesJson.success && countriesJson.data) {
-              const query = (search as string).trim().toUpperCase();
-              const lowerQuery = (search as string).trim().toLowerCase();
-              
-              // 在国家列表中查找匹配（代码/中文名/英文名）
-              const matchedCountry = countriesJson.data.find((c: any) => 
-                c.code?.toUpperCase() === query ||
-                c.name?.toLowerCase() === lowerQuery ||
-                c.nameEn?.toLowerCase() === lowerQuery ||
-                c.name?.toLowerCase().includes(lowerQuery) ||
-                c.nameEn?.toLowerCase().includes(lowerQuery)
-              );
-              
-              console.log('[Products] 匹配国家:', matchedCountry);
-              
-              if (matchedCountry) {
-                // 是国家搜索，调用国家 API（返回 local/regional/global 三档）
-                const res = await fetch(`/api/products/by-country/${matchedCountry.code}`);
-                const json = await res.json();
-                if (json.success && json.data) {
-                  // 合并三档产品：local + regional + global
-                  const allProducts = [
-                    ...(json.data.local || []),
-                    ...(json.data.regional || []),
-                    ...(json.data.global || [])
-                  ];
-                  console.log('[Products] 国家产品数:', allProducts.length, '(local:', json.data.local?.length, 'regional:', json.data.regional?.length, 'global:', json.data.global?.length, ')');
-                  setProducts(allProducts);
-                } else {
-                  setProducts([]);
-                }
-                setLoading(false);
-                return;
-              }
-            }
-          } catch (error) {
-            console.error('Failed to fetch countries for search:', error);
-          }
-          
-          // 不是国家搜索，获取所有产品进行关键词搜索（产品名称/描述）
-          const allProducts: Product[] = [];
-          for (let page = 1; page <= 10; page++) {
-            const res = await fetch(`/api/products?page=${page}&pageSize=100`);
-            const json = await res.json();
-            if (!json.success || !json.data || json.data.length === 0) break;
-            allProducts.push(...json.data);
-            if (json.data.length < 100) break;
-          }
-          
-          // 前端搜索过滤（产品名称/描述）
-          const lowerQuery = (search as string).toLowerCase();
-          const filtered = allProducts.filter((p: Product) => 
-            p.name.toLowerCase().includes(lowerQuery) ||
-            p.nameEn.toLowerCase().includes(lowerQuery) ||
-            (p.description && p.description.toLowerCase().includes(lowerQuery))
-          );
-          
-          console.log('[Products] 关键词搜索结果:', filtered.length);
-          setProducts(filtered);
-          setLoading(false);
-          return;
-        } else if (viewMode === 'country' && selectedItem) {
-          endpoint = `/api/products/by-country/${selectedItem}`;
-        } else if (viewMode === 'region' && selectedItem) {
-          endpoint = `/api/products/region/${selectedItem}`;
-        } else if (viewMode === 'plan-type' && selectedItem) {
-          endpoint = `/api/products/plan-type/${selectedItem}`;
-        } else if (activeTab === 'popular') {
-          endpoint = '/api/products/popular-countries';
-        } else if (activeTab === 'regional') {
-          endpoint = '/api/products/regional';
-        } else if (activeTab === 'global') {
-          endpoint = '/api/products/global';
-        } else {
-          endpoint = '/api/products?page=1&pageSize=50';
-        }
-        
-        const res = await fetch(endpoint);
-        const json = await res.json();
-        
-        if (json.success && json.data) {
-          // 处理 by-country API 返回的三档数据结构
-          if (endpoint.includes('/by-country/') && typeof json.data === 'object' && !Array.isArray(json.data)) {
-            const allProducts = [
-              ...(json.data.local || []),
-              ...(json.data.regional || []),
-              ...(json.data.global || [])
-            ];
-            setProducts(allProducts);
-          } else {
-            setProducts(json.data);
-          }
-        } else {
-          setProducts([]);
-        }
-      } catch (error) {
-        console.error('Failed to load products:', error);
-        setProducts([]);
-      } finally {
-        setLoading(false);
+  // 选择国家
+  const selectCountry = async (country: { code: string; name: string; flag: string }) => {
+    setSelectedCountry(country);
+    setLevel('products');
+    setLoading(true);
+    setActiveType('local');
+    try {
+      const res = await fetch(`/api/products/by-country/${country.code}`);
+      const json = await res.json();
+      if (json.success) {
+        setProducts({
+          local: json.data.local || [],
+          regional: json.data.regional || [],
+          global: json.data.global || [],
+        });
+        // 自动选择有产品的tab
+        if ((json.data.local || []).length > 0) setActiveType('local');
+        else if ((json.data.regional || []).length > 0) setActiveType('regional');
+        else setActiveType('global');
       }
-    }
-    loadProducts();
-  }, [viewMode, selectedItem, activeTab, search]);
-
-  // 导航处理
-  const handleTabClick = (tabId: string) => {
-    router.push(`/products?tab=${tabId}`, undefined, { shallow: true });
-  };
-
-  const handleCountryClick = (code: string) => {
-    router.push(`/products?tab=popular&country=${code}`, undefined, { shallow: true });
-  };
-
-  const handleRegionClick = (id: string) => {
-    router.push(`/products?tab=regional&region=${id}`, undefined, { shallow: true });
-  };
-
-  const handlePlanTypeClick = (id: string) => {
-    router.push(`/products?tab=global&planType=${id}`, undefined, { shallow: true });
-  };
-
-  const handleBack = () => {
-    if (viewMode !== 'list') {
-      router.push(`/products?tab=${activeTab}`, undefined, { shallow: true });
+    } catch (e) {
+      console.error(e);
+    } finally {
+      setLoading(false);
     }
   };
 
-  // 渲染选择器视图
-  const renderSelector = () => {
-    if (viewMode === 'country' || (activeTab === 'popular' && !selectedItem)) {
-      return (
-        <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-8 gap-4">
-          {POPULAR_COUNTRIES.map((c) => (
-            <button
-              key={c.code}
-              onClick={() => handleCountryClick(c.code)}
-              className="bg-white rounded-xl p-6 border-2 border-gray-200 hover:border-orange-500 hover:shadow-lg transition-all text-center group"
-            >
-              <span className="text-5xl mb-3 block group-hover:scale-110 transition-transform">{c.flag}</span>
-              <p className="font-semibold text-gray-900">{c.name}</p>
-            </button>
-          ))}
-        </div>
-      );
+  // 加载全球套餐
+  const loadGlobal = async () => {
+    setLoading(true);
+    try {
+      const res = await fetch('/api/products/global');
+      const json = await res.json();
+      setProducts({ local: [], regional: [], global: json.data || [] });
+      setActiveType('global');
+    } catch (e) {
+      console.error(e);
+    } finally {
+      setLoading(false);
     }
-
-    if (viewMode === 'region' || (activeTab === 'regional' && !selectedItem)) {
-      return (
-        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4">
-          {REGIONS.map((r) => (
-            <button
-              key={r.id}
-              onClick={() => handleRegionClick(r.id)}
-              className="bg-white rounded-xl p-6 border-2 border-gray-200 hover:border-orange-500 hover:shadow-lg transition-all text-center group"
-            >
-              <span className="text-5xl mb-3 block group-hover:scale-110 transition-transform">{r.icon}</span>
-              <p className="font-semibold text-gray-900">{r.name}</p>
-            </button>
-          ))}
-        </div>
-      );
-    }
-
-    if (viewMode === 'plan-type' || (activeTab === 'global' && !selectedItem)) {
-      return (
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 max-w-2xl mx-auto">
-          {PLAN_TYPES.map((t) => {
-            const Icon = t.icon;
-            return (
-              <button
-                key={t.id}
-                onClick={() => handlePlanTypeClick(t.id)}
-                className="bg-white rounded-xl p-8 border-2 border-gray-200 hover:border-orange-500 hover:shadow-lg transition-all text-center group"
-              >
-                <div className={`w-16 h-16 mx-auto mb-4 rounded-full bg-gradient-to-br ${t.color} flex items-center justify-center group-hover:scale-110 transition-transform`}>
-                  <Icon className="w-8 h-8 text-white" />
-                </div>
-                <p className="text-xl font-bold text-gray-900 mb-2">{t.name}</p>
-                <p className="text-sm text-gray-500">{t.desc}</p>
-              </button>
-            );
-          })}
-        </div>
-      );
-    }
-
-    return null;
   };
 
-  // 获取当前选中项名称
-  const getSelectedName = () => {
-    if (viewMode === 'country') {
-      const c = POPULAR_COUNTRIES.find(x => x.code === selectedItem);
-      return c?.name || '';
+  // 搜索
+  const handleSearch = async () => {
+    if (!search.trim()) { setSearchResults(null); return; }
+    setLoading(true);
+    try {
+      const res = await fetch(`/api/products?search=${encodeURIComponent(search)}&pageSize=100`);
+      const json = await res.json();
+      setSearchResults(json.data || []);
+    } catch (e) {
+      setSearchResults([]);
+    } finally {
+      setLoading(false);
     }
-    if (viewMode === 'region') {
-      const r = REGIONS.find(x => x.id === selectedItem);
-      return r?.name || '';
-    }
-    if (viewMode === 'plan-type') {
-      const t = PLAN_TYPES.find(x => x.id === selectedItem);
-      return t?.name || '';
-    }
-    return '';
   };
 
-  const tabs = [
-    { id: 'all', label: '全部' },
-    { id: 'popular', label: '热门国家' },
-    { id: 'regional', label: '区域' },
-    { id: 'global', label: '全球' },
-  ];
+  const currentProducts = activeType === 'local' ? products.local
+    : activeType === 'regional' ? products.regional
+    : products.global;
 
   return (
     <>
-      <SEO
-        title="全部 eSIM 套餐 - 150+ 国家"
-        description="浏览 SimRyoko 所有 eSIM 套餐，覆盖日本、韩国、欧洲、美国等 150+ 国家。本地套餐、区域套餐、全球套餐，价格从$1.50 起，即买即用。"
-        canonical="/products"
-      />
+      <SEO title="全球 eSIM 套餐 - 150+ 国家" description="覆盖150+国家的eSIM套餐" canonical="/products" />
       <div className="min-h-screen bg-gray-50">
-      {/* 顶部标签页导航 + 搜索框 */}
-      <div className="sticky top-0 z-50 bg-white border-b border-gray-200 shadow-sm">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex flex-col sm:flex-row items-center justify-between py-4 gap-4">
-            <div className="flex flex-wrap justify-center gap-2">
-              {tabs.map((t) => (
-                <button
-                  key={t.id}
-                  onClick={() => handleTabClick(t.id)}
-                  className={`px-6 py-2.5 rounded-full font-medium transition-all ${
-                    activeTab === t.id
-                      ? 'bg-gradient-to-r from-orange-500 to-red-500 text-white shadow-md'
-                      : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
-                  }`}
-                >
-                  {t.label}
-                </button>
-              ))}
-            </div>
 
-            {/* 搜索框 */}
-            <form onSubmit={handleSearch} className="w-full sm:w-auto flex-shrink-0">
-              <div className="relative">
+        {/* 顶部搜索 */}
+        <div className="sticky top-0 z-50 bg-white border-b border-gray-200 shadow-sm">
+          <div className="max-w-4xl mx-auto px-4 py-3">
+            <div className="flex gap-2">
+              <div className="flex-1 relative">
+                <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
                 <input
                   type="text"
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                  placeholder="搜索国家或产品..."
-                  className="w-full sm:w-64 pl-4 pr-12 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-orange-500"
+                  value={search}
+                  onChange={e => setSearch(e.target.value)}
+                  onKeyDown={e => e.key === 'Enter' && handleSearch()}
+                  placeholder="搜索国家或套餐..."
+                  className="w-full pl-10 pr-4 py-2.5 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-orange-400"
                 />
-                <button
-                  type="submit"
-                  className="absolute right-2 top-1/2 -translate-y-1/2 p-1 text-gray-400 hover:text-gray-600"
-                >
-                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-                  </svg>
-                </button>
               </div>
-            </form>
+              <button onClick={handleSearch} className="px-4 py-2.5 bg-orange-500 text-white rounded-xl font-medium hover:bg-orange-600">
+                搜索
+              </button>
+              {searchResults && (
+                <button onClick={() => { setSearchResults(null); setSearch(''); }} className="px-3 py-2.5 bg-gray-100 text-gray-600 rounded-xl">
+                  清除
+                </button>
+              )}
+            </div>
           </div>
         </div>
-      </div>
 
-      {/* 内容区域 */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        {/* 返回按钮 + 标题 */}
-        {(selectedItem || viewMode !== 'list') && (
-          <div className="mb-6 flex items-center gap-4">
-            <button
-              onClick={handleBack}
-              className="flex items-center gap-2 px-4 py-2 bg-white border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors"
-            >
-              <MapPin className="w-4 h-4" />
-              <span>返回</span>
-            </button>
-            <h2 className="text-xl font-bold text-gray-900">
-              {getSelectedName()} {viewMode === 'country' ? '产品' : viewMode === 'region' ? '区域套餐' : '套餐'}
-            </h2>
-          </div>
-        )}
+        <div className="max-w-4xl mx-auto px-4 py-6">
 
-        {/* 选择器视图 */}
-        {(!selectedItem && (activeTab === 'popular' || activeTab === 'regional' || activeTab === 'global')) ? (
-          <div className="mb-8">
-            <h3 className="text-lg font-semibold text-gray-900 mb-4 text-center">
-              {activeTab === 'popular' ? '选择目的地国家/地区' : activeTab === 'regional' ? '选择大洲区域' : '选择套餐类型'}
-            </h3>
-            {renderSelector()}
-          </div>
-        ) : (
-          /* 产品列表 */
-          <div>
-            {/* 产品数量统计 */}
-            <div className="mb-6 text-center">
-              <p className="text-gray-600">
-                {loading ? (
-                  <span className="inline-flex items-center gap-2">
-                    <span className="w-4 h-4 border-2 border-orange-500 border-t-transparent rounded-full animate-spin" />
-                    加载中...
-                  </span>
-                ) : (
-                  `共 ${products.length} 款产品`
-                )}
-              </p>
+          {/* 搜索结果 */}
+          {searchResults && (
+            <div>
+              <p className="text-sm text-gray-500 mb-4">找到 {searchResults.length} 个结果</p>
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                {searchResults.map(p => <ProductCard key={p.id} product={p} />)}
+              </div>
             </div>
+          )}
 
-            {/* 产品网格 */}
-            {loading ? (
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
-                {[...Array(8)].map((_, i) => (
-                  <div key={i} className="bg-white rounded-xl p-4 border border-gray-200 animate-pulse">
-                    <div className="h-48 bg-gray-200 rounded-lg mb-4" />
-                    <div className="h-4 bg-gray-200 rounded w-3/4 mb-2" />
-                    <div className="h-4 bg-gray-200 rounded w-1/2" />
-                  </div>
+          {/* 第一级：大洲选择 */}
+          {!searchResults && level === 'continent' && (
+            <div>
+              <h2 className="text-lg font-bold text-gray-900 mb-4">选择目的地</h2>
+              <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
+                {CONTINENTS.map(c => (
+                  <button key={c.id} onClick={() => selectContinent(c)}
+                    className="bg-white rounded-2xl p-5 border border-gray-200 hover:border-orange-400 hover:shadow-md transition-all text-center">
+                    <span className="text-4xl mb-2 block">{c.icon}</span>
+                    <p className="font-semibold text-gray-900">{c.name}</p>
+                  </button>
                 ))}
               </div>
-            ) : products.length > 0 ? (
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
-                {products.map((product) => (
-                  <ProductCard key={product.id} product={product} />
+            </div>
+          )}
+
+          {/* 第二级：国家选择 */}
+          {!searchResults && level === 'country' && selectedContinent && (
+            <div>
+              <button onClick={() => setLevel('continent')} className="flex items-center gap-1 text-orange-500 mb-4 hover:text-orange-600">
+                <ChevronLeft className="w-4 h-4" /> 返回大洲
+              </button>
+              <h2 className="text-lg font-bold text-gray-900 mb-4">{selectedContinent.icon} {selectedContinent.name}</h2>
+              <div className="grid grid-cols-3 sm:grid-cols-4 lg:grid-cols-5 gap-3">
+                {selectedContinent.countries.map(c => (
+                  <button key={c.code} onClick={() => selectCountry(c)}
+                    className="bg-white rounded-2xl p-4 border border-gray-200 hover:border-orange-400 hover:shadow-md transition-all text-center">
+                    <span className="text-3xl mb-1 block">{c.flag}</span>
+                    <p className="text-xs font-medium text-gray-700">{c.name}</p>
+                  </button>
                 ))}
               </div>
-            ) : (
-              <div className="text-center py-16">
-                {searchQuery ? (
-                  <>
-                    <p className="text-gray-500 text-lg mb-2">未找到与 "{searchQuery}" 相关的产品</p>
-                    <p className="text-gray-400 text-sm">试试其他国家或关键词</p>
-                  </>
-                ) : (
-                  <p className="text-gray-500 text-lg">该分类下暂无产品</p>
-                )}
+            </div>
+          )}
+
+          {/* 第三级：产品列表 */}
+          {!searchResults && level === 'products' && (
+            <div>
+              <button onClick={() => {
+                if (selectedContinent?.id === 'global') setLevel('continent');
+                else setLevel('country');
+              }} className="flex items-center gap-1 text-orange-500 mb-4 hover:text-orange-600">
+                <ChevronLeft className="w-4 h-4" /> 返回{selectedContinent?.id === 'global' ? '大洲' : '国家列表'}
+              </button>
+
+              <div className="flex items-center gap-3 mb-4">
+                {selectedCountry && <span className="text-3xl">{selectedCountry.flag}</span>}
+                <h2 className="text-lg font-bold text-gray-900">
+                  {selectedCountry?.name || '全球'} 套餐
+                </h2>
               </div>
-            )}
-          </div>
+
+              {/* 类型 tab */}
+              <div className="flex gap-2 mb-5">
+                {[
+                  { key: 'local', label: `本地 (${products.local.length})` },
+                  { key: 'regional', label: `区域 (${products.regional.length})` },
+                  { key: 'global', label: `全球 (${products.global.length})` },
+                ].filter(t => {
+                  if (t.key === 'local') return products.local.length > 0;
+                  if (t.key === 'regional') return products.regional.length > 0;
+                  return products.global.length > 0;
+                }).map(t => (
+                  <button key={t.key} onClick={() => setActiveType(t.key as any)}
+                    className={`px-4 py-2 rounded-full text-sm font-medium transition-all ${
+                      activeType === t.key ? 'bg-orange-500 text-white' : 'bg-white text-gray-600 border border-gray-200 hover:border-orange-300'
+                    }`}>
+                    {t.label}
+                  </button>
+                ))}
+              </div>
+
+              {loading ? (
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  {[1,2,3,4].map(i => (
+                    <div key={i} className="bg-white rounded-2xl p-4 border animate-pulse">
+                      <div className="h-4 bg-gray-200 rounded mb-2 w-3/4" />
+                      <div className="h-3 bg-gray-200 rounded mb-1 w-1/2" />
+                      <div className="h-6 bg-gray-200 rounded mt-3 w-1/3" />
+                    </div>
+                  ))}
+                </div>
+              ) : currentProducts.length > 0 ? (
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  {currentProducts.map(p => <ProductCard key={p.id} product={p} />)}
+                </div>
+              ) : (
+                <div className="text-center py-12 text-gray-400">暂无套餐</div>
+              )}
+            </div>
+          )}
+        </div>
+      </div>
+    </>
+  );
+}
+
+function ProductCard({ product }: { product: Product }) {
+  function formatData(size: number) {
+    if (!size) return '无限流量';
+    if (size >= 1024) return `${(size / 1024).toFixed(0)}GB`;
+    return `${size}MB`;
+  }
+
+  return (
+    <Link href={`/product/${product.id}`}
+      className="group bg-white rounded-2xl border border-gray-200 p-4 hover:border-orange-400 hover:shadow-lg transition-all block">
+      <div className="flex items-start justify-between mb-3">
+        <div className="flex gap-1 flex-wrap">
+          {product.countries?.slice(0, 4).map((c: any) => (
+            <span key={c.code} className="text-xl">{getFlag(c.code)}</span>
+          ))}
+          {product.countries && product.countries.length > 4 && (
+            <span className="text-xs text-gray-400 self-end">+{product.countries.length - 4}</span>
+          )}
+        </div>
+        {product.isHot && <span className="px-2 py-0.5 bg-red-500 text-white text-xs rounded-full">热销</span>}
+      </div>
+
+      <h3 className="font-semibold text-gray-900 text-sm mb-3 line-clamp-2 group-hover:text-orange-600 min-h-[2.5rem]">
+        {product.name}
+      </h3>
+
+      <div className="flex gap-3 text-xs text-gray-500 mb-3">
+        <span className="flex items-center gap-1">
+          <Wifi className="w-3 h-3 text-orange-400" />
+          {formatData(product.dataSize)}
+        </span>
+        <span className="flex items-center gap-1">
+          <Clock className="w-3 h-3 text-orange-400" />
+          {product.validDays}天
+        </span>
+        {product.countries && product.countries.length > 1 && (
+          <span className="flex items-center gap-1">
+            <MapPin className="w-3 h-3 text-orange-400" />
+            {product.countries.length}国
+          </span>
         )}
       </div>
-    </div>
-    </>
+
+      <div className="flex items-center justify-between pt-3 border-t border-gray-100">
+        <span className="text-xl font-bold text-orange-600">${Number(product.price || 0).toFixed(2)}</span>
+        <span className="px-3 py-1.5 bg-orange-50 text-orange-600 text-xs font-medium rounded-lg group-hover:bg-orange-500 group-hover:text-white transition-colors">
+          立即购买
+        </span>
+      </div>
+    </Link>
+  );
+}
+
+function getFlag(code: string): string {
+  if (!code || code.length !== 2) return '🌐';
+  return code.toUpperCase().replace(/./g, c =>
+    String.fromCodePoint(c.charCodeAt(0) + 127397)
   );
 }
