@@ -1,4 +1,3 @@
-import Head from 'next/head';
 import HeroSection from '@/components/home/HeroSection';
 import FeaturedProducts from '@/components/home/FeaturedProducts';
 import HowItWorks from '@/components/home/HowItWorks';
@@ -7,8 +6,9 @@ import PaymentMethods from '@/components/home/PaymentMethods';
 import TrustBadges from '@/components/home/TrustBadges';
 import FAQ from '@/components/home/FAQ';
 import SEO from '@/components/ui/SEO';
+import { getCachedProducts } from '@/lib/products-cache';
 
-export default function HomePage() {
+export default function HomePage({ products }: { products: any[] }) {
   return (
     <>
       <SEO
@@ -17,7 +17,7 @@ export default function HomePage() {
         canonical="/"
       />
       <HeroSection />
-      <FeaturedProducts />
+      <FeaturedProducts initialProducts={products} />
       <HowItWorks />
       <TrustBadges />
       <Testimonials />
@@ -25,4 +25,16 @@ export default function HomePage() {
       <FAQ />
     </>
   );
+}
+
+export async function getStaticProps() {
+  try {
+    const products = await getCachedProducts();
+    return {
+      props: { products: products.slice(0, 6) },
+      revalidate: 3600,
+    };
+  } catch {
+    return { props: { products: [] } };
+  }
 }

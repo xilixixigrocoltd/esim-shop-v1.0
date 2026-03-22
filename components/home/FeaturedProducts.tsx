@@ -18,12 +18,13 @@ const POPULAR_DESTINATIONS = [
   { code: 'IT', name: '意大利', emoji: '🇮🇹' },
 ];
 
-export default function FeaturedProducts() {
-  const [products, setProducts] = useState<any[]>([]);
-  const [loading, setLoading] = useState(true);
+export default function FeaturedProducts({ initialProducts = [] }: { initialProducts?: any[] }) {
+  const [products, setProducts] = useState<any[]>(initialProducts);
+  const [loading, setLoading] = useState(initialProducts.length === 0);
   const [search, setSearch] = useState('');
 
   useEffect(() => {
+    if (initialProducts.length > 0) return;
     fetch('/api/products?pageSize=6')
       .then(r => r.json())
       .then(d => {
