@@ -76,6 +76,8 @@ function loadData() {
 
   const local: Record<string, Product[]> = {}
   for (const [code, items] of Object.entries(raw.local as Record<string, any[]>)) {
+    // 过滤掉非标准国家代码（地区/省级代码如 GP-MG, GB-SCT）
+    if (code.length !== 2 || code.includes('-')) continue
     local[code] = items.map(normalizeProduct)
   }
   const regional: Product[] = (raw.regional as any[]).map(normalizeProduct)
