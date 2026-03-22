@@ -13,7 +13,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
   try {
     // 从缓存获取全部产品
-    const allProducts = getCachedProducts();
+    const allProducts = await getCachedProducts();
     
     // 筛选热门国家的 local 产品
     const filtered = allProducts.filter((p: any) => {

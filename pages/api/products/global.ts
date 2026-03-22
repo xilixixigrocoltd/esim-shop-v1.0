@@ -8,7 +8,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
   try {
     // 从缓存获取全部产品
-    const allProducts = getCachedProducts();
+    const allProducts = await getCachedProducts();
     
     // 筛选 global 类型
     const globalProducts = allProducts.filter((p: any) => p.type === 'global');
