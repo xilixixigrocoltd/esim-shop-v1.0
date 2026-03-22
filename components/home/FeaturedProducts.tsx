@@ -1,9 +1,7 @@
-'use client';
-
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { Search, Wifi, Clock, ArrowRight } from 'lucide-react';
 import Link from 'next/link';
-import { getCountryFlag, formatDataSize } from '@/lib/api';
+import { useRouter } from 'next/router';
 
 const POPULAR_DESTINATIONS = [
   { code: 'JP', name: '日本', emoji: '🇯🇵' },
@@ -16,27 +14,33 @@ const POPULAR_DESTINATIONS = [
   { code: 'DE', name: '德国', emoji: '🇩🇪' },
   { code: 'FR', name: '法国', emoji: '🇫🇷' },
   { code: 'IT', name: '意大利', emoji: '🇮🇹' },
+  { code: 'MY', name: '马来西亚', emoji: '🇲🇾' },
+  { code: 'VN', name: '越南', emoji: '🇻🇳' },
+  { code: 'ID', name: '印尼', emoji: '🇮🇩' },
+  { code: 'PH', name: '菲律宾', emoji: '🇵🇭' },
+  { code: 'TW', name: '台湾', emoji: '🇹🇼' },
+  { code: 'HK', name: '香港', emoji: '🇭🇰' },
+  { code: 'AE', name: '阿联酋', emoji: '🇦🇪' },
+  { code: 'TR', name: '土耳其', emoji: '🇹🇷' },
+  { code: 'CA', name: '加拿大', emoji: '🇨🇦' },
+  { code: 'ES', name: '西班牙', emoji: '🇪🇸' },
 ];
 
-export default function FeaturedProducts({ initialProducts = [] }: { initialProducts?: any[] }) {
-  const [products, setProducts] = useState<any[]>(initialProducts);
-  const [loading, setLoading] = useState(initialProducts.length === 0);
-  const [search, setSearch] = useState('');
+function formatData(size: number) {
+  if (!size) return '无限流量';
+  if (size >= 1024) return `${(size / 1024).toFixed(0)}GB`;
+  return `${size}MB`;
+}
 
-  useEffect(() => {
-    if (initialProducts.length > 0) return;
-    fetch('/api/products?pageSize=6')
-      .then(r => r.json())
-      .then(d => {
-        const list = Array.isArray(d.data) ? d.data.slice(0, 6) : [];
-        setProducts(list);
-        setLoading(false);
-      })
-      .catch((err) => {
-        console.error('FeaturedProducts fetch error:', err);
-        setLoading(false);
-      });
-  }, []);
+export default function FeaturedProducts({ initialProducts = [] }: { initialProducts?: any[] }) {
+  const [search, setSearch] = useState('');
+  const router = useRouter();
+
+  const handleSearch = () => {
+    if (search.trim()) {
+      router.push(`/products?search=${encodeURIComponent(search)}`);
+    }
+  };
 
   return (
     <section className="py-16 bg-gray-50">
@@ -44,91 +48,82 @@ export default function FeaturedProducts({ initialProducts = [] }: { initialProd
 
         {/* 搜索框 */}
         <div className="max-w-2xl mx-auto mb-12">
-          <h2 className="text-3xl font-bold text-center text-gray-900 mb-3">找到你的目的地套餐</h2>
+          <h2 className="text-3xl font-bold text-center text-gray-900 mb-2">找到你的目的地套餐</h2>
           <p className="text-center text-gray-500 mb-6">覆盖 150+ 国家，即买即用</p>
           <div className="relative">
-            <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 w-5 h-5" />
             <input
               type="text"
               value={search}
               onChange={e => setSearch(e.target.value)}
-              placeholder="搜索国家或地区..."
-              className="w-full pl-12 pr-4 py-4 rounded-2xl border border-gray-200 shadow-sm focus:outline-none focus:ring-2 focus:ring-orange-400 text-lg"
-              onKeyDown={e => {
-                if (e.key === 'Enter' && search.trim()) {
-                  window.location.href = `/products?search=${encodeURIComponent(search)}`;
-                }
-              }}
+              placeholder="搜索国家或地区，如：日本、泰国..."
+              className="w-full pl-5 pr-32 py-4 rounded-2xl border border-gray-200 shadow-sm focus:outline-none focus:ring-2 focus:ring-orange-400 text-base"
+              onKeyDown={e => e.key === 'Enter' && handleSearch()}
             />
-            {search && (
-              <button
-                onClick={() => window.location.href = `/products?search=${encodeURIComponent(search)}`}
-                className="absolute right-3 top-1/2 -translate-y-1/2 px-4 py-2 bg-orange-500 text-white rounded-xl text-sm font-medium hover:bg-orange-600"
-              >
-                搜索
-              </button>
-            )}
+            <button
+              onClick={handleSearch}
+              className="absolute right-2 top-1/2 -translate-y-1/2 px-5 py-2.5 bg-orange-500 text-white rounded-xl text-sm font-medium hover:bg-orange-600 transition-colors"
+            >
+              搜索
+            </button>
           </div>
         </div>
 
-        {/* 热门目的地横向滚动 */}
+        {/* 热门目的地 */}
         <div className="mb-12">
           <h3 className="text-lg font-semibold text-gray-700 mb-4">🔥 热门目的地</h3>
-          <div className="flex gap-3 overflow-x-auto pb-2 scrollbar-hide">
+          <div className="flex gap-3 overflow-x-auto pb-2" style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}>
             {POPULAR_DESTINATIONS.map(dest => (
               <Link
                 key={dest.code}
-                href={`/country/${dest.code.toLowerCase()}`}
-                className="flex-shrink-0 flex flex-col items-center gap-1 px-4 py-3 bg-white rounded-2xl border border-gray-200 hover:border-orange-400 hover:shadow-md transition-all min-w-[80px]"
+                href={`/products?country=${dest.code}`}
+                className="flex-shrink-0 flex flex-col items-center gap-1 px-4 py-3 bg-white rounded-2xl border border-gray-200 hover:border-orange-400 hover:shadow-md transition-all min-w-[72px]"
               >
                 <span className="text-3xl">{dest.emoji}</span>
-                <span className="text-xs font-medium text-gray-700">{dest.name}</span>
+                <span className="text-xs font-medium text-gray-700 whitespace-nowrap">{dest.name}</span>
               </Link>
             ))}
           </div>
         </div>
 
         {/* 热销套餐 */}
-        <div>
-          <div className="flex items-center justify-between mb-6">
-            <h3 className="text-lg font-semibold text-gray-700">⚡ 热销套餐</h3>
-            <Link href="/products" className="flex items-center gap-1 text-orange-500 hover:text-orange-600 text-sm font-medium">
-              查看全部 <ArrowRight className="w-4 h-4" />
-            </Link>
-          </div>
-
-          {loading ? (
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-              {[1,2,3].map(i => (
-                <div key={i} className="bg-white rounded-xl border border-gray-200 p-4 animate-pulse">
-                  <div className="h-8 bg-gray-200 rounded mb-3 w-1/2" />
-                  <div className="h-4 bg-gray-200 rounded mb-2" />
-                  <div className="h-4 bg-gray-200 rounded w-3/4" />
-                </div>
-              ))}
+        {initialProducts.length > 0 && (
+          <div>
+            <div className="flex items-center justify-between mb-6">
+              <h3 className="text-lg font-semibold text-gray-700">⚡ 热销套餐</h3>
+              <Link href="/products" className="flex items-center gap-1 text-orange-500 hover:text-orange-600 text-sm font-medium">
+                查看全部 <ArrowRight className="w-4 h-4" />
+              </Link>
             </div>
-          ) : (
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-              {products.map(product => (
+              {initialProducts.map((product: any) => (
                 <Link
                   key={product.id}
                   href={`/product/${product.id}`}
-                  className="group bg-white rounded-xl border border-gray-200 p-4 hover:border-orange-400 hover:shadow-lg transition-all"
+                  className="group bg-white rounded-2xl border border-gray-200 p-4 hover:border-orange-400 hover:shadow-lg transition-all"
                 >
                   <div className="flex items-center gap-2 mb-3">
                     {product.countries?.slice(0, 3).map((c: any) => (
-                      <span key={c.code} className="text-2xl">{getCountryFlag(c.code)}</span>
+                      <span key={c.code} className="text-2xl">
+                        {c.code?.length === 2 ? c.code.toUpperCase().replace(/./g, (ch: string) =>
+                          String.fromCodePoint(ch.charCodeAt(0) + 127397)) : '🌐'}
+                      </span>
                     ))}
                     {product.isHot && (
                       <span className="ml-auto px-2 py-0.5 bg-red-500 text-white text-xs rounded-full">热销</span>
                     )}
                   </div>
-                  <h4 className="font-semibold text-gray-900 mb-2 line-clamp-2 group-hover:text-orange-600 text-sm">
+                  <h4 className="font-semibold text-gray-900 mb-2 line-clamp-2 group-hover:text-orange-600 text-sm min-h-[2.5rem]">
                     {product.name}
                   </h4>
                   <div className="flex items-center gap-3 text-xs text-gray-500 mb-3">
-                    <span className="flex items-center gap-1"><Wifi className="w-3 h-3 text-orange-400" />{formatDataSize(product.dataSize)}</span>
-                    <span className="flex items-center gap-1"><Clock className="w-3 h-3 text-orange-400" />{product.validDays || product.validityDays}天</span>
+                    <span className="flex items-center gap-1">
+                      <Wifi className="w-3 h-3 text-orange-400" />
+                      {formatData(product.dataSize)}
+                    </span>
+                    <span className="flex items-center gap-1">
+                      <Clock className="w-3 h-3 text-orange-400" />
+                      {product.validDays || product.validityDays}天
+                    </span>
                   </div>
                   <div className="flex items-center justify-between pt-3 border-t border-gray-100">
                     <span className="text-xl font-bold text-orange-600">${Number(product.price || 0).toFixed(2)}</span>
@@ -139,8 +134,18 @@ export default function FeaturedProducts({ initialProducts = [] }: { initialProd
                 </Link>
               ))}
             </div>
-          )}
-        </div>
+          </div>
+        )}
+
+        {/* 没有产品时显示入口 */}
+        {initialProducts.length === 0 && (
+          <div className="text-center">
+            <Link href="/products"
+              className="inline-flex items-center gap-2 px-8 py-4 bg-orange-500 text-white font-semibold rounded-2xl hover:bg-orange-600 transition-colors">
+              浏览全部套餐 <ArrowRight className="w-5 h-5" />
+            </Link>
+          </div>
+        )}
       </div>
     </section>
   );

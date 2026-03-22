@@ -6,7 +6,22 @@ import PaymentMethods from '@/components/home/PaymentMethods';
 import TrustBadges from '@/components/home/TrustBadges';
 import FAQ from '@/components/home/FAQ';
 import SEO from '@/components/ui/SEO';
-import { getCachedProducts } from '@/lib/products-cache';
+import productsData from './api/products/by-country/products.json';
+
+function getHotProducts() {
+  const data = productsData as any;
+  const all: any[] = [
+    ...Object.values(data.local || {}).flat(),
+    ...(data.regional || []),
+    ...(data.global || []),
+  ];
+  // 优先 isHot，再按价格排序
+  const hot = all.filter((p: any) => p.isHot);
+  if (hot.length >= 6) return hot.slice(0, 6);
+  // 补充区域套餐
+  const regional = (data.regional || []).slice(0, 6 - hot.length);
+  return [...hot, ...regional].slice(0, 6);
+}
 
 export default function HomePage({ products }: { products: any[] }) {
   return (
@@ -27,13 +42,10 @@ export default function HomePage({ products }: { products: any[] }) {
   );
 }
 
-export async function getStaticProps() {
+export function getStaticProps() {
   try {
-    const products = await getCachedProducts();
-    return {
-      props: { products: products.slice(0, 6) },
-      revalidate: 3600,
-    };
+    const products = getHotProducts();
+    return { props: { products }, revalidate: 3600 };
   } catch {
     return { props: { products: [] } };
   }
