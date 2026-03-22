@@ -1,5 +1,6 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
 import { b2bApi } from '@/lib/api';
+import { getCachedProducts } from '@/lib/products-cache';
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   if (req.method !== 'GET') {
@@ -14,27 +15,30 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   }
 
   try {
-    const allProducts = [];
+    // 先尝试 B2B API
+    const allProducts = await b2bApi.getAllProducts();
+    const filtered = allProducts.filter((p: any) => {
+      if (p.type !== 'local' || !p.countries) return false;
+      return p.countries.some((c: any) => c.code?.toUpperCase() === countryCode.toUpperCase());
+    });
+
+    res.setHeader('Cache-Control', 'public, s-maxage=300, stale-while-revalidate');
+    return res.status(200).json({ success: true, data: filtered });
+  } catch (b2bError: any) {
+    // B2B API 失败，降级到缓存
+    console.warn('[ByCountry API] B2B API 失败，使用缓存:', b2bError.message);
     
-    // 获取所有产品（28 页）
-    for (let page = 1; page <= 28; page++) {
-      const result = await b2bApi.getProducts(page, 100);
-      if (!result || !result.products) break;
-      
-      // 筛选指定国家的本地产品（只返回 local 类型）
-      const filtered = result.products.filter((p: any) => {
-        if (p.type !== 'local' || !p.countries) return false;
-        return p.countries.some((c: any) => c.code?.toUpperCase() === countryCode.toUpperCase());
-      });
-      
-      allProducts.push(...filtered);
-      if (result.products.length < 100) break;
-    }
+    const allProducts = await getCachedProducts();
+    const filtered = allProducts.filter((p: any) => {
+      if (p.type !== 'local' || !p.countries) return false;
+      return p.countries.some((c: any) => c.code?.toUpperCase() === countryCode.toUpperCase());
+    });
 
     res.setHeader('Cache-Control', 'public, s-maxage=600, stale-while-revalidate');
-    return res.status(200).json({ success: true, data: allProducts });
-  } catch (error: any) {
-    console.error('Failed to fetch products by country:', error);
-    return res.status(500).json({ error: `获取产品失败：${error.message}` });
+    return res.status(200).json({ 
+      success: true, 
+      data: filtered,
+      warning: 'B2B API 不可用，显示缓存产品'
+    });
   }
 }
