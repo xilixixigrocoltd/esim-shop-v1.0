@@ -10,8 +10,8 @@ class B2BApiClient {
   private getConfig() {
     return {
       B2B_API_URL: process.env.B2B_API_URL || "https://ciuh32wky.xigrocoltd.com",
-      API_KEY: process.env.API_KEY || "",
-      API_SECRET: process.env.API_SECRET || "",
+      API_KEY: process.env.B2B_API_KEY || process.env.API_KEY || "",
+      API_SECRET: process.env.B2B_API_SECRET || process.env.API_SECRET || "",
     };
   }
 
