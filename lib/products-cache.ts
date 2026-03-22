@@ -7,9 +7,11 @@ import productsData from '../pages/api/products/by-country/products.json';
 // 从缓存文件提取所有产品（合并 local + regional + global）
 function getAllProductsFromCache(): Product[] {
   const data = productsData as any;
+  // local 是对象：{JP: [...], KR: [...]}，需要展开
   const localProducts = Object.values(data.local || {}).flat();
-  const regionalProducts = data.regional || [];
-  const globalProducts = data.global || [];
+  // regional 和 global 是数组
+  const regionalProducts = Array.isArray(data.regional) ? data.regional : [];
+  const globalProducts = Array.isArray(data.global) ? data.global : [];
   return [...localProducts, ...regionalProducts, ...globalProducts];
 }
 
