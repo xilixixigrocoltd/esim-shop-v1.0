@@ -1,16 +1,70 @@
-// 2026-03-22 16:30 - Final fix
+// 2026-03-22 16:45 - 恢复 B2B API 调用，支持全部 2720 个产品
 import type { NextApiRequest, NextApiResponse } from 'next';
+import crypto from 'crypto';
 
-const PRODUCTS = [
-  { id: 1, name: "日本 3GB/7 天", price: 4.50, type: "local", countries: [{ code: "JP", cn: "日本" }] },
-  { id: 2, name: "韩国 2GB/5 天", price: 3.50, type: "local", countries: [{ code: "KR", cn: "韩国" }] },
-  { id: 3, name: "欧洲 5GB/30 天", price: 12.00, type: "regional", countries: [{ code: "DE" }, { code: "FR" }, { code: "GB" }] },
-  { id: 4, name: "美国 10GB/30 天", price: 15.00, type: "local", countries: [{ code: "US" }] },
-  { id: 5, name: "泰国 5GB/15 天", price: 6.00, type: "local", countries: [{ code: "TH" }] },
-];
+const API_KEY = process.env.B2B_API_KEY!;
+const API_SECRET = process.env.B2B_API_SECRET!;
+const BASE_URL = process.env.B2B_API_URL || 'https://ciuh32wky.xigrocoltd.com/api';
 
-export default function handler(req: NextApiRequest, res: NextApiResponse) {
-  const code = (req.query.code as string)?.toUpperCase();
-  const filtered = PRODUCTS.filter(p => p.countries?.some(c => c.code?.toUpperCase() === code));
-  return res.status(200).json({ success: true, data: filtered });
+function generateSignature(method: string, endpoint: string, body: string, timestamp: number, nonce: string): string {
+  const payload = `${method}${endpoint}${body}${timestamp}${nonce}`;
+  return crypto.createHmac('sha256', API_SECRET).update(payload).digest('hex');
+}
+
+async function fetchB2BProducts(): Promise<any[]> {
+  const timestamp = Date.now();
+  const nonce = crypto.randomBytes(16).toString('hex');
+  const endpoint = '/v1/products';
+  const signature = generateSignature('GET', endpoint, '', timestamp, nonce);
+
+  const res = await fetch(`${BASE_URL}${endpoint}`, {
+    method: 'GET',
+    headers: {
+      'X-API-KEY': API_KEY,
+      'X-TIMESTAMP': timestamp.toString(),
+      'X-NONCE': nonce,
+      'X-SIGNATURE': signature,
+      'User-Agent': 'Mozilla/5.0',
+    },
+  });
+
+  if (!res.ok) {
+    throw new Error(`B2B API request failed: ${res.status} - ${res.statusText}`);
+  }
+
+  const data = await res.json();
+  return data.data?.products || [];
+}
+
+export default async function handler(req: NextApiRequest, res: NextApiResponse) {
+  try {
+    const code = (req.query.code as string)?.toUpperCase();
+    
+    if (!code) {
+      return res.status(400).json({ success: false, message: '缺少国家代码' });
+    }
+
+    // 从 B2B API 获取全部产品
+    const allProducts = await fetchB2BProducts();
+    
+    // 按国家代码筛选产品
+    const filtered = allProducts.filter((p: any) => {
+      if (!p.countries || !Array.isArray(p.countries)) return false;
+      return p.countries.some((c: any) => c.code?.toUpperCase() === code);
+    });
+
+    return res.status(200).json({ 
+      success: true, 
+      data: filtered,
+      total: filtered.length,
+      timestamp: new Date().toISOString()
+    });
+  } catch (error: any) {
+    console.error('by-country API error:', error);
+    return res.status(500).json({ 
+      success: false, 
+      message: `获取产品失败：${error.message}`,
+      code: 500
+    });
+  }
 }
