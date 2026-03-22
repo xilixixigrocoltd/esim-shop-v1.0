@@ -1,5 +1,5 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
-import { b2bApi } from '@/lib/api';
+import { getCachedProducts } from '@/lib/products-cache';
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   if (req.method !== 'GET') {
@@ -7,22 +7,14 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   }
 
   try {
-    const allProducts = [];
+    // 从缓存获取全部产品
+    const allProducts = getCachedProducts();
     
-    // 获取全部 28 页产品
-    for (let page = 1; page <= 28; page++) {
-      const result = await b2bApi.getProducts(page, 100);
-      if (!result || !result.products) break;
-      
-      // 筛选 global 类型
-      const filtered = result.products.filter((p: any) => p.type === 'global');
-      allProducts.push(...filtered);
-      
-      if (result.products.length < 100) break;
-    }
+    // 筛选 global 类型
+    const globalProducts = allProducts.filter((p: any) => p.type === 'global');
 
     res.setHeader('Cache-Control', 'public, s-maxage=600, stale-while-revalidate');
-    return res.status(200).json({ success: true, data: allProducts });
+    return res.status(200).json({ success: true, data: globalProducts });
   } catch (error: any) {
     console.error('Failed to fetch global products:', error);
     return res.status(500).json({ error: `获取全球套餐失败：${error.message}` });
