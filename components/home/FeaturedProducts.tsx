@@ -27,10 +27,14 @@ export default function FeaturedProducts() {
     fetch('/api/products?pageSize=6')
       .then(r => r.json())
       .then(d => {
-        setProducts(d.data?.slice(0, 6) || []);
+        const list = Array.isArray(d.data) ? d.data.slice(0, 6) : [];
+        setProducts(list);
         setLoading(false);
       })
-      .catch(() => setLoading(false));
+      .catch((err) => {
+        console.error('FeaturedProducts fetch error:', err);
+        setLoading(false);
+      });
   }, []);
 
   return (
@@ -123,7 +127,7 @@ export default function FeaturedProducts() {
                   </h4>
                   <div className="flex items-center gap-3 text-xs text-gray-500 mb-3">
                     <span className="flex items-center gap-1"><Wifi className="w-3 h-3 text-orange-400" />{formatDataSize(product.dataSize)}</span>
-                    <span className="flex items-center gap-1"><Clock className="w-3 h-3 text-orange-400" />{product.validDays}天</span>
+                    <span className="flex items-center gap-1"><Clock className="w-3 h-3 text-orange-400" />{product.validDays || product.validityDays}天</span>
                   </div>
                   <div className="flex items-center justify-between pt-3 border-t border-gray-100">
                     <span className="text-xl font-bold text-orange-600">${Number(product.price || 0).toFixed(2)}</span>
