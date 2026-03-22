@@ -1,5 +1,5 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
-import { POPULAR_PRODUCTS } from '@/lib/products-cache';
+import { b2bApi } from '@/lib/api';
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   if (req.method !== 'GET') {
@@ -13,16 +13,28 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     return res.status(400).json({ success: false, error: '国家代码不能为空' });
   }
 
-  // 直接从缓存筛选产品（绕过 B2B API）
-  const filtered = POPULAR_PRODUCTS.filter((p: any) => {
-    if (!p.countries) return false;
-    return p.countries.some((c: any) => c.code?.toUpperCase() === countryCode.toUpperCase());
-  });
+  try {
+    const allProducts = [];
+    
+    // 获取所有产品（28 页）
+    for (let page = 1; page <= 28; page++) {
+      const result = await b2bApi.getProducts(page, 100);
+      if (!result || !result.products) break;
+      
+      // 筛选指定国家的本地产品（只返回 local 类型）
+      const filtered = result.products.filter((p: any) => {
+        if (p.type !== 'local' || !p.countries) return false;
+        return p.countries.some((c: any) => c.code?.toUpperCase() === countryCode.toUpperCase());
+      });
+      
+      allProducts.push(...filtered);
+      if (result.products.length < 100) break;
+    }
 
-  res.setHeader('Cache-Control', 'public, s-maxage=300, stale-while-revalidate');
-  return res.status(200).json({ 
-    success: true, 
-    data: filtered,
-    note: '当前显示缓存产品，B2B API 维护中'
-  });
+    res.setHeader('Cache-Control', 'public, s-maxage=600, stale-while-revalidate');
+    return res.status(200).json({ success: true, data: allProducts });
+  } catch (error: any) {
+    console.error('Failed to fetch products by country:', error);
+    return res.status(500).json({ error: `获取产品失败：${error.message}` });
+  }
 }
