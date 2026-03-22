@@ -1,5 +1,5 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
-import { b2bApi } from '@/lib/api';
+import { getCachedProducts } from '@/lib/products-cache';
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   if (req.method !== 'GET') {
@@ -8,7 +8,14 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
   try {
     const { id } = req.query;
-    const product = await b2bApi.getProduct(Number(id));
+    const allProducts = await getCachedProducts();
+    const product = allProducts.find((p: any) => String(p.id) === String(id));
+
+    if (!product) {
+      return res.status(404).json({ error: 'Product not found' });
+    }
+
+    res.setHeader('Cache-Control', 'public, s-maxage=600, stale-while-revalidate');
     return res.status(200).json({ success: true, data: product });
   } catch (error) {
     console.error('Failed to fetch product:', error);

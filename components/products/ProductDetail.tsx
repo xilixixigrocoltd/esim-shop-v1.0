@@ -187,6 +187,15 @@ export default function ProductDetail({ product }: ProductDetailProps) {
         </div>
       </div>
 
+      <div className="max-w-4xl mx-auto px-4 mb-2">
+        <div className="bg-yellow-50 border border-yellow-300 rounded-xl p-4 flex items-start gap-3">
+          <span className="text-xl flex-shrink-0">⚠️</span>
+          <p className="text-sm text-yellow-800 font-medium">
+            需要国际版手机才能使用 eSIM（港版/美版 iPhone，三星国际版等），国行手机不支持
+          </p>
+        </div>
+      </div>
+
       <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 p-4 pb-6 md:pb-4">
         <div className="max-w-4xl mx-auto">
           {/* 移动端：垂直布局 */}

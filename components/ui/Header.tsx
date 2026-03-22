@@ -32,8 +32,8 @@ export default function Header({ cartCount = 0 }: HeaderProps) {
             <Link href="/countries" className="text-gray-600 hover:text-orange-600 font-medium">
               {t('nav.countries')}
             </Link>
-            <Link href="/blog" className="text-gray-600 hover:text-orange-600 font-medium">
-              博客
+            <Link href="/account/orders" className="text-gray-600 hover:text-orange-600 font-medium">
+              我的订单
             </Link>
             <Link href="/help" className="text-gray-600 hover:text-orange-600 font-medium">
               {t('nav.help')}
