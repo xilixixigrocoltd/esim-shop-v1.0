@@ -1,5 +1,6 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
 import { b2bApi } from '@/lib/api';
+import { getCachedProducts } from '@/lib/products-cache';
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   if (req.method !== 'GET') {
@@ -35,7 +36,25 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     res.setHeader('Cache-Control', 'public, s-maxage=600, stale-while-revalidate');
     return res.status(200).json({ success: true, data: allProducts });
   } catch (error: any) {
-    console.error('Failed to fetch products by country:', error);
-    return res.status(500).json({ error: `获取产品失败：${error.message}` });
+    // B2B API 失败，降级到缓存
+    console.warn('[By-Country API] B2B API 失败，使用缓存:', error.message);
+    
+    try {
+      const allProducts = await getCachedProducts();
+      const filtered = allProducts.filter((p: any) => {
+        if (p.type !== 'local' || !p.countries) return false;
+        return p.countries.some((c: any) => c.code?.toUpperCase() === countryCode.toUpperCase());
+      });
+      
+      res.setHeader('Cache-Control', 'public, s-maxage=60, stale-while-revalidate');
+      return res.status(200).json({ 
+        success: true, 
+        data: filtered,
+        warning: 'B2B API 不可用，显示缓存产品'
+      });
+    } catch (cacheError: any) {
+      console.error('Failed to fetch products by country:', error);
+      return res.status(500).json({ error: `获取产品失败：${error.message}` });
+    }
   }
 }
