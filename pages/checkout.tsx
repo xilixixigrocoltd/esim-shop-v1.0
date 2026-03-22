@@ -1,16 +1,196 @@
-import CheckoutPage from '@/components/checkout/CheckoutPage';
-import SEO from '@/components/ui/SEO';
+import Head from 'next/head'
+import { useRouter } from 'next/router'
+import { useState, useEffect } from 'react'
+import { getFlagEmoji, formatData } from '../components/ProductCard'
+import { useI18n } from '../lib/i18n-context'
+import { Product } from '../lib/data'
 
-export default function Checkout() {
+type CartItem = Product & { qty: number }
+
+const USDT_ADDRESS = 'TBuhpRpFPV1HkdfaPEdxsKgTE43jV911rL'
+
+export default function CheckoutPage() {
+  const { t } = useI18n()
+  const router = useRouter()
+  const [cart, setCart] = useState<CartItem[]>([])
+  const [mounted, setMounted] = useState(false)
+  const [email, setEmail] = useState('')
+  const [payMethod, setPayMethod] = useState<'stripe' | 'usdt'>('stripe')
+  const [agreed, setAgreed] = useState(false)
+  const [loading, setLoading] = useState(false)
+  const [error, setError] = useState('')
+  const [copied, setCopied] = useState(false)
+
+  useEffect(() => {
+    setMounted(true)
+    try { setCart(JSON.parse(localStorage.getItem('cart') || '[]')) } catch {}
+  }, [])
+
+  const total = cart.reduce((s, i) => s + i.price * (i.qty || 1), 0)
+
+  async function handlePay() {
+    setError('')
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) { setError(t('checkout.errorEmail')); return }
+    if (!agreed) { setError(t('checkout.errorTerms')); return }
+
+    setLoading(true)
+    try {
+      if (payMethod === 'stripe') {
+        const res = await fetch('/api/checkout/create-session', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ items: cart, email }),
+        })
+        if (!res.ok) throw new Error(t('checkout.errorFailed'))
+        const data = await res.json()
+        if (data.url) window.location.href = data.url
+        else throw new Error(t('checkout.errorFailed'))
+      } else {
+        // USDT flow: show address (handled in UI)
+        setLoading(false)
+        return
+      }
+    } catch (e: any) {
+      setError(e.message || t('checkout.errorFailed'))
+    }
+    setLoading(false)
+  }
+
+  function copyAddress() {
+    navigator.clipboard.writeText(USDT_ADDRESS).then(() => { setCopied(true); setTimeout(() => setCopied(false), 2000) })
+  }
+
+  if (!mounted) return null
+
+  if (cart.length === 0) {
+    router.push('/cart')
+    return null
+  }
+
   return (
     <>
-      <SEO
-        title="结算"
-        description="安全结算您的 eSIM 订单。支持信用卡、支付宝、USDT 等多种支付方式。"
-        canonical="/checkout"
-        noIndex
-      />
-      <CheckoutPage />
+      <Head>
+        <title>{t('checkout.title')} — SimRyoko</title>
+      </Head>
+
+      <div className="max-w-5xl mx-auto px-4 sm:px-6 py-10">
+        <h1 className="text-2xl font-bold text-gray-900 mb-8">{t('checkout.title')}</h1>
+
+        <div className="grid grid-cols-1 lg:grid-cols-5 gap-8">
+          {/* Left: form */}
+          <div className="lg:col-span-3 space-y-5">
+            {/* Email */}
+            <div className="bg-white rounded-2xl border border-gray-100 p-6">
+              <label className="block text-sm font-semibold text-gray-900 mb-2">{t('checkout.email')}</label>
+              <input
+                type="email" value={email} onChange={e => setEmail(e.target.value)}
+                placeholder={t('checkout.emailPlaceholder')}
+                className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-orange-400 focus:border-transparent text-sm"
+              />
+              <p className="text-xs text-gray-400 mt-2">{t('checkout.emailHint')}</p>
+            </div>
+
+            {/* eSIM delivery info */}
+            <div className="bg-blue-50 border border-blue-100 rounded-2xl p-5">
+              <p className="font-semibold text-blue-800 mb-1">{t('checkout.deliveryTitle')}</p>
+              <p className="text-blue-700 text-sm">{t('checkout.deliveryDesc')}</p>
+            </div>
+
+            {/* China warning */}
+            <div className="bg-amber-50 border border-amber-200 rounded-2xl p-5">
+              <p className="font-semibold text-amber-800 mb-1">{t('checkout.warningTitle')}</p>
+              <p className="text-amber-700 text-sm">{t('checkout.warningDesc')}</p>
+            </div>
+
+            {/* Payment method */}
+            <div className="bg-white rounded-2xl border border-gray-100 p-6">
+              <p className="text-sm font-semibold text-gray-900 mb-4">{t('checkout.payment')}</p>
+              <div className="space-y-3">
+                {/* Stripe */}
+                <label className={`flex items-start gap-4 p-4 rounded-xl border-2 cursor-pointer transition-colors ${payMethod === 'stripe' ? 'border-orange-400 bg-orange-50' : 'border-gray-100 hover:border-gray-200'}`}>
+                  <input type="radio" name="pay" value="stripe" checked={payMethod === 'stripe'} onChange={() => setPayMethod('stripe')} className="mt-0.5 accent-orange-500" />
+                  <div>
+                    <div className="flex items-center gap-2 font-medium text-gray-900 text-sm">
+                      <span>💳</span> {t('checkout.stripe')}
+                    </div>
+                    <div className="text-xs text-gray-400 mt-0.5">{t('checkout.stripeDesc')}</div>
+                  </div>
+                </label>
+
+                {/* USDT */}
+                <label className={`flex items-start gap-4 p-4 rounded-xl border-2 cursor-pointer transition-colors ${payMethod === 'usdt' ? 'border-orange-400 bg-orange-50' : 'border-gray-100 hover:border-gray-200'}`}>
+                  <input type="radio" name="pay" value="usdt" checked={payMethod === 'usdt'} onChange={() => setPayMethod('usdt')} className="mt-0.5 accent-orange-500" />
+                  <div className="flex-1 min-w-0">
+                    <div className="flex items-center gap-2 font-medium text-gray-900 text-sm">
+                      <span>₮</span> {t('checkout.usdt')}
+                    </div>
+                    <div className="text-xs text-gray-400 mt-0.5">{t('checkout.usdtDesc')}</div>
+                    {payMethod === 'usdt' && (
+                      <div className="mt-3 p-3 bg-gray-50 rounded-xl">
+                        <p className="text-xs text-gray-500 mb-1.5">{t('checkout.usdtAddress')}</p>
+                        <div className="flex items-center gap-2">
+                          <code className="text-xs text-gray-700 break-all flex-1">{USDT_ADDRESS}</code>
+                          <button onClick={copyAddress}
+                            className="flex-shrink-0 bg-orange-500 text-white text-xs px-3 py-1.5 rounded-lg font-medium hover:bg-orange-600 transition-colors">
+                            {copied ? '✓' : t('common.copy') || 'Copy'}
+                          </button>
+                        </div>
+                        <p className="text-xs text-gray-400 mt-2">
+                          {total.toFixed(2)} USDT → {t('checkout.email')} {email || '…'}
+                        </p>
+                      </div>
+                    )}
+                  </div>
+                </label>
+              </div>
+            </div>
+
+            {/* Terms */}
+            <label className="flex items-start gap-3 cursor-pointer">
+              <input type="checkbox" checked={agreed} onChange={e => setAgreed(e.target.checked)} className="mt-1 accent-orange-500 w-4 h-4 flex-shrink-0" />
+              <span className="text-sm text-gray-600">
+                {t('checkout.agreePrefix')}{' '}
+                <span className="text-orange-500 underline cursor-pointer">{t('checkout.agreeTerms')}</span>
+                {t('checkout.agreeSuffix')}
+              </span>
+            </label>
+
+            {error && <div className="bg-red-50 border border-red-200 rounded-xl p-4 text-sm text-red-700">{error}</div>}
+
+            <button onClick={handlePay} disabled={loading}
+              className="w-full bg-orange-500 hover:bg-orange-600 text-white font-bold py-4 rounded-2xl text-lg transition-colors shadow-lg disabled:opacity-60 disabled:cursor-not-allowed min-h-[60px] flex items-center justify-center gap-2">
+              {loading
+                ? <><span className="animate-spin rounded-full h-5 w-5 border-2 border-white border-t-transparent" />{t('checkout.processing')}</>
+                : payMethod === 'usdt' ? `${t('checkout.pay')} (USDT)` : t('checkout.pay')
+              }
+            </button>
+            <p className="text-center text-xs text-gray-400">{t('checkout.security')}</p>
+          </div>
+
+          {/* Right: order summary */}
+          <div className="lg:col-span-2">
+            <div className="bg-white rounded-2xl border border-gray-100 p-6 sticky top-24">
+              <h3 className="font-bold text-gray-900 mb-5">{t('checkout.summary')}</h3>
+              <div className="space-y-4 mb-5">
+                {cart.map(item => (
+                  <div key={item.id} className="flex items-center gap-3">
+                    <span className="text-2xl flex-shrink-0">{getFlagEmoji(item.countries?.[0]?.code || '')}</span>
+                    <div className="flex-1 min-w-0">
+                      <div className="text-sm font-medium text-gray-900 truncate">{item.name}</div>
+                      <div className="text-xs text-gray-400 mt-0.5">{formatData(item.dataSize, t)} · {item.validDays}{t('product.days')} × {item.qty || 1}</div>
+                    </div>
+                    <span className="font-semibold text-gray-900 flex-shrink-0">${(item.price * (item.qty || 1)).toFixed(2)}</span>
+                  </div>
+                ))}
+              </div>
+              <div className="border-t border-gray-100 pt-4 flex justify-between items-center">
+                <span className="font-bold text-gray-900">{t('cart.total')}</span>
+                <span className="text-2xl font-extrabold text-orange-500">${total.toFixed(2)}</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
     </>
-  );
+  )
 }
