@@ -1,84 +1,88 @@
 'use client';
 
-import { Zap, Shield, Globe } from 'lucide-react';
-import { POPULAR_COUNTRIES } from '@/lib/constants';
-import { getCountryFlag } from '@/lib/api';
-import { useI18n } from '@/lib/i18n-context';
+import { useState } from 'react';
+import { useRouter } from 'next/router';
+import { Search } from 'lucide-react';
 
 export default function HeroSection() {
-  const { t } = useI18n();
+  const router = useRouter();
+  const [query, setQuery] = useState('');
+
+  const handleSearch = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (query.trim()) {
+      router.push(`/countries?q=${encodeURIComponent(query.trim())}`);
+    } else {
+      router.push('/countries');
+    }
+  };
 
   return (
-    <section className="relative bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 text-white overflow-hidden">
-      <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 md:py-24">
-        <div className="text-center max-w-3xl mx-auto">
-          <div className="inline-flex items-center gap-2 px-4 py-2 bg-white/10 rounded-full text-sm font-medium mb-6">
-            <Zap className="w-4 h-4 text-orange-400" />
-            <span>{t('home.hero.instant')}</span>
-          </div>
+    <section className="relative overflow-hidden bg-gradient-to-br from-orange-500 via-orange-400 to-amber-500 text-white">
+      {/* Decorative blobs */}
+      <div className="absolute top-0 left-0 w-96 h-96 bg-white/10 rounded-full -translate-x-1/2 -translate-y-1/2 blur-3xl" />
+      <div className="absolute bottom-0 right-0 w-96 h-96 bg-orange-700/30 rounded-full translate-x-1/2 translate-y-1/2 blur-3xl" />
 
-          <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 leading-tight">
-            {t('home.hero.title')}
-          </h1>
-
-          <p className="text-lg md:text-xl text-gray-300 mb-12">
-            {t('home.hero.subtitle')}
-          </p>
-
-          <div className="flex flex-col sm:flex-row gap-4 justify-center mb-16">
-            <a href="/products?tab=all" className="px-8 py-4 bg-gradient-to-r from-orange-500 to-red-500 text-white font-semibold rounded-xl hover:opacity-90">
-              {t('home.hero.cta')}
-            </a>
-            <a href="/help" className="px-8 py-4 bg-white/10 text-white font-semibold rounded-xl hover:bg-white/20 border border-white/20">
-              {t('home.hero.learn_more')}
-            </a>
-          </div>
-
-          <div>
-            <p className="text-sm text-gray-400 mb-4">{t('home.hero.popular')}</p>
-            <div className="flex flex-wrap justify-center gap-3">
-              {POPULAR_COUNTRIES.slice(0, 6).map((country) => (
-                <a key={country.code} href={`/country/${country.code.toLowerCase()}`} className="flex items-center gap-2 px-4 py-2 bg-white/10 rounded-full hover:bg-white/20">
-                  <span className="text-2xl">{getCountryFlag(country.code)}</span>
-                  <span className="font-medium">{country.name}</span>
-                </a>
-              ))}
-            </div>
-          </div>
+      <div className="relative max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-20 md:py-28 text-center">
+        {/* Three badges */}
+        <div className="flex flex-wrap justify-center gap-3 mb-8">
+          <span className="inline-flex items-center gap-1.5 px-4 py-1.5 bg-white/20 backdrop-blur-sm rounded-full text-sm font-medium">
+            🌍 150+ 国家
+          </span>
+          <span className="inline-flex items-center gap-1.5 px-4 py-1.5 bg-white/20 backdrop-blur-sm rounded-full text-sm font-medium">
+            ⚡ 即时激活
+          </span>
+          <span className="inline-flex items-center gap-1.5 px-4 py-1.5 bg-white/20 backdrop-blur-sm rounded-full text-sm font-medium">
+            💳 USDT支付
+          </span>
         </div>
-      </div>
 
-      <div className="relative border-t border-white/10">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <div className="flex items-center gap-4">
-              <div className="w-12 h-12 bg-orange-500/20 rounded-xl flex items-center justify-center">
-                <Globe className="w-6 h-6 text-orange-400" />
-              </div>
-              <div>
-                <h3 className="font-semibold">{t('home.features.countries')}</h3>
-                <p className="text-sm text-gray-400">{t('home.features.global')}</p>
-              </div>
-            </div>
-            <div className="flex items-center gap-4">
-              <div className="w-12 h-12 bg-orange-500/20 rounded-xl flex items-center justify-center">
-                <Zap className="w-6 h-6 text-orange-400" />
-              </div>
-              <div>
-                <h3 className="font-semibold">{t('home.features.instant')}</h3>
-                <p className="text-sm text-gray-400">{t('home.features.delivery')}</p>
-              </div>
-            </div>
-            <div className="flex items-center gap-4">
-              <div className="w-12 h-12 bg-orange-500/20 rounded-xl flex items-center justify-center">
-                <Shield className="w-6 h-6 text-orange-400" />
-              </div>
-              <div>
-                <h3 className="font-semibold">{t('home.features.refund')}</h3>
-                <p className="text-sm text-gray-400">{t('home.features.unused')}</p>
-              </div>
-            </div>
+        {/* Main title */}
+        <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold mb-4 leading-tight tracking-tight">
+          全球 eSIM，出发前搞定
+        </h1>
+        <p className="text-lg sm:text-xl text-orange-100 mb-10">
+          150+ 国家，即买即用，USDT 支付
+        </p>
+
+        {/* Big search box */}
+        <form onSubmit={handleSearch} className="max-w-xl mx-auto">
+          <div className="relative flex items-center">
+            <Search className="absolute left-4 w-5 h-5 text-gray-400 pointer-events-none" />
+            <input
+              type="text"
+              value={query}
+              onChange={(e) => setQuery(e.target.value)}
+              placeholder="搜索国家，如：日本、美国、泰国…"
+              className="w-full pl-12 pr-32 py-4 rounded-2xl bg-white text-gray-800 placeholder-gray-400 shadow-xl text-base focus:outline-none focus:ring-2 focus:ring-white/60"
+            />
+            <button
+              type="submit"
+              className="absolute right-2 px-5 py-2.5 bg-orange-600 hover:bg-orange-700 text-white font-semibold rounded-xl transition-colors text-sm"
+            >
+              搜索
+            </button>
           </div>
+        </form>
+
+        {/* Quick links */}
+        <div className="mt-8 flex flex-wrap justify-center gap-3">
+          {[
+            { code: 'jp', label: '🇯🇵 日本' },
+            { code: 'kr', label: '🇰🇷 韩国' },
+            { code: 'th', label: '🇹🇭 泰国' },
+            { code: 'us', label: '🇺🇸 美国' },
+            { code: 'gb', label: '🇬🇧 英国' },
+            { code: 'sg', label: '🇸🇬 新加坡' },
+          ].map(({ code, label }) => (
+            <a
+              key={code}
+              href={`/country/${code}`}
+              className="px-4 py-2 bg-white/20 hover:bg-white/30 backdrop-blur-sm rounded-full text-sm font-medium transition-colors"
+            >
+              {label}
+            </a>
+          ))}
         </div>
       </div>
     </section>

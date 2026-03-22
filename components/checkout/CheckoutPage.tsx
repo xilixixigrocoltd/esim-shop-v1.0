@@ -2,15 +2,13 @@
 
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
-import { CreditCard, Wallet, Mail, AlertCircle, Check } from 'lucide-react';
+import { CreditCard, Wallet, Mail, AlertCircle, Check, ShoppingBag } from 'lucide-react';
 import { storage, CART_KEY, formatPrice, isValidEmail } from '@/lib/utils';
 import { formatDataSize, getCountryFlag } from '@/lib/api';
-import { useI18n } from '@/lib/i18n-context';
 import type { CartItem } from '@/types';
 
 export default function CheckoutPage() {
   const router = useRouter();
-  const { t } = useI18n();
   const [cart, setCart] = useState<CartItem[]>([]);
   const [email, setEmail] = useState('');
   const [paymentMethod, setPaymentMethod] = useState<'stripe' | 'usdt'>('stripe');
@@ -19,7 +17,7 @@ export default function CheckoutPage() {
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    const savedCart = storage.get(CART_KEY) as CartItem[] || [];
+    const savedCart = (storage.get(CART_KEY) as CartItem[]) || [];
     if (savedCart.length === 0) {
       router.push('/cart');
       return;
@@ -27,26 +25,27 @@ export default function CheckoutPage() {
     setCart(savedCart);
   }, [router]);
 
-  const totalPrice = cart.reduce((sum, item) => sum + Number(item.product.price || 0) * item.quantity, 0);
+  const totalPrice = cart.reduce(
+    (sum, item) => sum + Number(item.product.price || 0) * item.quantity,
+    0
+  );
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError('');
 
     if (!isValidEmail(email)) {
-      setError(t('checkout.email.placeholder'));
+      setError('请输入有效的电子邮件地址');
       return;
     }
-
     if (!agreed) {
-      setError(t('checkout.agree'));
+      setError('请先同意服务条款');
       return;
     }
 
     setLoading(true);
-
     try {
-      const stripeItems = cart.map(item => ({
+      const items = cart.map((item) => ({
         id: item.product.id,
         productId: item.product.id,
         quantity: item.quantity,
@@ -59,34 +58,28 @@ export default function CheckoutPage() {
       const response = await fetch('/api/payment/create', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          email,
-          items: stripeItems,
-          amount: totalPrice,
-        }),
+        body: JSON.stringify({ email, items, amount: totalPrice }),
       });
-
       const data = await response.json();
 
       if (!response.ok) {
-        setError(data.error || `HTTP ${response.status}: ${t('checkout.processing')}`);
+        setError(data.error || `支付请求失败 (${response.status})`);
         return;
       }
 
       if (data.success && data.paymentUrl) {
-        setTimeout(() => {
-          window.location.href = data.paymentUrl;
-        }, 500);
-        return;
-      } else if (paymentMethod === 'usdt') {
-        router.push(`/success?orderId=USDT-${Date.now()}&email=${encodeURIComponent(email)}&method=usdt`);
+        window.location.href = data.paymentUrl;
         return;
       }
-      
-      setError(data.error || t('checkout.processing'));
+      if (paymentMethod === 'usdt') {
+        router.push(
+          `/success?orderId=USDT-${Date.now()}&email=${encodeURIComponent(email)}&method=usdt`
+        );
+        return;
+      }
+      setError(data.error || '支付处理中，请稍候');
     } catch (err: any) {
-      console.error('支付创建错误:', err);
-      setError(err.message || t('common.error'));
+      setError(err.message || '网络错误，请重试');
     } finally {
       setLoading(false);
     }
@@ -96,121 +89,170 @@ export default function CheckoutPage() {
 
   return (
     <div className="min-h-screen bg-gray-50 py-8">
-      <div className="max-w-2xl mx-auto px-4">
-        <h1 className="text-2xl font-bold text-gray-900 mb-6">{t('checkout.title')}</h1>
+      <div className="max-w-5xl mx-auto px-4">
+        <h1 className="text-2xl font-bold text-gray-900 mb-8">确认订单</h1>
 
-        <div className="bg-white rounded-xl p-6 shadow-sm mb-6">
-          <h2 className="font-semibold text-gray-900 mb-4">{t('checkout.order_summary')}</h2>
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          {/* ── Left: Order summary ── */}
           <div className="space-y-4">
-            {cart.map((item) => (
-              <div key={item.product.id} className="flex gap-4">
-                <div className="w-12 h-12 bg-gray-100 rounded-lg flex items-center justify-center text-2xl">
-                  {item.product.countries?.[0] && getCountryFlag(item.product.countries[0].code)}
-                </div>
-                <div className="flex-1">
-                  <h3 className="font-medium text-gray-900">{item.product.name}</h3>
-                  <p className="text-sm text-gray-500">
-                    {formatDataSize(item.product.dataSize)} / {item.product.validDays}'天' x {item.quantity}
-                  </p>
-                </div>
-                <div className="text-right">
-                  <p className="font-semibold">${(Number(item.product.price || 0) * item.quantity).toFixed(2)}</p>
-                </div>
+            <div className="bg-white rounded-2xl p-6 shadow-sm">
+              <h2 className="font-semibold text-gray-900 mb-4 flex items-center gap-2">
+                <ShoppingBag className="w-5 h-5 text-orange-500" />
+                订单摘要
+              </h2>
+              <div className="space-y-4 divide-y divide-gray-100">
+                {cart.map((item) => (
+                  <div key={item.product.id} className="flex items-center gap-3 pt-4 first:pt-0">
+                    <div className="w-11 h-11 bg-gray-50 rounded-xl flex items-center justify-center text-2xl shrink-0">
+                      {item.product.countries?.[0]
+                        ? getCountryFlag(item.product.countries[0].code)
+                        : '🌐'}
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <p className="font-medium text-gray-900 truncate">{item.product.name}</p>
+                      <p className="text-xs text-gray-400 mt-0.5">
+                        {formatDataSize(item.product.dataSize)} · {item.product.validDays} 天 × {item.quantity}
+                      </p>
+                    </div>
+                    <p className="font-semibold text-gray-900 shrink-0">
+                      ${(Number(item.product.price || 0) * item.quantity).toFixed(2)}
+                    </p>
+                  </div>
+                ))}
               </div>
-            ))}
-          </div>
-          <div className="border-t mt-4 pt-4 flex justify-between items-center">
-            <span className="font-semibold">{t('cart.total')}</span>
-            <span className="text-xl font-bold text-orange-600">{formatPrice(totalPrice)}</span>
-          </div>
-        </div>
+              <div className="border-t mt-4 pt-4 flex justify-between items-center">
+                <span className="font-semibold text-gray-700">合计</span>
+                <span className="text-xl font-bold text-orange-500">{formatPrice(totalPrice)}</span>
+              </div>
+            </div>
 
-        <form onSubmit={handleSubmit} className="space-y-6">
-          <div className="bg-white rounded-xl p-6 shadow-sm">
-            <h2 className="font-semibold text-gray-900 mb-4">{t('checkout.contact')}</h2>
-            <div className="relative">
-              <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
+            {/* eSIM delivery notice */}
+            <div className="bg-blue-50 border border-blue-200 rounded-2xl p-4 text-sm text-blue-700">
+              <p className="font-semibold mb-1">📧 eSIM 发送方式</p>
+              <p>付款成功后，eSIM 二维码将发送至您填写的邮箱。请确保邮箱地址正确。</p>
+            </div>
+
+            {/* China warning */}
+            <div className="bg-red-50 border border-red-200 rounded-2xl p-4 text-sm text-red-700">
+              <p className="font-semibold mb-1">⚠️ 重要提示</p>
+              <p>本 eSIM 不支持在中国大陆使用。中国大陆境内无法正常连接网络，请注意。</p>
+            </div>
+          </div>
+
+          {/* ── Right: Payment form ── */}
+          <form onSubmit={handleSubmit} className="space-y-4">
+            {/* Email */}
+            <div className="bg-white rounded-2xl p-6 shadow-sm">
+              <h2 className="font-semibold text-gray-900 mb-4 flex items-center gap-2">
+                <Mail className="w-5 h-5 text-orange-500" />
+                接收邮箱
+              </h2>
               <input
                 type="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                placeholder={t('checkout.email.placeholder')}
-                className="w-full pl-10 pr-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-orange-500 focus:border-transparent"
+                placeholder="your@email.com"
+                className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-orange-400 focus:border-transparent outline-none text-base"
                 required
               />
+              <p className="text-xs text-gray-400 mt-2">eSIM 激活码将发送至此邮箱</p>
             </div>
-          </div>
 
-          <div className="bg-white rounded-xl p-6 shadow-sm">
-            <h2 className="font-semibold text-gray-900 mb-4">{t('checkout.payment_method')}</h2>
-            <div className="space-y-3">
-              <label className={`flex items-center gap-4 p-4 border rounded-xl cursor-pointer ${paymentMethod === 'stripe' ? 'border-orange-500 bg-orange-50' : 'border-gray-200'}`}>
-                <input type="radio" name="payment" value="stripe" checked={paymentMethod === 'stripe'} onChange={() => setPaymentMethod('stripe')} className="hidden" />
-                <div className="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center">
-                  <CreditCard className="w-5 h-5 text-blue-600" />
-                </div>
-                <div className="flex-1">
-                  <p className="font-medium">{t('checkout.payment.card')}</p>
-                  <p className="text-sm text-gray-500">{t('checkout.payment.card.desc')}</p>
-                </div>
-                {paymentMethod === 'stripe' && <Check className="w-5 h-5 text-orange-500" />}
-              </label>
+            {/* Payment method */}
+            <div className="bg-white rounded-2xl p-6 shadow-sm">
+              <h2 className="font-semibold text-gray-900 mb-4">支付方式</h2>
+              <div className="space-y-3">
+                {/* Stripe */}
+                <label
+                  className={`flex items-center gap-4 p-4 border-2 rounded-2xl cursor-pointer transition-colors ${
+                    paymentMethod === 'stripe'
+                      ? 'border-orange-400 bg-orange-50'
+                      : 'border-gray-200 hover:border-gray-300'
+                  }`}
+                >
+                  <input
+                    type="radio"
+                    name="payment"
+                    value="stripe"
+                    checked={paymentMethod === 'stripe'}
+                    onChange={() => setPaymentMethod('stripe')}
+                    className="hidden"
+                  />
+                  <div className="w-10 h-10 bg-blue-100 rounded-xl flex items-center justify-center shrink-0">
+                    <CreditCard className="w-5 h-5 text-blue-600" />
+                  </div>
+                  <div className="flex-1">
+                    <p className="font-medium text-gray-900">信用卡 / Apple Pay / Google Pay</p>
+                    <p className="text-xs text-gray-400 mt-0.5">由 Stripe 安全处理</p>
+                  </div>
+                  {paymentMethod === 'stripe' && (
+                    <Check className="w-5 h-5 text-orange-500 shrink-0" />
+                  )}
+                </label>
 
-              <label className={`flex items-center gap-4 p-4 border rounded-xl cursor-pointer ${paymentMethod === 'usdt' ? 'border-orange-500 bg-orange-50' : 'border-gray-200'}`}>
-                <input type="radio" name="payment" value="usdt" checked={paymentMethod === 'usdt'} onChange={() => setPaymentMethod('usdt')} className="hidden" />
-                <div className="w-10 h-10 bg-green-100 rounded-lg flex items-center justify-center">
-                  <Wallet className="w-5 h-5 text-green-600" />
-                </div>
-                <div className="flex-1">
-                  <p className="font-medium">{t('checkout.payment.usdt')}</p>
-                  <p className="text-sm text-gray-500">{t('checkout.payment.usdt.desc')}</p>
-                </div>
-                {paymentMethod === 'usdt' && <Check className="w-5 h-5 text-orange-500" />}
-              </label>
-            </div>
-          </div>
-
-          <div className="bg-white rounded-xl p-6 shadow-sm">
-            <h2 className="font-semibold text-gray-900 mb-4">{t('checkout.terms')}</h2>
-            
-            <div className="bg-red-50 border-2 border-red-200 rounded-xl p-4 mb-4">
-              <div className="flex items-start gap-3">
-                <AlertCircle className="w-5 h-5 text-red-600 mt-0.5 flex-shrink-0" />
-                <div className="text-sm text-red-800">
-                  <p className="font-bold mb-1">{t('product.detail.warning.china')}</p>
-                  <p className="font-semibold mb-2">{t('product.detail.warning.china.desc')}</p>
-                  <p className="font-bold mb-1">{t('product.detail.warning.china').replace('⚠️ ', '')}</p>
-                  <p className="font-semibold">{t('product.detail.warning.china.desc')}</p>
-                  <p className="mt-2 text-red-700">{t('product.detail.warning.china.note')}</p>
-                </div>
+                {/* USDT */}
+                <label
+                  className={`flex items-center gap-4 p-4 border-2 rounded-2xl cursor-pointer transition-colors ${
+                    paymentMethod === 'usdt'
+                      ? 'border-orange-400 bg-orange-50'
+                      : 'border-gray-200 hover:border-gray-300'
+                  }`}
+                >
+                  <input
+                    type="radio"
+                    name="payment"
+                    value="usdt"
+                    checked={paymentMethod === 'usdt'}
+                    onChange={() => setPaymentMethod('usdt')}
+                    className="hidden"
+                  />
+                  <div className="w-10 h-10 bg-green-100 rounded-xl flex items-center justify-center shrink-0">
+                    <Wallet className="w-5 h-5 text-green-600" />
+                  </div>
+                  <div className="flex-1">
+                    <p className="font-medium text-gray-900">USDT（加密货币）</p>
+                    <p className="text-xs text-gray-400 mt-0.5">via CryptoPay · TRC20 / ERC20</p>
+                  </div>
+                  {paymentMethod === 'usdt' && (
+                    <Check className="w-5 h-5 text-orange-500 shrink-0" />
+                  )}
+                </label>
               </div>
             </div>
 
+            {/* Agree */}
             <label className="flex items-start gap-3 cursor-pointer">
-              <input type="checkbox" checked={agreed} onChange={(e) => setAgreed(e.target.checked)} className="mt-1 w-5 h-5 text-orange-500 rounded focus:ring-orange-500" />
-              <div className="text-sm text-gray-600">
-                {t('checkout.agree')}
-                <a href="/help" target="_blank" className="text-orange-600 hover:underline">{t('checkout.terms')}</a>
-                {t('checkout.confirm_device')}
-              </div>
+              <input
+                type="checkbox"
+                checked={agreed}
+                onChange={(e) => setAgreed(e.target.checked)}
+                className="mt-1 w-4 h-4 accent-orange-500 rounded"
+              />
+              <span className="text-sm text-gray-500">
+                我已阅读并同意{' '}
+                <a href="/help" target="_blank" className="text-orange-500 hover:underline">
+                  服务条款与退款政策
+                </a>
+                ，并确认设备支持 eSIM。
+              </span>
             </label>
-          </div>
 
-          {error && (
-            <div className="flex items-center gap-2 text-red-600 bg-red-50 p-4 rounded-xl">
-              <AlertCircle className="w-5 h-5" />
-              {error}
-            </div>
-          )}
+            {error && (
+              <div className="flex items-center gap-2 text-red-600 bg-red-50 p-4 rounded-2xl text-sm">
+                <AlertCircle className="w-5 h-5 shrink-0" />
+                {error}
+              </div>
+            )}
 
-          <button
-            type="submit"
-            disabled={loading}
-            className="w-full py-4 bg-gradient-to-r from-orange-500 to-red-500 text-white font-semibold rounded-xl hover:opacity-90 disabled:opacity-50"
-          >
-            {loading ? t('checkout.processing') : `${t('checkout.confirm_pay')} ${formatPrice(totalPrice)}`}
-          </button>
-        </form>
+            <button
+              type="submit"
+              disabled={loading}
+              className="w-full py-4 bg-orange-500 hover:bg-orange-600 disabled:opacity-50 text-white font-bold rounded-2xl transition-colors text-base"
+            >
+              {loading ? '处理中…' : `立即支付 ${formatPrice(totalPrice)}`}
+            </button>
+          </form>
+        </div>
       </div>
     </div>
   );
