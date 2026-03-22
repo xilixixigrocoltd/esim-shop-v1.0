@@ -227,14 +227,14 @@ export default function ProductDetail({ product }: ProductDetailProps) {
             <div className="flex flex-col gap-2">
               <button
                 onClick={addToCart}
-                className={`w-full py-3 rounded-xl font-semibold flex items-center justify-center gap-2 ${added ? 'bg-green-500 text-white' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'}`}
+                className={`w-full py-3 rounded-xl font-bold text-base flex items-center justify-center gap-2 transition-all ${added ? 'bg-green-500 text-white' : 'bg-orange-500 text-white hover:bg-orange-600 active:scale-95'}`}
               >
-                {added ? <><Check className="w-5 h-5" /> ✓</> : <><ShoppingCart className="w-5 h-5" /> {t('product.detail.add_to_cart')}</>}
+                {added ? <><Check className="w-5 h-5" /> 已加入购物车</> : <><ShoppingCart className="w-5 h-5" /> {t('product.detail.add_to_cart')}</>}
               </button>
               
               <button
                 onClick={buyNow}
-                className="w-full py-3 bg-gradient-to-r from-orange-500 to-red-500 text-white font-semibold rounded-xl hover:opacity-90"
+                className="w-full py-3 bg-gradient-to-r from-red-500 to-red-600 text-white font-bold text-base rounded-xl hover:opacity-90 active:scale-95 transition-all"
               >
                 {t('product.detail.buy_now')}
               </button>
@@ -266,14 +266,14 @@ export default function ProductDetail({ product }: ProductDetailProps) {
 
             <button
               onClick={addToCart}
-              className={`px-6 py-3 rounded-xl font-semibold flex items-center gap-2 ${added ? 'bg-green-500 text-white' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'}`}
+              className={`px-8 py-3 rounded-xl font-bold text-base flex items-center gap-2 transition-all ${added ? 'bg-green-500 text-white' : 'bg-orange-500 text-white hover:bg-orange-600'}`}
             >
-              {added ? <><Check className="w-5 h-5" /> ✓</> : <><ShoppingCart className="w-5 h-5" /> {t('product.detail.add_to_cart')}</>}
+              {added ? <><Check className="w-5 h-5" /> 已加入</> : <><ShoppingCart className="w-5 h-5" /> {t('product.detail.add_to_cart')}</>}
             </button>
 
             <button
               onClick={buyNow}
-              className="px-6 py-3 bg-gradient-to-r from-orange-500 to-red-500 text-white font-semibold rounded-xl hover:opacity-90"
+              className="px-8 py-3 bg-gradient-to-r from-red-500 to-red-600 text-white font-bold text-base rounded-xl hover:opacity-90 transition-all"
             >
               {t('product.detail.buy_now')}
             </button>

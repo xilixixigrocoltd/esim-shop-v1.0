@@ -33,27 +33,20 @@ export default function HelpPage() {
         <div className="bg-white rounded-2xl shadow-sm p-6 mb-6">
           <h2 className="text-xl font-bold text-gray-900 mb-6">{t('home.faq.title')}</h2>
           <div className="space-y-6">
-            <div>
-              <h3 className="font-semibold text-gray-900 mb-2">{t('faq.what_is_esim.q')}</h3>
-              <p className="text-gray-600">{t('faq.what_is_esim.a')}</p>
-            </div>
-            <div>
-              <h3 className="font-semibold text-gray-900 mb-2">{t('faq.check_compatibility.q')}</h3>
-              <p className="text-gray-600">{t('faq.check_compatibility.a')}</p>
-            </div>
-            <div>
-              <h3 className="font-semibold text-gray-900 mb-2">{t('faq.installation.q')}</h3>
-              <ol className="list-decimal list-inside text-gray-600 mt-2 space-y-1">
-                <li>{t('product.detail.terms.item1')}</li>
-                <li>{t('help.install.iphone')}</li>
-                <li>{t('product.detail.installation')}</li>
-                <li>{t('product.detail.coverage')}</li>
-              </ol>
-            </div>
-            <div>
-              <h3 className="font-semibold text-gray-900 mb-2">{t('faq.refund.q')}</h3>
-              <p className="text-gray-600">{t('faq.refund.a')}</p>
-            </div>
+            {[
+              { q: 'faq.what_is_esim.q', a: 'faq.what_is_esim.a' },
+              { q: 'faq.check_compatibility.q', a: 'faq.check_compatibility.a' },
+              { q: 'faq.installation.q', a: 'faq.installation.a' },
+              { q: 'faq.usage.q', a: 'faq.usage.a' },
+              { q: 'faq.refund.q', a: 'faq.refund.a' },
+              { q: 'faq.topup.q', a: 'faq.topup.a' },
+              { q: 'faq.contact.q', a: 'faq.contact.a' },
+            ].map(({ q, a }, idx) => (
+              <div key={idx} className="border-b border-gray-100 pb-6 last:border-0 last:pb-0">
+                <h3 className="font-semibold text-gray-900 mb-2">{t(q)}</h3>
+                <p className="text-gray-600">{t(a)}</p>
+              </div>
+            ))}
           </div>
         </div>
 

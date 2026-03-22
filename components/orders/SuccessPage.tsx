@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
-import { CheckCircle, Mail, ShoppingBag, QrCode, AlertCircle } from 'lucide-react';
+import { CheckCircle, Mail, ShoppingBag, QrCode, AlertCircle, ClipboardList } from 'lucide-react';
 import { storage, CART_KEY } from '@/lib/utils';
 import { useI18n } from '@/lib/i18n-context';
 
@@ -163,11 +163,21 @@ export default function SuccessPage({ orderId: propOrderId, email: propEmail }: 
         )}
 
         <div className="space-y-3">
-          <Link href="/countries" className="flex items-center justify-center gap-2 w-full py-3 bg-gradient-to-r from-orange-500 to-red-500 text-white font-semibold rounded-xl">
+          {orderId && (
+            <Link href={`/account/orders`} className="flex items-center justify-center gap-2 w-full py-3 bg-gradient-to-r from-orange-500 to-red-500 text-white font-semibold rounded-xl">
+              <ClipboardList className="w-5 h-5" />
+              {t('success.view_orders')}
+            </Link>
+          )}
+          <Link href="/help" className="flex items-center justify-center gap-2 w-full py-3 border border-orange-500 text-orange-600 font-semibold rounded-xl hover:bg-orange-50">
+            <QrCode className="w-5 h-5" />
+            {t('order.install_guide')}
+          </Link>
+          <Link href="/countries" className="flex items-center justify-center gap-2 w-full py-3 bg-gray-100 text-gray-700 font-semibold rounded-xl hover:bg-gray-200">
             <ShoppingBag className="w-5 h-5" />
             {t('cart.continue_shopping')}
           </Link>
-          <Link href="/" className="block w-full py-3 text-gray-600 hover:text-gray-900">
+          <Link href="/" className="block w-full py-3 text-gray-500 hover:text-gray-700 text-sm text-center">
             {t('success.back_home')}
           </Link>
         </div>
