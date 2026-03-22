@@ -1,7 +1,3 @@
-const B2B_API_URL = process.env.B2B_API_URL || "https://api.xigrocoltd.com";
-const API_KEY = process.env.API_KEY || "";
-const API_SECRET = process.env.API_SECRET || "";
-
 import type { Product, ProductListResponse, Order } from "@/types";
 import crypto from "crypto";
 
@@ -11,7 +7,16 @@ function hmacSha256(message: string, secret: string): string {
 }
 
 class B2BApiClient {
+  private getConfig() {
+    return {
+      B2B_API_URL: process.env.B2B_API_URL || "https://ciuh32wky.xigrocoltd.com/api",
+      API_KEY: process.env.API_KEY || "",
+      API_SECRET: process.env.API_SECRET || "",
+    };
+  }
+
   private async request<T>(endpoint: string, method: "GET" | "POST" = "GET", data?: any): Promise<T> {
+    const { B2B_API_URL, API_KEY, API_SECRET } = this.getConfig();
     const timestamp = Date.now().toString();
     const nonce = Math.random().toString(36).substring(2, 20) + Date.now().toString(36);
     // JSON 序列化去除空格，与 API 期望格式一致
