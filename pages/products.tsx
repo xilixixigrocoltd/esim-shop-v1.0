@@ -115,12 +115,18 @@ export default function ProductsPage() {
               console.log('[Products] 匹配国家:', matchedCountry);
               
               if (matchedCountry) {
-                // 是国家搜索，调用国家 API（只返回 local 产品）
+                // 是国家搜索，调用国家 API（返回 local/regional/global 三档）
                 const res = await fetch(`/api/products/by-country/${matchedCountry.code}`);
                 const json = await res.json();
-                console.log('[Products] 国家产品数:', json.data?.length);
                 if (json.success && json.data) {
-                  setProducts(json.data);
+                  // 合并三档产品：local + regional + global
+                  const allProducts = [
+                    ...(json.data.local || []),
+                    ...(json.data.regional || []),
+                    ...(json.data.global || [])
+                  ];
+                  console.log('[Products] 国家产品数:', allProducts.length, '(local:', json.data.local?.length, 'regional:', json.data.regional?.length, 'global:', json.data.global?.length, ')');
+                  setProducts(allProducts);
                 } else {
                   setProducts([]);
                 }
@@ -174,7 +180,17 @@ export default function ProductsPage() {
         const json = await res.json();
         
         if (json.success && json.data) {
-          setProducts(json.data);
+          // 处理 by-country API 返回的三档数据结构
+          if (endpoint.includes('/by-country/') && typeof json.data === 'object' && !Array.isArray(json.data)) {
+            const allProducts = [
+              ...(json.data.local || []),
+              ...(json.data.regional || []),
+              ...(json.data.global || [])
+            ];
+            setProducts(allProducts);
+          } else {
+            setProducts(json.data);
+          }
         } else {
           setProducts([]);
         }
