@@ -1,9 +1,19 @@
 // 产品数据缓存（当 B2B API 不可用时使用）
-// 最后更新：2026-03-21
+// 最后更新：2026-03-22
 
 import type { Product } from '@/types';
+import productsData from '../pages/api/products/by-country/products.json';
 
-// 热门产品（手动精选）
+// 从缓存文件提取所有产品（合并 local + regional + global）
+function getAllProductsFromCache(): Product[] {
+  const data = productsData as any;
+  const localProducts = Object.values(data.local || {}).flat();
+  const regionalProducts = data.regional || [];
+  const globalProducts = data.global || [];
+  return [...localProducts, ...regionalProducts, ...globalProducts];
+}
+
+// 热门产品（用于默认展示）
 export const POPULAR_PRODUCTS: Product[] = [
   {
     id: 1,
@@ -58,31 +68,10 @@ export const POPULAR_PRODUCTS: Product[] = [
   }
 ];
 
-// 获取缓存产品（带降级）
+// 获取缓存产品（返回完整产品列表）
 export async function getCachedProducts(): Promise<Product[]> {
-  // 优先尝试从 B2B API 获取
-  try {
-    const res = await fetch(`${process.env.B2B_API_URL}/api/v1/products?limit=100`, {
-      headers: {
-        'x-api-key': process.env.API_KEY || '',
-        'Content-Type': 'application/json',
-      },
-      // 5 秒超时
-      signal: AbortSignal.timeout(5000)
-    });
-    
-    if (res.ok) {
-      const data = await res.json();
-      if (data.success && data.message?.products) {
-        return data.message.products;
-      }
-    }
-  } catch (error) {
-    console.log('[Products] B2B API 不可用，使用缓存数据');
-  }
-  
-  // 降级：返回缓存的热门产品
-  return POPULAR_PRODUCTS;
+  // 直接从缓存文件读取所有产品
+  return getAllProductsFromCache();
 }
 
 // 获取单个产品
