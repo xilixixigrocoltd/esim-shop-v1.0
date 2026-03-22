@@ -1,3 +1,4 @@
+'use client';
 import { useState } from 'react';
 import { Search, Wifi, Clock, ArrowRight } from 'lucide-react';
 import Link from 'next/link';
