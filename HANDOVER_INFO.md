@@ -1,0 +1,1 @@
+# SimRyoko eSIM 项目交接文档\n\n已生成于 Termux 本地:\n`/data/data/com.termux/files/home/.openclaw/workspace/PROJECT_HANDOVER.md`\n\n包含:\n- 所有代码仓库和部署配置\n- API 端点状态和测试命令\n- 完整凭证清单\n- 部署流程和故障排查\n- 项目结构和运维脚本\n\n直接查看本地文件获取完整信息。
