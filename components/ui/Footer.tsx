@@ -2,8 +2,11 @@
 
 import Link from 'next/link';
 import { MessageCircle, Mail } from 'lucide-react';
+import { useI18n } from '@/lib/i18n-context';
 
 export default function Footer() {
+  const { t } = useI18n();
+
   return (
     <footer className="bg-gray-900 text-gray-400">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
@@ -17,7 +20,7 @@ export default function Footer() {
               <span className="text-xl font-bold text-white">SimRyoko</span>
             </div>
             <p className="text-sm leading-relaxed mb-5">
-              全球 eSIM，即买即用。覆盖 150+ 国家，支持 USDT 支付，出发前搞定网络。
+              {t('footer.tagline')}
             </p>
             {/* Payment icons */}
             <div className="flex items-center gap-2 flex-wrap">
@@ -37,31 +40,31 @@ export default function Footer() {
 
           {/* ── Col 2: Quick links ── */}
           <div>
-            <h3 className="text-white font-semibold mb-4">快捷链接</h3>
+            <h3 className="text-white font-semibold mb-4">{t('footer.links')}</h3>
             <ul className="space-y-2.5 text-sm">
               <li>
                 <Link href="/products?tab=all" className="hover:text-orange-400 transition-colors">
-                  全部套餐
+                  {t('footer.link.products')}
                 </Link>
               </li>
               <li>
                 <Link href="/countries" className="hover:text-orange-400 transition-colors">
-                  国家列表
+                  {t('footer.link.countries')}
                 </Link>
               </li>
               <li>
                 <Link href="/help" className="hover:text-orange-400 transition-colors">
-                  帮助中心
+                  {t('footer.link.help')}
                 </Link>
               </li>
               <li>
                 <Link href="/help#faq" className="hover:text-orange-400 transition-colors">
-                  常见问题
+                  {t('footer.link.faq')}
                 </Link>
               </li>
               <li>
                 <Link href="/account/orders" className="hover:text-orange-400 transition-colors">
-                  我的订单
+                  {t('footer.link.orders')}
                 </Link>
               </li>
             </ul>
@@ -69,7 +72,7 @@ export default function Footer() {
 
           {/* ── Col 3: Contact ── */}
           <div>
-            <h3 className="text-white font-semibold mb-4">联系我们</h3>
+            <h3 className="text-white font-semibold mb-4">{t('footer.contact')}</h3>
             <ul className="space-y-3 text-sm">
               <li>
                 <a
@@ -91,7 +94,7 @@ export default function Footer() {
                   <span>xilixi@xigrocoltd.com</span>
                 </a>
               </li>
-              <li className="text-gray-500 text-xs pt-1">7 × 24 小时在线支持</li>
+              <li className="text-gray-500 text-xs pt-1">{t('footer.support_hours')}</li>
             </ul>
           </div>
         </div>
@@ -101,13 +104,13 @@ export default function Footer() {
           <p>© 2026 SimRyoko · Xigro Co Limited · All rights reserved.</p>
           <div className="flex gap-5">
             <Link href="/help" className="hover:text-orange-400 transition-colors">
-              服务条款
+              {t('footer.terms')}
             </Link>
             <Link href="/help" className="hover:text-orange-400 transition-colors">
-              隐私政策
+              {t('footer.privacy')}
             </Link>
             <Link href="/help" className="hover:text-orange-400 transition-colors">
-              退款政策
+              {t('footer.refund')}
             </Link>
           </div>
         </div>

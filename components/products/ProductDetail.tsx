@@ -49,7 +49,7 @@ export default function ProductDetail({ product }: ProductDetailProps) {
     "@context": "https://schema.org",
     "@type": "Product",
     "name": product.name,
-    "description": `${product.name} - ${formatDataSize(product.dataSize)}流量，${product.validDays}天有效期`,
+    "description": `${product.name} - ${formatDataSize(product.dataSize)} data, ${product.validDays} days`,
     "image": product.imageUrl,
     "brand": {
       "@type": "Brand",
@@ -114,7 +114,7 @@ export default function ProductDetail({ product }: ProductDetailProps) {
             </div>
             <div className="flex items-center gap-2 px-4 py-2 bg-orange-50 rounded-lg">
               <Clock className="w-5 h-5 text-orange-500" />
-              <span className="font-medium">{product.validDays + ' 天'}</span>
+              <span className="font-medium">{product.validDays} {t('checkout.days_unit')}</span>
             </div>
             {product.type !== 'local' && (
               <div className="flex items-center gap-2 px-4 py-2 bg-orange-50 rounded-lg">
@@ -157,11 +157,11 @@ export default function ProductDetail({ product }: ProductDetailProps) {
         <div className="bg-white rounded-xl p-6 mb-6">
           <h2 className="text-lg font-bold text-gray-900 mb-4">{t('product.detail.installation')}</h2>
           <ol className="space-y-3 text-gray-600 list-decimal list-inside">
-            <li>{t('product.detail.installation')}</li>
-            <li>确保设备已连接 WiFi</li>
-            <li>打开手机设置 → 蜂窝网络 → 添加 eSIM</li>
-            <li>扫描二维码完成安装</li>
-            <li>开启数据漫游即可使用</li>
+            <li>{t('product.detail.terms.item1')}</li>
+            <li>{t('product.detail.install.step1')}</li>
+            <li>{t('product.detail.install.step2')}</li>
+            <li>{t('product.detail.install.step3')}</li>
+            <li>{t('product.detail.install.step4')}</li>
           </ol>
         </div>
 
@@ -191,7 +191,7 @@ export default function ProductDetail({ product }: ProductDetailProps) {
         <div className="bg-yellow-50 border border-yellow-300 rounded-xl p-4 flex items-start gap-3">
           <span className="text-xl flex-shrink-0">⚠️</span>
           <p className="text-sm text-yellow-800 font-medium">
-            需要国际版手机才能使用 eSIM（港版/美版 iPhone，三星国际版等），国行手机不支持
+            {t('product.detail.warning.intl')}
           </p>
         </div>
       </div>
@@ -229,7 +229,7 @@ export default function ProductDetail({ product }: ProductDetailProps) {
                 onClick={addToCart}
                 className={`w-full py-3 rounded-xl font-bold text-base flex items-center justify-center gap-2 transition-all ${added ? 'bg-green-500 text-white' : 'bg-orange-500 text-white hover:bg-orange-600 active:scale-95'}`}
               >
-                {added ? <><Check className="w-5 h-5" /> 已加入购物车</> : <><ShoppingCart className="w-5 h-5" /> {t('product.detail.add_to_cart')}</>}
+                {added ? <><Check className="w-5 h-5" /> {t('product.added_to_cart')}</> : <><ShoppingCart className="w-5 h-5" /> {t('product.detail.add_to_cart')}</>}
               </button>
               
               <button
@@ -268,7 +268,7 @@ export default function ProductDetail({ product }: ProductDetailProps) {
               onClick={addToCart}
               className={`px-8 py-3 rounded-xl font-bold text-base flex items-center gap-2 transition-all ${added ? 'bg-green-500 text-white' : 'bg-orange-500 text-white hover:bg-orange-600'}`}
             >
-              {added ? <><Check className="w-5 h-5" /> 已加入</> : <><ShoppingCart className="w-5 h-5" /> {t('product.detail.add_to_cart')}</>}
+              {added ? <><Check className="w-5 h-5" /> {t('product.added')}</> : <><ShoppingCart className="w-5 h-5" /> {t('product.detail.add_to_cart')}</>}
             </button>
 
             <button

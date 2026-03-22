@@ -6,10 +6,12 @@ import { useRouter } from 'next/router';
 import { Trash2, Plus, Minus, ShoppingBag, ArrowRight } from 'lucide-react';
 import { storage, CART_KEY, formatPrice } from '@/lib/utils';
 import { getCountryFlag, formatDataSize } from '@/lib/api';
+import { useI18n } from '@/lib/i18n-context';
 import type { CartItem } from '@/types';
 
 export default function CartPage() {
   const router = useRouter();
+  const { t } = useI18n();
   const [cart, setCart] = useState<CartItem[]>([]);
   const [loading, setLoading] = useState(true);
 
@@ -61,13 +63,13 @@ export default function CartPage() {
           <div className="w-24 h-24 bg-orange-100 rounded-full flex items-center justify-center mx-auto mb-6">
             <ShoppingBag className="w-12 h-12 text-orange-400" />
           </div>
-          <h1 className="text-2xl font-bold text-gray-900 mb-2">购物车是空的</h1>
-          <p className="text-gray-500 mb-8">还没有选好套餐？去挑一个吧！</p>
+          <h1 className="text-2xl font-bold text-gray-900 mb-2">{t('cart.empty.title')}</h1>
+          <p className="text-gray-500 mb-8">{t('cart.empty.subtitle')}</p>
           <Link
             href="/countries"
             className="inline-flex items-center gap-2 px-8 py-3 bg-orange-500 hover:bg-orange-600 text-white font-semibold rounded-2xl transition-colors"
           >
-            去挑选套餐 <ArrowRight className="w-5 h-5" />
+            {t('cart.browse')} <ArrowRight className="w-5 h-5" />
           </Link>
         </div>
       </div>
@@ -79,8 +81,8 @@ export default function CartPage() {
     <div className="min-h-screen bg-gray-50 py-8">
       <div className="max-w-2xl mx-auto px-4">
         <h1 className="text-2xl font-bold text-gray-900 mb-6">
-          购物车
-          <span className="ml-2 text-base font-normal text-gray-400">({totalItems} 件)</span>
+          {t('cart.title')}
+          <span className="ml-2 text-base font-normal text-gray-400">({totalItems} {t('cart.items')})</span>
         </h1>
 
         {/* Item list */}
@@ -101,7 +103,7 @@ export default function CartPage() {
               <div className="flex-1 min-w-0">
                 <h3 className="font-semibold text-gray-900 truncate">{item.product.name}</h3>
                 <p className="text-sm text-gray-400 mt-0.5">
-                  {formatDataSize(item.product.dataSize)} · {item.product.validDays} 天
+                  {formatDataSize(item.product.dataSize)} · {item.product.validDays} {t('checkout.days_unit')}
                 </p>
                 <p className="text-orange-500 font-bold mt-1">
                   ${Number(item.product.price || 0).toFixed(2)}
@@ -113,7 +115,7 @@ export default function CartPage() {
                 <button
                   onClick={() => removeItem(item.product.id)}
                   className="text-gray-300 hover:text-red-400 transition-colors"
-                  aria-label="删除"
+                  aria-label={t('cart.delete')}
                 >
                   <Trash2 className="w-4 h-4" />
                 </button>
@@ -140,24 +142,24 @@ export default function CartPage() {
         {/* Summary */}
         <div className="bg-white rounded-2xl p-6 shadow-sm">
           <div className="flex justify-between items-center text-gray-500 mb-2 text-sm">
-            <span>商品小计 ({totalItems} 件)</span>
+            <span>{t('cart.subtotal')} ({totalItems} {t('cart.items')})</span>
             <span>{formatPrice(totalPrice)}</span>
           </div>
           <div className="flex justify-between items-center text-lg font-bold border-t pt-4 mt-4">
-            <span>合计</span>
+            <span>{t('cart.total')}</span>
             <span className="text-orange-500">{formatPrice(totalPrice)}</span>
           </div>
           <button
             onClick={() => router.push('/checkout')}
             className="w-full mt-5 py-4 bg-orange-500 hover:bg-orange-600 text-white font-semibold rounded-2xl transition-colors text-base"
           >
-            去结账
+            {t('cart.checkout')}
           </button>
           <Link
             href="/countries"
             className="block text-center mt-3 text-sm text-gray-400 hover:text-orange-500 transition-colors"
           >
-            继续选购
+            {t('cart.continue_shopping')}
           </Link>
         </div>
       </div>

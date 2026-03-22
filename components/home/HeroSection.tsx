@@ -3,9 +3,11 @@
 import { useState } from 'react';
 import { useRouter } from 'next/router';
 import { Search } from 'lucide-react';
+import { useI18n } from '@/lib/i18n-context';
 
 export default function HeroSection() {
   const router = useRouter();
+  const { t } = useI18n();
   const [query, setQuery] = useState('');
 
   const handleSearch = (e: React.FormEvent) => {
@@ -27,22 +29,22 @@ export default function HeroSection() {
         {/* Three badges */}
         <div className="flex flex-wrap justify-center gap-3 mb-8">
           <span className="inline-flex items-center gap-1.5 px-4 py-1.5 bg-white/20 backdrop-blur-sm rounded-full text-sm font-medium">
-            🌍 150+ 国家
+            {t('home.hero.badge.countries')}
           </span>
           <span className="inline-flex items-center gap-1.5 px-4 py-1.5 bg-white/20 backdrop-blur-sm rounded-full text-sm font-medium">
-            ⚡ 即时激活
+            {t('home.hero.badge.instant')}
           </span>
           <span className="inline-flex items-center gap-1.5 px-4 py-1.5 bg-white/20 backdrop-blur-sm rounded-full text-sm font-medium">
-            💳 USDT支付
+            {t('home.hero.badge.usdt')}
           </span>
         </div>
 
         {/* Main title */}
         <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold mb-4 leading-tight tracking-tight">
-          全球 eSIM，出发前搞定
+          {t('home.hero.title2')}
         </h1>
         <p className="text-lg sm:text-xl text-orange-100 mb-10">
-          150+ 国家，即买即用，USDT 支付
+          {t('home.hero.subtitle2')}
         </p>
 
         {/* Big search box */}
@@ -53,14 +55,14 @@ export default function HeroSection() {
               type="text"
               value={query}
               onChange={(e) => setQuery(e.target.value)}
-              placeholder="搜索国家，如：日本、美国、泰国…"
+              placeholder={t('home.hero.search_placeholder2')}
               className="w-full pl-12 pr-32 py-4 rounded-2xl bg-white text-gray-800 placeholder-gray-400 shadow-xl text-base focus:outline-none focus:ring-2 focus:ring-white/60"
             />
             <button
               type="submit"
               className="absolute right-2 px-5 py-2.5 bg-orange-600 hover:bg-orange-700 text-white font-semibold rounded-xl transition-colors text-sm"
             >
-              搜索
+              {t('home.hero.search_btn')}
             </button>
           </div>
         </form>
@@ -68,19 +70,19 @@ export default function HeroSection() {
         {/* Quick links */}
         <div className="mt-8 flex flex-wrap justify-center gap-3">
           {[
-            { code: 'jp', label: '🇯🇵 日本' },
-            { code: 'kr', label: '🇰🇷 韩国' },
-            { code: 'th', label: '🇹🇭 泰国' },
-            { code: 'us', label: '🇺🇸 美国' },
-            { code: 'gb', label: '🇬🇧 英国' },
-            { code: 'sg', label: '🇸🇬 新加坡' },
-          ].map(({ code, label }) => (
+            { code: 'jp', key: 'home.hero.quick.jp' },
+            { code: 'kr', key: 'home.hero.quick.kr' },
+            { code: 'th', key: 'home.hero.quick.th' },
+            { code: 'us', key: 'home.hero.quick.us' },
+            { code: 'gb', key: 'home.hero.quick.gb' },
+            { code: 'sg', key: 'home.hero.quick.sg' },
+          ].map(({ code, key }) => (
             <a
               key={code}
               href={`/country/${code}`}
               className="px-4 py-2 bg-white/20 hover:bg-white/30 backdrop-blur-sm rounded-full text-sm font-medium transition-colors"
             >
-              {label}
+              {t(key)}
             </a>
           ))}
         </div>

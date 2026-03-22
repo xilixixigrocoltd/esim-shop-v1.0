@@ -83,8 +83,103 @@ export const translations = {
     
     // 首页 - 信任标识
     'home.trust.title': '值得信赖',
+    'home.trust.secure_payment': '安全支付',
+    'home.trust.secure_payment.desc': 'Stripe 加密处理，PCI DSS 认证',
+    'home.trust.instant': '即时送达',
+    'home.trust.instant.desc': '支付成功后 1 分钟内收到 eSIM',
+    'home.trust.support': '7×24 客服',
+    'home.trust.support.desc': 'Telegram 在线客服随时待命',
+    'home.trust.refund': '7 天退款',
+    'home.trust.refund.desc': '未激活可全额退款',
     
-    // 首页 - FAQ
+    // 首页 - 支付方式详情
+    'home.payment.card': '信用卡/借记卡',
+    'home.payment.card.desc': 'Visa、Mastercard、American Express',
+    'home.payment.apple_pay.desc': 'iPhone、iPad、Mac 快速支付',
+    'home.payment.google_pay.desc': 'Android 设备快捷支付',
+    'home.payment.alipay': '支付宝',
+    'home.payment.alipay.desc': '中国大陆用户首选',
+    'home.payment.secure_note': '🔒 所有支付由 Stripe 加密处理，我们不会存储您的卡片信息',
+    
+    // 首页 - Hero 标签
+    'home.hero.badge.countries': '🌍 150+ 国家',
+    'home.hero.badge.instant': '⚡ 即时激活',
+    'home.hero.badge.usdt': '💳 USDT支付',
+    'home.hero.title2': '全球 eSIM，出发前搞定',
+    'home.hero.subtitle2': '150+ 国家，即买即用，USDT 支付',
+    'home.hero.search_placeholder2': '搜索国家，如：日本、美国、泰国…',
+    'home.hero.search_btn': '搜索',
+    'home.hero.quick.jp': '🇯🇵 日本',
+    'home.hero.quick.kr': '🇰🇷 韩国',
+    'home.hero.quick.th': '🇹🇭 泰国',
+    'home.hero.quick.us': '🇺🇸 美国',
+    'home.hero.quick.gb': '🇬🇧 英国',
+    'home.hero.quick.sg': '🇸🇬 新加坡',
+    
+    // 首页 - FAQ 副标题
+    'home.faq.subtitle': '快速找到您想知道的答案',
+    
+    // 购物车页详细
+    'cart.empty.title': '购物车是空的',
+    'cart.empty.subtitle': '还没有选好套餐？去挑一个吧！',
+    'cart.browse': '去挑选套餐',
+    'cart.items': '件',
+    'cart.subtotal': '商品小计',
+    'cart.delete': '删除',
+    
+    // 结账页详细
+    'checkout.confirm_order': '确认订单',
+    'checkout.order_summary': '订单摘要',
+    'checkout.days_unit': '天',
+    'checkout.delivery.title': '📧 eSIM 发送方式',
+    'checkout.delivery.desc': '付款成功后，eSIM 二维码将发送至您填写的邮箱。请确保邮箱地址正确。',
+    'checkout.warning.title': '⚠️ 重要提示',
+    'checkout.warning.desc': '本 eSIM 不支持在中国大陆使用。中国大陆境内无法正常连接网络，请注意。',
+    'checkout.email.label': '接收邮箱',
+    'checkout.email.hint': 'eSIM 激活码将发送至此邮箱',
+    'checkout.payment.label': '支付方式',
+    'checkout.payment.stripe': '信用卡 / Apple Pay / Google Pay',
+    'checkout.payment.stripe.desc': '由 Stripe 安全处理',
+    'checkout.payment.usdt.label': 'USDT（加密货币）',
+    'checkout.payment.usdt.desc2': 'via CryptoPay · TRC20 / ERC20',
+    'checkout.agree.text': '我已阅读并同意',
+    'checkout.agree.terms': '服务条款与退款政策',
+    'checkout.agree.device': '，并确认设备支持 eSIM。',
+    'checkout.error.email': '请输入有效的电子邮件地址',
+    'checkout.error.terms': '请先同意服务条款',
+    'checkout.error.server': '支付请求失败',
+    'checkout.error.network': '网络错误，请重试',
+    'checkout.pay.loading': '处理中…',
+    'checkout.pay.btn': '立即支付',
+    
+    // Footer
+    'footer.tagline': '全球 eSIM，即买即用。覆盖 150+ 国家，支持 USDT 支付，出发前搞定网络。',
+    'footer.links': '快捷链接',
+    'footer.link.products': '全部套餐',
+    'footer.link.countries': '国家列表',
+    'footer.link.help': '帮助中心',
+    'footer.link.faq': '常见问题',
+    'footer.link.orders': '我的订单',
+    'footer.contact': '联系我们',
+    'footer.support_hours': '7 × 24 小时在线支持',
+    'footer.terms': '服务条款',
+    'footer.privacy': '隐私政策',
+    'footer.refund': '退款政策',
+    
+    // 产品详情 - 安装步骤
+    'product.detail.install.step1': '确保设备已连接 WiFi',
+    'product.detail.install.step2': '打开手机设置 → 蜂窝网络 → 添加 eSIM',
+    'product.detail.install.step3': '扫描二维码完成安装',
+    'product.detail.install.step4': '开启数据漫游即可使用',
+    'product.detail.warning.intl': '需要国际版手机才能使用 eSIM（港版/美版 iPhone，三星国际版等），国行手机不支持',
+    'product.added_to_cart': '已加入购物车',
+    'product.added': '已加入',
+    
+    // Countries 页面 SEO
+    'seo.countries.title': '123 个国家 eSIM - 全球覆盖',
+    'seo.countries.desc': 'SimRyoko eSIM 覆盖全球 123 个国家，包括日本、韩国、美国、欧洲、东南亚等热门目的地。按国家浏览，找到最适合您的 eSIM 套餐。',
+    
+    // FAQ
     'home.faq.title': '常见问题',
     
     // 产品列表页
@@ -380,8 +475,103 @@ export const translations = {
     
     // 首页 - 信任标识
     'home.trust.title': 'Trusted By',
+    'home.trust.secure_payment': 'Secure Payment',
+    'home.trust.secure_payment.desc': 'Stripe encryption, PCI DSS certified',
+    'home.trust.instant': 'Instant Delivery',
+    'home.trust.instant.desc': 'Receive eSIM within 1 minute of payment',
+    'home.trust.support': '24/7 Support',
+    'home.trust.support.desc': 'Telegram support team always available',
+    'home.trust.refund': '7-Day Refund',
+    'home.trust.refund.desc': 'Full refund if not activated',
     
-    // 首页 - FAQ
+    // 首页 - 支付方式详情
+    'home.payment.card': 'Credit/Debit Card',
+    'home.payment.card.desc': 'Visa, Mastercard, American Express',
+    'home.payment.apple_pay.desc': 'Fast payment on iPhone, iPad, Mac',
+    'home.payment.google_pay.desc': 'Quick payment on Android devices',
+    'home.payment.alipay': 'Alipay',
+    'home.payment.alipay.desc': 'Preferred by China mainland users',
+    'home.payment.secure_note': '🔒 All payments processed by Stripe. We never store your card details.',
+    
+    // 首页 - Hero 标签
+    'home.hero.badge.countries': '🌍 150+ Countries',
+    'home.hero.badge.instant': '⚡ Instant Activation',
+    'home.hero.badge.usdt': '💳 USDT Payment',
+    'home.hero.title2': 'Global eSIM, Ready Before You Go',
+    'home.hero.subtitle2': '150+ countries, instant activation, USDT accepted',
+    'home.hero.search_placeholder2': 'Search country, e.g. Japan, USA, Thailand…',
+    'home.hero.search_btn': 'Search',
+    'home.hero.quick.jp': '🇯🇵 Japan',
+    'home.hero.quick.kr': '🇰🇷 Korea',
+    'home.hero.quick.th': '🇹🇭 Thailand',
+    'home.hero.quick.us': '🇺🇸 USA',
+    'home.hero.quick.gb': '🇬🇧 UK',
+    'home.hero.quick.sg': '🇸🇬 Singapore',
+    
+    // 首页 - FAQ 副标题
+    'home.faq.subtitle': 'Find answers to common questions',
+    
+    // 购物车页详细
+    'cart.empty.title': 'Your cart is empty',
+    'cart.empty.subtitle': "Haven't picked a plan yet? Go explore!",
+    'cart.browse': 'Browse Plans',
+    'cart.items': 'items',
+    'cart.subtotal': 'Subtotal',
+    'cart.delete': 'Delete',
+    
+    // 结账页详细
+    'checkout.confirm_order': 'Confirm Order',
+    'checkout.order_summary': 'Order Summary',
+    'checkout.days_unit': 'days',
+    'checkout.delivery.title': '📧 eSIM Delivery',
+    'checkout.delivery.desc': 'After payment, the eSIM QR code will be sent to your email. Please ensure your email is correct.',
+    'checkout.warning.title': '⚠️ Important Notice',
+    'checkout.warning.desc': 'This eSIM does not work in mainland China. Connection may fail inside China mainland.',
+    'checkout.email.label': 'Receive Email',
+    'checkout.email.hint': 'eSIM activation code will be sent to this email',
+    'checkout.payment.label': 'Payment Method',
+    'checkout.payment.stripe': 'Credit Card / Apple Pay / Google Pay',
+    'checkout.payment.stripe.desc': 'Securely processed by Stripe',
+    'checkout.payment.usdt.label': 'USDT (Crypto)',
+    'checkout.payment.usdt.desc2': 'via CryptoPay · TRC20 / ERC20',
+    'checkout.agree.text': 'I have read and agree to the',
+    'checkout.agree.terms': 'Terms & Refund Policy',
+    'checkout.agree.device': ', and confirm my device supports eSIM.',
+    'checkout.error.email': 'Please enter a valid email address',
+    'checkout.error.terms': 'Please agree to the terms first',
+    'checkout.error.server': 'Payment request failed',
+    'checkout.error.network': 'Network error, please try again',
+    'checkout.pay.loading': 'Processing…',
+    'checkout.pay.btn': 'Pay Now',
+    
+    // Footer
+    'footer.tagline': 'Global eSIM, instant activation. 150+ countries, USDT accepted, ready before you go.',
+    'footer.links': 'Quick Links',
+    'footer.link.products': 'All Plans',
+    'footer.link.countries': 'Countries',
+    'footer.link.help': 'Help Center',
+    'footer.link.faq': 'FAQ',
+    'footer.link.orders': 'My Orders',
+    'footer.contact': 'Contact Us',
+    'footer.support_hours': '24/7 Online Support',
+    'footer.terms': 'Terms of Service',
+    'footer.privacy': 'Privacy Policy',
+    'footer.refund': 'Refund Policy',
+    
+    // 产品详情 - 安装步骤
+    'product.detail.install.step1': 'Ensure your device is connected to Wi-Fi',
+    'product.detail.install.step2': 'Go to Settings → Cellular → Add eSIM',
+    'product.detail.install.step3': 'Scan the QR code to install',
+    'product.detail.install.step4': 'Enable Data Roaming to use',
+    'product.detail.warning.intl': 'International version phone required for eSIM (HK/US iPhone, Samsung international, etc.). China-mainland models not supported.',
+    'product.added_to_cart': 'Added to Cart',
+    'product.added': 'Added',
+    
+    // Countries 页面 SEO
+    'seo.countries.title': '123 Countries eSIM - Global Coverage',
+    'seo.countries.desc': 'SimRyoko eSIM covers 123 countries worldwide, including Japan, Korea, USA, Europe, Southeast Asia and more.',
+    
+    // FAQ
     'home.faq.title': 'FAQ',
     
     // 产品列表页
