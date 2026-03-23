@@ -83,6 +83,13 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
           
           console.log('Creating B2B order:', orderPayload);
           order = await b2bApi.createOrder(orderPayload);
+          
+          // ⚡ 关键：下单后立即用余额确认支付，触发 eSIM 分配
+          if (order?.id) {
+            console.log('Confirming payment for order:', order.id);
+            order = await b2bApi.confirmOrderPayment(order.id);
+            console.log('Payment confirmed, ICCID:', order?.esimIccid || 'pending');
+          }
         }
         
         // 订单号：B2B API 返回 orderNumber 或 orderNo

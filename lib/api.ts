@@ -90,6 +90,25 @@ class B2BApiClient {
     if (!data.success) throw new Error(data.message || '下单失败');
     return data.data;
   }
+
+  // 确认支付订单（用余额扣款，触发 eSIM 分配）
+  async confirmOrderPayment(orderId: number): Promise<Order> {
+    const token = await getToken();
+    const baseUrl = process.env.B2B_API_URL || 'https://ciuh32wky.xigrocoltd.com';
+
+    const res = await fetch(`${baseUrl}/api/orders/${orderId}/pay`, {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${token}`,
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ payType: 'balance' })
+    });
+
+    const data = await res.json();
+    if (!data.success) throw new Error(data.message || '支付确认失败');
+    return data.data;
+  }
 }
 
 export const b2bApi = new B2BApiClient();
