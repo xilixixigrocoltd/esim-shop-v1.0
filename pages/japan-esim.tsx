@@ -2,23 +2,12 @@ import { GetStaticProps } from 'next'
 import Head from 'next/head'
 import Link from 'next/link'
 import { getProductsByCountry } from '@/lib/data'
+import type { Product } from '@/lib/data'
 import { useI18n } from '@/lib/i18n-context'
-import ProductCard, { getFlagEmoji, formatData } from '@/components/ProductCard'
-import Layout from '@/components/Layout'
+import ProductCard from '@/components/ProductCard'
 
-interface Product {
-  id: string | number
-  name: string
-  type: string
-  countries: { code: string; name: string }[]
-  dataSize: number
-  validDays: number
-  price: number
-  isHot?: boolean
-  features?: string[]
-}
 
-interface Props {
+interface PageProps {
   products: Product[]
   minPrice: number
   countryCode: string
@@ -46,7 +35,7 @@ const COUNTRY_INFO = {
   ],
 }
 
-export default function JapanEsimPage({ products, minPrice }: Props) {
+export default function JapanEsimPage({ products, minPrice }: PageProps) {
   const { t } = useI18n()
   const info = COUNTRY_INFO
   const siteUrl = 'https://simryoko.com'
@@ -71,7 +60,7 @@ export default function JapanEsimPage({ products, minPrice }: Props) {
   }
 
   return (
-    <Layout>
+    <>
       <Head>
         <title>{title}</title>
         <meta name="description" content={description} />
@@ -216,7 +205,7 @@ export default function JapanEsimPage({ products, minPrice }: Props) {
           </div>
         </div>
       </section>
-    </Layout>
+    </>
   )
 }
 

@@ -10,38 +10,36 @@ import ProductCard from '@/components/ProductCard'
 interface PageProps {
   products: Product[]
   minPrice: number
-  countryCode: string
 }
 
 const COUNTRY_INFO = {
-  code: 'TH',
-  slug: 'thailand-esim',
-  nameCn: '泰国',
-  nameEn: 'Thailand',
-  flag: '🇹🇭',
-  carriers: 'AIS / DTAC / True Move',
-  highlight: '东南亚热门旅游胜地',
-  ctaCountry: 'TH',
+  code: 'US',
+  slug: 'usa-esim',
+  nameCn: '美国',
+  flag: '🇺🇸',
+  carriers: 'T-Mobile / AT&T',
+  highlight: '留学商务出行首选',
+  ctaCountry: 'US',
   faqs: [
-    { q: '泰国用哪个运营商网络？', a: '我们的泰国eSIM运行在AIS、DTAC、True Move等主流网络上，覆盖曼谷、清迈、普吉岛等热门旅游城市及大部分地区。' },
-    { q: '国行手机（双卡单待）能用吗？', a: '部分国行手机不支持eSIM功能，建议购买前确认您的手机支持eSIM。iPhone XS及以后机型、三星Galaxy S20及以后机型均支持eSIM。' },
-    { q: '什么时候激活eSIM最好？', a: '建议到达泰国后再开启eSIM数据连接。购买后您会收到二维码，提前扫码安装到手机，到达泰国后在设置中开启即可使用。' },
-    { q: '流量用完了怎么办？', a: '流量用完后可在SimRyoko购买新套餐，重新安装二维码即可。建议根据行程选择合适流量套餐，10天行程推荐5GB以上。' },
+    { q: '美国eSIM用哪个运营商网络？', a: '我们的美国eSIM运行在T-Mobile、AT&T等主流网络上，覆盖全美50个州，包括纽约、洛杉矶、旧金山、拉斯维加斯等热门城市。' },
+    { q: '美国eSIM有长期套餐吗？', a: '是的，我们提供7天、15天、30天甚至365天套餐，非常适合留学生和长期商务出行人员。' },
+    { q: '美国eSIM支持通话吗？', a: '部分套餐包含语音通话和短信功能，如"Change+"系列。纯数据套餐可通过WhatsApp、FaceTime等应用进行通话。' },
+    { q: '流量用完了怎么办？', a: '流量用完后可在SimRyoko购买新套餐，重新安装二维码即可。美国视频流媒体（Netflix、YouTube）耗流量较快，建议选择大流量套餐。' },
   ],
   related: [
+    { slug: 'uk-esim', name: '英国', flag: '🇬🇧' },
     { slug: 'japan-esim', name: '日本', flag: '🇯🇵' },
-    { slug: 'korea-esim', name: '韩国', flag: '🇰🇷' },
     { slug: 'singapore-esim', name: '新加坡', flag: '🇸🇬' },
   ],
 }
 
-export default function ThailandEsimPage({ products, minPrice }: PageProps) {
+export default function UsaEsimPage({ products, minPrice }: PageProps) {
   const { t } = useI18n()
   const info = COUNTRY_INFO
   const siteUrl = 'https://simryoko.com'
   const pageUrl = `${siteUrl}/${info.slug}`
   const title = `${info.nameCn}eSIM套餐 | 落地即用，最低$${minPrice.toFixed(2)}起 | SimRyoko`
-  const description = `去${info.nameCn}旅行？SimRyoko提供${info.nameCn}eSIM套餐，${info.carriers}网络，落地即用，无需换卡。最低$${minPrice.toFixed(2)}起，支持信用卡/USDT支付。`
+  const description = `去${info.nameCn}旅行留学？SimRyoko提供${info.nameCn}eSIM套餐，${info.carriers}网络，落地即用，无需换卡。最低$${minPrice.toFixed(2)}起，支持信用卡/USDT支付。`
 
   const jsonLd = {
     '@context': 'https://schema.org',
@@ -152,7 +150,7 @@ export default function ThailandEsimPage({ products, minPrice }: PageProps) {
             <div>
               <h3 className="font-bold text-lg mb-4 flex items-center gap-2"><span>🍎</span> iPhone 安装步骤</h3>
               <ol className="space-y-3">
-                {['购买后邮件收到二维码', '进入 设置 → 蜂窝网络 → 添加eSIM → 扫描二维码', '到达泰国后开启eSIM数据即可使用'].map((s, i) => (
+                {['购买后邮件收到二维码', '进入 设置 → 蜂窝网络 → 添加eSIM → 扫描二维码', '到达美国后开启eSIM数据即可使用'].map((s, i) => (
                   <li key={i} className="flex gap-3">
                     <span className="w-7 h-7 rounded-full bg-orange-100 text-orange-600 font-bold flex items-center justify-center flex-shrink-0 text-sm">{i + 1}</span>
                     <span className="text-gray-600 text-sm">{s}</span>
@@ -163,7 +161,7 @@ export default function ThailandEsimPage({ products, minPrice }: PageProps) {
             <div>
               <h3 className="font-bold text-lg mb-4 flex items-center gap-2"><span>🤖</span> Android 安装步骤</h3>
               <ol className="space-y-3">
-                {['购买后邮件收到二维码', '进入 设置 → 网络 → SIM卡 → 添加eSIM → 扫描二维码', '到达泰国后在移动网络设置中切换至eSIM'].map((s, i) => (
+                {['购买后邮件收到二维码', '进入 设置 → 网络 → SIM卡 → 添加eSIM → 扫描二维码', '到达美国后在移动网络设置中切换至eSIM'].map((s, i) => (
                   <li key={i} className="flex gap-3">
                     <span className="w-7 h-7 rounded-full bg-orange-100 text-orange-600 font-bold flex items-center justify-center flex-shrink-0 text-sm">{i + 1}</span>
                     <span className="text-gray-600 text-sm">{s}</span>
@@ -193,7 +191,7 @@ export default function ThailandEsimPage({ products, minPrice }: PageProps) {
       {/* 相关推荐 */}
       <section className="py-12 px-4 bg-white">
         <div className="max-w-4xl mx-auto">
-          <h2 className="text-2xl font-bold text-gray-900 mb-6 text-center">亚洲其他热门目的地</h2>
+          <h2 className="text-2xl font-bold text-gray-900 mb-6 text-center">其他热门目的地</h2>
           <div className="flex flex-wrap gap-4 justify-center">
             {info.related.map(r => (
               <Link key={r.slug} href={`/${r.slug}`}
@@ -210,7 +208,7 @@ export default function ThailandEsimPage({ products, minPrice }: PageProps) {
 }
 
 export const getStaticProps: GetStaticProps = async () => {
-  const { local, regional } = getProductsByCountry('TH')
+  const { local, regional } = getProductsByCountry('US')
   const all = [...local, ...regional]
   const sorted = all.sort((a, b) => a.price - b.price)
   const minPrice = sorted.length > 0 ? sorted[0].price : 4.00
@@ -218,7 +216,6 @@ export const getStaticProps: GetStaticProps = async () => {
     props: {
       products: sorted.slice(0, 12),
       minPrice,
-      countryCode: 'TH',
     },
   }
 }
