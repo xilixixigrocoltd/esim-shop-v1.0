@@ -26,10 +26,16 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     }))
 
     const session = await stripe.checkout.sessions.create({
-      payment_method_types: ['card'],
+      payment_method_types: ['card', 'alipay'],
+      payment_method_options: {
+        card: {
+          request_three_d_secure: 'automatic',
+        },
+      },
       line_items: lineItems,
       mode: 'payment',
       customer_email: email,
+      // Apple Pay & Google Pay 自动通过 card 方式支持（Stripe 自动检测）
       success_url: `${process.env.NEXT_PUBLIC_URL || 'https://simryoko.com'}/success?session_id={CHECKOUT_SESSION_ID}`,
       cancel_url: `${process.env.NEXT_PUBLIC_URL || 'https://simryoko.com'}/cart`,
       metadata: { email },
