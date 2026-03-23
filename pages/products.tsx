@@ -97,7 +97,7 @@ export default function ProductsPage({ allProducts, countries }: Props) {
       }
     }
 
-    return list
+    return [...list].sort((a, b) => parseFloat(String(a.price)) - parseFloat(String(b.price)))
   }, [allProducts, tab, search, selectedCountry, selectedContinent, globalType])
 
   const tabs = [
@@ -193,13 +193,44 @@ export default function ProductsPage({ allProducts, countries }: Props) {
             </div>
           )}
 
-          {/* 全部 tab */}
+          {/* 全部 tab - 按国家网格选择 */}
           {!search && tab === 'all' && (
             <div>
-              <p className="text-sm text-gray-500 mb-4">{locale === 'zh' ? `共 ${displayProducts.length} 款套餐` : `${displayProducts.length} plans`}</p>
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-                {displayProducts.map(p => <ProductCard key={p.id} product={p} />)}
-              </div>
+              {!selectedCountry ? (
+                <>
+                  <h2 className="text-base font-semibold text-gray-700 mb-4">
+                    {locale === 'zh' ? '🌍 选择目的地国家' : locale === 'ja' ? '🌍 目的地を選択' : locale === 'ko' ? '🌍 목적지 선택' : '🌍 Choose Country'}
+                  </h2>
+                  <div className="grid grid-cols-3 sm:grid-cols-5 lg:grid-cols-7 gap-2">
+                    {countries.sort((a,b) => a.name.localeCompare(b.name, 'zh')).map(c => (
+                      <button key={c.code} onClick={() => setSelectedCountry(c.code)}
+                        className="flex flex-col items-center gap-1 p-2.5 bg-white rounded-xl border border-gray-200 hover:border-orange-400 hover:shadow-md transition-all">
+                        <span className="text-2xl">{getFlagEmoji(c.code)}</span>
+                        <span className="text-xs font-medium text-gray-700 text-center leading-tight truncate w-full">{c.name}</span>
+                        <span className="text-xs text-gray-400">{c.productCount}</span>
+                      </button>
+                    ))}
+                  </div>
+                </>
+              ) : (
+                <>
+                  <button onClick={() => setSelectedCountry(null)} className="flex items-center gap-1 text-orange-500 mb-4 hover:text-orange-600 text-sm font-medium">
+                    <ChevronLeft className="w-4 h-4" />
+                    {locale === 'zh' ? '返回国家列表' : 'Back'}
+                  </button>
+                  <div className="flex items-center gap-3 mb-5">
+                    <span className="text-4xl">{getFlagEmoji(selectedCountry)}</span>
+                    <h2 className="text-xl font-bold text-gray-900">
+                      {countryMap[selectedCountry]?.name || selectedCountry} {locale === 'zh' ? '套餐' : 'Plans'}
+                    </h2>
+                    <span className="text-sm text-gray-500">({displayProducts.length}{locale === 'zh' ? '款' : ' plans'})</span>
+                  </div>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                    {displayProducts.map(p => <ProductCard key={p.id} product={p} />)}
+                  </div>
+                  {displayProducts.length === 0 && <div className="text-center py-12 text-gray-400">{locale === 'zh' ? '暂无套餐' : 'No plans'}</div>}
+                </>
+              )}
             </div>
           )}
 
