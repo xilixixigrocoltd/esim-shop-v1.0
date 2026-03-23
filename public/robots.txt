@@ -24,3 +24,4 @@ Allow: /help
 
 # 站点地图位置
 Sitemap: https://simryoko.com/sitemap.xml
+Sitemap: https://simryoko.com/api/sitemap.xml

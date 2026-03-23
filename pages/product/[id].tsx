@@ -62,8 +62,33 @@ export default function ProductDetail({ product, related }: Props) {
   return (
     <>
       <Head>
-        <title>{product.name} — SimRyoko eSIM</title>
-        <meta name="description" content={`${product.name} | ${dataStr} | ${product.validDays}${t('product.days')} | $${product.price} USD`} />
+        <title>{product.name} - eSIM套餐 | SimRyoko</title>
+        <meta name="description" content={`${product.name}，${dataStr}流量，有效期${product.validDays}天，仅需$${product.price} USD。境外流量即买即用，支持USDT支付，出国必备eSIM。`} />
+        <link rel="canonical" href={`https://simryoko.com/product/${product.id}`} />
+        <meta property="og:type" content="product" />
+        <meta property="og:url" content={`https://simryoko.com/product/${product.id}`} />
+        <meta property="og:title" content={`${product.name} - eSIM套餐 | SimRyoko`} />
+        <meta property="og:description" content={`${dataStr}流量，${product.validDays}天有效，$${product.price} USD起。出国流量eSIM，即买即用。`} />
+        <meta property="og:image" content="https://simryoko.com/og-image.jpg" />
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content={`${product.name} - eSIM套餐 | SimRyoko`} />
+        <meta name="twitter:description" content={`${dataStr}流量，${product.validDays}天有效，$${product.price} USD起`} />
+        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "Product",
+          "name": product.name,
+          "description": `${product.name}，${dataStr}流量，有效期${product.validDays}天，境外流量eSIM套餐，即买即用`,
+          "image": "https://simryoko.com/og-image.jpg",
+          "brand": { "@type": "Brand", "name": "SimRyoko" },
+          "offers": {
+            "@type": "Offer",
+            "price": product.price.toFixed(2),
+            "priceCurrency": "USD",
+            "availability": "https://schema.org/InStock",
+            "url": `https://simryoko.com/product/${product.id}`,
+            "seller": { "@type": "Organization", "name": "SimRyoko" }
+          }
+        })}} />
       </Head>
 
       <div className="max-w-5xl mx-auto px-4 sm:px-6 py-8">

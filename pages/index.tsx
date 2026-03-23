@@ -37,16 +37,34 @@ export default function Home({ hotProducts, countries }: Props) {
   return (
     <>
       <Head>
-        <title>SimRyoko — {t('hero.title')}</title>
-        <meta name="description" content={t('hero.subtitle')} />
-        <meta property="og:title" content={`SimRyoko — ${t('hero.title')}`} />
-        <meta property="og:description" content={t('hero.subtitle')} />
+        <title>SimRyoko — 全球eSIM套餐，出发前搞定 | 150+国家境外流量</title>
+        <meta name="description" content="SimRyoko提供150+国家eSIM套餐，日本/韩国/泰国/美国等热门目的地，出国流量即买即用，支持USDT等加密货币支付，无需换卡，手机直接激活海外网络。" />
+        <link rel="canonical" href="https://simryoko.com" />
+        {/* Open Graph */}
+        <meta property="og:type" content="website" />
+        <meta property="og:url" content="https://simryoko.com" />
+        <meta property="og:title" content="SimRyoko - 全球eSIM，出发前搞定" />
+        <meta property="og:description" content="150+国家eSIM套餐，USDT支付，即买即用。日本/韩国/泰国/美国境外流量，秒速激活，出国不换卡。" />
+        <meta property="og:image" content="https://simryoko.com/og-image.jpg" />
+        <meta property="og:site_name" content="SimRyoko" />
+        {/* Twitter Card */}
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content="SimRyoko - 全球eSIM，出发前搞定" />
+        <meta name="twitter:description" content="150+国家eSIM套餐，USDT支付，即买即用" />
+        <meta name="twitter:image" content="https://simryoko.com/og-image.jpg" />
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify({
           "@context": "https://schema.org",
           "@type": "OnlineStore",
           "name": "SimRyoko",
-          "description": t('hero.subtitle'),
+          "description": "全球150+国家eSIM套餐，出国流量即买即用，支持USDT加密货币支付",
           "url": "https://simryoko.com",
+          "logo": "https://simryoko.com/favicon.svg",
+          "sameAs": [],
+          "potentialAction": {
+            "@type": "SearchAction",
+            "target": "https://simryoko.com/products?search={search_term_string}",
+            "query-input": "required name=search_term_string"
+          }
         })}} />
       </Head>
 
