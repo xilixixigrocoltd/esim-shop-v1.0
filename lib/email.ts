@@ -43,7 +43,7 @@ export async function sendOrderConfirmation(email: string, orderData: {
     <div style="background:#f0fdf4;border:1px solid #86efac;border-radius:12px;padding:20px;margin:20px 0;">
       <h3 style="color:#166534;margin:0 0 12px;">📱 您的 eSIM 信息</h3>
       <p><strong>ICCID:</strong> <code style="background:#e5e7eb;padding:2px 6px;border-radius:4px;">${esimData.iccid}</code></p>
-      ${esimData.activationCode ? `<p><strong>激活码 (LPA):</strong> <code style="background:#e5e7eb;padding:2px 6px;border-radius:4px;font-size:12px;word-break:break-all;">${esimData.activationCode}</code></p>` : ''}
+      ${esimData.activationCode ? `<p><strong>LPA 激活码:</strong></p><p style="margin:4px 0;"><code style="background:#e5e7eb;padding:4px 8px;border-radius:4px;font-size:11px;word-break:break-all;display:block;">${esimData.activationCode}</code></p><p style="color:#6b7280;font-size:12px;margin:2px 0;">（手动安装时在"添加蜂窝套餐"→"手动输入"中粘贴此码）</p>` : ''}
       <p><strong>流量:</strong> ${esimData.dataAmount}</p>
       <p><strong>有效期:</strong> ${esimData.validityDays} 天</p>
       ${esimData.qrCode ? `

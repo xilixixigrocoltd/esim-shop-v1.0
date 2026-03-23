@@ -22,8 +22,6 @@ export default function SuccessPage({ orderId: propOrderId, email: propEmail }: 
   const [fetchingDetails, setFetchingDetails] = useState(false);
 
   useEffect(() => {
-    storage.remove(CART_KEY);
-
     const { orderId: urlOrderId, email: urlEmail, session_id } = router.query;
     
     if (session_id) {
@@ -35,12 +33,19 @@ export default function SuccessPage({ orderId: propOrderId, email: propEmail }: 
             setOrderId(data.orderId || `Stripe-${(session_id as string).slice(-8)}`);
             setEmail(data.email || '');
             setOrderDetails(data);
+            // 仅在支付确认成功后清空购物车
+            if (data.paymentStatus === 'paid') {
+              storage.remove(CART_KEY);
+            }
           } else {
             setOrderId(`Stripe-${(session_id as string).slice(-8)}`);
+            // 未确认支付状态时也清空（用户已到达成功页面，Stripe 已重定向）
+            storage.remove(CART_KEY);
           }
         })
         .catch(() => {
           setOrderId(`Stripe-${(session_id as string).slice(-8)}`);
+          storage.remove(CART_KEY);
         })
         .finally(() => {
           setFetchingDetails(false);
@@ -61,6 +66,8 @@ export default function SuccessPage({ orderId: propOrderId, email: propEmail }: 
       setEmail(propEmail);
     }
 
+    // 无 session_id 时也清空购物车（其他支付方式）
+    storage.remove(CART_KEY);
     setLoading(false);
   }, [router.query, propOrderId, propEmail]);
 

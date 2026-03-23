@@ -109,6 +109,37 @@ class B2BApiClient {
     if (!data.success) throw new Error(data.message || '支付确认失败');
     return data.data;
   }
+
+  // 查询 eSIM 流量使用情况
+  async getEsimUsage(iccid: string): Promise<any> {
+    const data = await apiGet(`/api/esims/${iccid}/usage`);
+    return data.data;
+  }
+
+  // 查询产品库存
+  async getInventory(productId: number): Promise<any> {
+    const data = await apiGet(`/api/products/${productId}/inventory`);
+    return data.data;
+  }
+
+  // 续费订单
+  async topupOrder(orderId: string, packageId: number): Promise<any> {
+    const token = await getToken();
+    const baseUrl = process.env.B2B_API_URL || 'https://ciuh32wky.xigrocoltd.com';
+
+    const res = await fetch(`${baseUrl}/api/orders/${orderId}/topup`, {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${token}`,
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ packageId })
+    });
+
+    const data = await res.json();
+    if (!data.success) throw new Error(data.message || '续费失败');
+    return data.data;
+  }
 }
 
 export const b2bApi = new B2BApiClient();

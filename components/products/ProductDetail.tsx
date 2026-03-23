@@ -29,6 +29,7 @@ export default function ProductDetail({ product }: ProductDetailProps) {
     }
 
     storage.set(CART_KEY, cart);
+    window.dispatchEvent(new Event('cart-updated'));
     setAdded(true);
     setTimeout(() => setAdded(false), 2000);
   };

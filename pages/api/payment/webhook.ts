@@ -66,10 +66,11 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         }
         
         // 2. 如果已有 B2B 订单号，直接查询；否则创建新订单
-        let order;
+        let order: any;
         if (b2bOrderId) {
           console.log('Using existing B2B order:', b2bOrderId);
-          return res.status(200).json({ received: true, orderId: b2bOrderId });
+          // 仍需发送确认邮件，不能直接 return
+          order = { orderNumber: b2bOrderId, orderNo: b2bOrderId };
         } else {
           // 创建 B2B 订单（支付成功后才创建！）
           const firstItem = items[0];
@@ -87,8 +88,26 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
           // ⚡ 关键：下单后立即用余额确认支付，触发 eSIM 分配
           if (order?.id) {
             console.log('Confirming payment for order:', order.id);
-            order = await b2bApi.confirmOrderPayment(order.id);
-            console.log('Payment confirmed, ICCID:', order?.esimIccid || 'pending');
+            try {
+              order = await b2bApi.confirmOrderPayment(order.id);
+              console.log('Payment confirmed, ICCID:', order?.esimIccid || 'pending');
+            } catch (payErr: any) {
+              console.error('confirmOrderPayment failed:', payErr.message);
+              // 余额不足或其他支付确认失败 → 告警管理员
+              const alertMsg = payErr.message?.includes('余额') || payErr.message?.toLowerCase().includes('balance')
+                ? `⚠️ B2B 账户余额不足！订单 ${order.id} 支付确认失败，eSIM 未分配。\n客户: ${email}\nStripe: ${session.id}\n错误: ${payErr.message}`
+                : `⚠️ confirmOrderPayment 失败！订单 ${order.id}\n客户: ${email}\nStripe: ${session.id}\n错误: ${payErr.message}`;
+              try {
+                await sendOrderConfirmation('simryokoesim@gmail.com', {
+                  orderId: `ALERT-PAY-${order.id}`,
+                  customerEmail: email || 'unknown',
+                  items: [{ name: alertMsg, quantity: 1, price: session.metadata?.amount || '0' }],
+                  totalAmount: session.metadata?.amount || '0',
+                  paymentMethod: '信用卡',
+                });
+              } catch (_e) { console.error('Failed to send balance alert email:', _e); }
+              // order 保持 createOrder 的结果继续发普通确认邮件给客户
+            }
           }
         }
         
@@ -107,15 +126,25 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         const esim = esimSims[0] || null;
         const productInfo = items[0]; // 从 metadata 取产品信息（order.product 在 pending 时可能为 null）
         
+        // 完整 LPA 激活码字符串，格式: "LPA:1$<smdpAddress>$<matchingId>"
+        // esim.qrCode 字段存放完整 LPA 字符串（B2BSimData.qrCode）
+        // esim.activationCode 只是 matching_id 部分
+        const fullLpaCode = esim?.qrCode || order.esimQrCode || '';
+        // 构建 iPhone 一键安装链接（如果 API 未直接返回）
+        const appleInstallUrl = esim?.directAppleUrl
+          || (fullLpaCode.startsWith('LPA:')
+            ? `https://esimsetup.apple.com/esim_qrcode_provisioning?carddata=${encodeURIComponent(fullLpaCode)}`
+            : undefined);
+
         const esimDataPayload = (esim || order.esimIccid) ? {
           iccid: esim?.iccid || order.esimIccid || '',
           // qrCode 字段传图片 URL（用于邮件显示二维码图片）
           qrCode: esim?.qrCodeUrl || '',
-          // activationCode 是 LPA matching_id，如 "HDFGO6T8VW7WM1QW"
-          activationCode: esim?.activationCode || order.esimActivationCode || '',
+          // activationCode 传完整 LPA 字符串，便于用户手动输入
+          activationCode: fullLpaCode,
           dataAmount: productInfo?.dataSize ? `${formatDataSize(productInfo.dataSize)}` : 'N/A',
           validityDays: productInfo?.validDays || 0,
-          directAppleUrl: esim?.directAppleUrl || undefined,
+          directAppleUrl: appleInstallUrl,
         } : undefined;
         
         // 无论是否有 eSIM（可能仍在 pending），都发送确认邮件
