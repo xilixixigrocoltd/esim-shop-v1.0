@@ -13,8 +13,12 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     const Stripe = (await import('stripe')).default
     const stripe = new Stripe(stripeKey)
 
+    const total = items.reduce((s: number, item: any) => {
+      const p = item.product || item
+      return s + parseFloat(p.price || 0) * (item.qty || item.quantity || 1)
+    }, 0)
+
     const lineItems = items.map((item: any) => {
-      // 兼容两种格式: { product: {...}, qty } 或 { id, name, price, qty, ... }
       const p = item.product || item
       const price = parseFloat(p.price || p.amount || 0)
       const dataSize = p.dataSize || 0
@@ -34,18 +38,28 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
     const session = await stripe.checkout.sessions.create({
       payment_method_types: ['card', 'alipay'],
-      payment_method_options: {
-        card: {
-          request_three_d_secure: 'automatic',
-        },
-      },
       line_items: lineItems,
       mode: 'payment',
       customer_email: email,
-      // Apple Pay & Google Pay 自动通过 card 方式支持（Stripe 自动检测）
       success_url: `${process.env.NEXT_PUBLIC_URL || 'https://simryoko.com'}/success?session_id={CHECKOUT_SESSION_ID}`,
       cancel_url: `${process.env.NEXT_PUBLIC_URL || 'https://simryoko.com'}/cart`,
-      metadata: { email },
+      metadata: {
+        email,
+        amount: total.toFixed(2),
+        // 存储产品信息供 webhook 使用（Stripe metadata 限制 500 字符/key）
+        items: JSON.stringify(items.map((item: any) => {
+          const p = item.product || item
+          return {
+            id: p.id,
+            name: p.name,
+            price: p.price,
+            dataSize: p.dataSize,
+            validDays: p.validDays,
+            qty: item.qty || 1,
+            countries: p.countries?.slice(0, 3),
+          }
+        })).slice(0, 490), // Stripe metadata value limit
+      },
     })
 
     res.status(200).json({ url: session.url })
