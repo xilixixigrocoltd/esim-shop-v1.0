@@ -179,7 +179,7 @@ export async function getCachedProducts(): Promise<Product[]> {
     if (live.length > 0) {
       _liveCache = live;
       _liveCacheAt = Date.now();
-      console.log(`[products-cache] Live: ${live.length} products fetched`);
+      // Live products refreshed (suppress verbose log in production)
       return live;
     }
   } catch (err: any) {

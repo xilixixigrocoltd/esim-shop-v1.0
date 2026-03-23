@@ -53,7 +53,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       });
     }
     
-    console.log(`[countries] 获取到 ${allProducts.length} 个产品`);
+
 
     const countryMap = new Map<string, CountryWithProducts>();
 
@@ -72,7 +72,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       }
     });
     
-    console.log(`[countries] 最终国家数：${countryMap.size}`);
+
 
     const countries = Array.from(countryMap.values())
       .filter(c => c.name)

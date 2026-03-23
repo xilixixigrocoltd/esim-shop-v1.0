@@ -46,7 +46,14 @@ export default function CheckoutPage() {
         if (data.url) window.location.href = data.url
         else throw new Error(t('checkout.errorFailed'))
       } else {
-        // USDT flow: show address (handled in UI)
+        // USDT flow: notify admin and show address
+        try {
+          await fetch('/api/payment/usdt-notify', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ email, items: cart, amount: total.toFixed(2) }),
+          })
+        } catch (_) { /* fire-and-forget */ }
         setLoading(false)
         return
       }

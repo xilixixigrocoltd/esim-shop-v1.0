@@ -35,8 +35,8 @@ export default function ProductCard({ product, compact = false, isLowestPrice = 
   const flags = product.countries.slice(0, 3).map(c => getFlagEmoji(c.code)).join(' ')
   const primaryName = product.countries[0]?.name || ''
 
-  // Data unit price: $X.XX/GB
-  const pricePerGb = product.dataSize > 0
+  // Data unit price: $X.XX/GB — suppress for unlimited data (dataSize=0) or free (price=0)
+  const pricePerGb = product.dataSize > 0 && product.price > 0
     ? `$${(product.price / (product.dataSize / 1024)).toFixed(2)}/GB`
     : null
 
