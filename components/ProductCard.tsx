@@ -37,11 +37,11 @@ export default function ProductCard({ product, compact = false }: Props) {
     e.preventDefault()
     e.stopPropagation()
     try {
-      const CART_KEY = 'simryoko_cart'
-      const cart: Array<{ product: typeof product; quantity: number }> = JSON.parse(localStorage.getItem(CART_KEY) || '[]')
-      const idx = cart.findIndex((i) => String(i.product.id) === String(product.id))
-      if (idx >= 0) cart[idx].quantity = (cart[idx].quantity || 1) + 1
-      else cart.push({ product, quantity: 1 })
+      const CART_KEY = 'cart'
+      const cart: Array<Product & { qty: number }> = JSON.parse(localStorage.getItem(CART_KEY) || '[]')
+      const idx = cart.findIndex((i) => String(i.id) === String(product.id))
+      if (idx >= 0) cart[idx].qty = (cart[idx].qty || 1) + 1
+      else cart.push({ ...product, qty: 1 })
       localStorage.setItem(CART_KEY, JSON.stringify(cart))
       window.dispatchEvent(new Event('cart-updated'))
       const btn = e.currentTarget as HTMLButtonElement

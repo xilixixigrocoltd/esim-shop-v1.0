@@ -148,7 +148,11 @@ export default function ProductsPage({ allProducts, countries }: Props) {
                 {displayProducts.map(p => <ProductCard key={p.id} product={p} />)}
               </div>
               {displayProducts.length === 0 && (
-                <div className="text-center py-16 text-gray-400">{locale === 'zh' ? '没有找到相关套餐' : 'No plans found'}</div>
+                <div className="text-center py-16">
+                  <div className="text-5xl mb-4">🔍</div>
+                  <p className="text-gray-500 font-medium mb-2">{locale === 'zh' ? '没有找到相关套餐' : 'No plans found'}</p>
+                  <p className="text-gray-400 text-sm">{locale === 'zh' ? '试试其他关键词或浏览全部套餐' : 'Try different keywords or browse all plans'}</p>
+                </div>
               )}
             </div>
           )}

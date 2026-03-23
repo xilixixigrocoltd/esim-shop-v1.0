@@ -118,7 +118,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
 
         {/* Mobile menu */}
         {mobileOpen && (
-          <div className="md:hidden border-t border-gray-100 bg-white px-4 py-4 space-y-1">
+          <div className="md:hidden border-t border-gray-100 bg-white px-4 py-4 space-y-1 animate-[slideDown_0.2s_ease-out]">
             {navLinks.map(l => (
               <Link key={l.href} href={l.href} onClick={() => setMobileOpen(false)}
                 className={`block px-4 py-3 rounded-lg text-sm font-medium ${isActive(l.href) ? 'text-orange-600 bg-orange-50' : 'text-gray-700 hover:bg-gray-50'}`}>
@@ -182,9 +182,9 @@ export default function Layout({ children }: { children: React.ReactNode }) {
           <div className="border-t border-gray-700 pt-6 flex flex-col sm:flex-row justify-between items-center gap-3 text-xs text-gray-500">
             <span>© {new Date().getFullYear()} SimRyoko. All rights reserved.</span>
             <div className="flex gap-4">
-              <span className="hover:text-gray-300 cursor-pointer">{t('footer.terms')}</span>
-              <span className="hover:text-gray-300 cursor-pointer">{t('footer.privacy')}</span>
-              <span className="hover:text-gray-300 cursor-pointer">{t('footer.refund')}</span>
+              <Link href="/terms" className="hover:text-gray-300 transition-colors">{t('footer.terms')}</Link>
+              <Link href="/privacy" className="hover:text-gray-300 transition-colors">{t('footer.privacy')}</Link>
+              <Link href="/help#refund" className="hover:text-gray-300 transition-colors">{t('footer.refund')}</Link>
             </div>
           </div>
         </div>

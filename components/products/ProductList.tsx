@@ -26,7 +26,16 @@ export default function ProductList({ countryCode }: ProductListProps) {
         if (countryCode) {
           const res = await fetch(`/api/products/by-country/${countryCode}`);
           const json = await res.json();
-          data = json.success ? json.data : [];
+          // API returns { local, regional, global } — flatten all three
+          if (json.success && json.data && typeof json.data === 'object') {
+            data = [
+              ...(json.data.local || []),
+              ...(json.data.regional || []),
+              ...(json.data.global || []),
+            ];
+          } else {
+            data = [];
+          }
         } else {
           const res = await fetch('/api/products?limit=100');
           const json = await res.json();

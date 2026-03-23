@@ -1,5 +1,6 @@
 import { useRouter } from 'next/router';
 import { GetStaticPaths, GetStaticProps } from 'next';
+import Link from 'next/link';
 import ProductList from '@/components/products/ProductList';
 import SEO from '@/components/ui/SEO';
 import Breadcrumb from '@/components/ui/Breadcrumb';
@@ -46,6 +47,15 @@ export default function CountryPage({ code, countryName, productCount, minPrice,
           { label: '国家列表', href: '/countries' },
           { label: `${countryName} eSIM` }
         ]} />
+        <div className="mt-2 mb-4">
+          <Link href="/products"
+            className="inline-flex items-center gap-1.5 text-sm text-gray-500 hover:text-orange-500 transition-colors">
+            <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+            </svg>
+            返回产品列表
+          </Link>
+        </div>
       </div>
       <ProductList countryCode={code.toLowerCase()} />
     </>

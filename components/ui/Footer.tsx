@@ -103,13 +103,13 @@ export default function Footer() {
         <div className="border-t border-gray-800 mt-10 pt-6 flex flex-col sm:flex-row justify-between items-center gap-3 text-xs text-gray-600">
           <p>© 2026 SimRyoko · Xigro Co Limited · All rights reserved.</p>
           <div className="flex gap-5">
-            <Link href="/help" className="hover:text-orange-400 transition-colors">
+            <Link href="/terms" className="hover:text-orange-400 transition-colors">
               {t('footer.terms')}
             </Link>
-            <Link href="/help" className="hover:text-orange-400 transition-colors">
+            <Link href="/privacy" className="hover:text-orange-400 transition-colors">
               {t('footer.privacy')}
             </Link>
-            <Link href="/help" className="hover:text-orange-400 transition-colors">
+            <Link href="/help#refund" className="hover:text-orange-400 transition-colors">
               {t('footer.refund')}
             </Link>
           </div>
