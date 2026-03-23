@@ -33,7 +33,7 @@ export default function Header({ cartCount = 0 }: HeaderProps) {
               {t('nav.countries')}
             </Link>
             <Link href="/account/orders" className="text-gray-600 hover:text-orange-600 font-medium">
-              我的订单
+              {t('nav.orders')}
             </Link>
             <Link href="/help" className="text-gray-600 hover:text-orange-600 font-medium">
               {t('nav.help')}
@@ -67,7 +67,7 @@ export default function Header({ cartCount = 0 }: HeaderProps) {
               {t('nav.countries')}
             </Link>
             <Link href="/account/orders" onClick={() => setIsMenuOpen(false)} className="block px-3 py-2 text-gray-700 hover:bg-gray-50 rounded-lg">
-              我的订单
+              {t('nav.orders')}
             </Link>
             <Link href="/help" onClick={() => setIsMenuOpen(false)} className="block px-3 py-2 text-gray-700 hover:bg-gray-50 rounded-lg">
               {t('nav.help')}

@@ -13,9 +13,9 @@ export default function HeroSection() {
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
     if (query.trim()) {
-      router.push(`/countries?q=${encodeURIComponent(query.trim())}`);
+      router.push(`/products?search=${encodeURIComponent(query.trim())}`);
     } else {
-      router.push('/countries');
+      router.push('/products');
     }
   };
 
