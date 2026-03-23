@@ -24,7 +24,7 @@ async function getToken(): Promise<string> {
     throw new Error('登录失败: ' + (data.message || '未知错误'));
   }
 
-  cachedToken = data.data.token;
+  cachedToken = data.data.token as string;
   // JWT 有效期30天，设置25天后刷新
   tokenExpiry = Date.now() + 25 * 24 * 60 * 60 * 1000;
   return cachedToken;
