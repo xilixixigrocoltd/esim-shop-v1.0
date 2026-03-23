@@ -215,5 +215,18 @@
     "local": "本地",
     "regional": "区域",
     "global": "全球"
-  }
+  },
+  "success.order_id": "订单号",
+  "success.view_orders": "查看我的订单",
+  "success.back_home": "返回首页",
+  "success.email.sent": "eSIM 已发送至您的邮箱",
+  "success.email.check": "请检查邮箱（含垃圾邮件箱）",
+  "product.detail.installation": "安装步骤",
+  "product.detail.coverage": "出发后打开手机，连接当地网络即可使用",
+  "help.install.iphone": "检查您的邮箱，找到 eSIM 二维码",
+  "order.install_guide": "安装指南",
+  "cart.continue_shopping": "继续购物",
+  "common.loading": "加载中...",
+  "common.error": "未知",
+  "checkout.email": "接收邮箱"
 }

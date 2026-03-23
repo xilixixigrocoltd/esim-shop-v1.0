@@ -215,5 +215,18 @@
     "local": "ローカル",
     "regional": "地域",
     "global": "グローバル"
-  }
+  },
+  "success.order_id": "注文番号",
+  "success.view_orders": "注文履歴を見る",
+  "success.back_home": "ホームに戻る",
+  "success.email.sent": "eSIMをメールに送信しました",
+  "success.email.check": "メールボックスをご確認ください（迷惑メールも）",
+  "product.detail.installation": "インストール手順",
+  "product.detail.coverage": "到着後、スマホを開いて現地ネットワークに接続してください",
+  "help.install.iphone": "メールでeSIM QRコードを確認してください",
+  "order.install_guide": "インストールガイド",
+  "cart.continue_shopping": "ショッピングを続ける",
+  "common.loading": "読み込み中...",
+  "common.error": "不明",
+  "checkout.email": "メールアドレス"
 }

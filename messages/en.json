@@ -215,5 +215,18 @@
     "local": "Local",
     "regional": "Regional",
     "global": "Global"
-  }
+  },
+  "success.order_id": "Order ID",
+  "success.view_orders": "View My Orders",
+  "success.back_home": "Back to Home",
+  "success.email.sent": "eSIM sent to your email",
+  "success.email.check": "Please check your inbox (including spam)",
+  "product.detail.installation": "Installation Steps",
+  "product.detail.coverage": "After arrival, open your phone and connect to local network",
+  "help.install.iphone": "Check your email for the eSIM QR code",
+  "order.install_guide": "Install Guide",
+  "cart.continue_shopping": "Continue Shopping",
+  "common.loading": "Loading...",
+  "common.error": "Unknown",
+  "checkout.email": "Email Address"
 }

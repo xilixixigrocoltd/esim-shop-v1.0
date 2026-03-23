@@ -215,5 +215,18 @@
     "local": "로컬",
     "regional": "지역",
     "global": "글로벌"
-  }
+  },
+  "success.order_id": "주문 번호",
+  "success.view_orders": "내 주문 보기",
+  "success.back_home": "홈으로 돌아가기",
+  "success.email.sent": "eSIM이 이메일로 전송되었습니다",
+  "success.email.check": "받은 편지함을 확인하세요（스팸 폴더 포함）",
+  "product.detail.installation": "설치 단계",
+  "product.detail.coverage": "도착 후 휴대폰을 열고 현지 네트워크에 연결하세요",
+  "help.install.iphone": "이메일에서 eSIM QR 코드를 확인하세요",
+  "order.install_guide": "설치 가이드",
+  "cart.continue_shopping": "계속 쇼핑하기",
+  "common.loading": "로딩 중...",
+  "common.error": "알 수 없음",
+  "checkout.email": "이메일 주소"
 }
