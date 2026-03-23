@@ -6,7 +6,9 @@
     "global": "글로벌 요금제",
     "help": "도움말",
     "cart": "장바구니",
-    "orders": "내 주문"
+    "orders": "내 주문",
+    "countries": "여행지",
+    "blog": "블로그"
   },
   "hero": {
     "title": "글로벌 eSIM, 출발 전에 준비 완료",
@@ -84,7 +86,40 @@
     "q5": "어떤 결제 수단을 사용할 수 있나요?",
     "a5": "신용카드(Visa/Mastercard), Apple Pay, Google Pay 및 USDT 암호화폐 결제를 지원합니다.",
     "more": "다른 궁금한 점이 있으신가요?",
-    "contact": "고객지원 문의"
+    "contact": {
+      "q": "고객지원은 어떻게 연락하나요?",
+      "a": "텔레그램 @Simryokoesimbot 또는 이메일 support@simryoko.com으로 연락하세요. 24시간 운영합니다."
+    },
+    "what_is_esim": {
+      "q": "eSIM이란 무엇인가요?",
+      "a": "eSIM은 내장형 가상 SIM 카드입니다. 실물 카드 없이 QR코드를 스캔하기만 하면 바로 개통됩니다."
+    },
+    "check_compatibility": {
+      "q": "제 스마트폰이 eSIM을 지원하나요?",
+      "a": "iPhone XR/XS 이상은 모두 지원합니다. 안드로이드는 설정에서 'eSIM 추가' 항목이 있는지 확인하세요. 중국 내수용 iPhone은 eSIM을 지원하지 않습니다."
+    },
+    "delivery": {
+      "q": "구매 후 eSIM을 어떻게 받나요?",
+      "a": "결제 완료 후 eSIM QR코드와 개통 안내가 즉시 이메일로 전송됩니다. 보통 1분 이내입니다."
+    },
+    "installation": {
+      "q": "eSIM 설치 방법을 알려주세요",
+      "a": "설정→셀룰러→eSIM 추가 를 열고, 이메일의 QR코드를 스캔한 후 안내에 따라 설치하세요."
+    },
+    "usage": {
+      "q": "eSIM은 언제부터 요금이 부과되나요?",
+      "a": "설치 직후 개통되지 않습니다. 보통 현지 네트워크에 처음 연결하는 시점부터 요금이 부과됩니다."
+    },
+    "refund": {
+      "q": "환불이 가능한가요?",
+      "a": "개통 전이라면 7일 이내 전액 환불 가능합니다. QR코드를 스캔하여 개통한 이후에는 환불이 불가합니다."
+    },
+    "topup": {
+      "q": "데이터가 소진되면 추가할 수 있나요?",
+      "a": "일부 요금제는 충전/연장이 가능합니다. 주문 페이지의 충전 옵션을 확인하세요."
+    },
+    "contact_us": "다른 궁금한 점이 있으신가요?",
+    "contact_support": "고객지원 문의"
   },
   "product": {
     "buy": "지금 구매",
@@ -111,7 +146,35 @@
     "related": "관련 요금제",
     "backToProducts": "상품 목록으로 돌아가기",
     "addedToCart": "담았습니다 ✓",
-    "buyingNow": "처리 중…"
+    "buyingNow": "처리 중…",
+    "added": "담았습니다 ✓",
+    "added_to_cart": "담았습니다 ✓",
+    "buy_now": "지금 구매",
+    "detail": {
+      "add_to_cart": "장바구니 담기",
+      "buy_now": "지금 구매",
+      "description": "요금제 설명",
+      "installation": "설치 단계",
+      "coverage": "도착 후 휴대폰을 열고 현지 네트워크에 연결하세요",
+      "install": {
+        "step1": "Wi-Fi에 연결된 상태에서 진행하세요",
+        "step2": "설정 → 셀룰러 → eSIM 추가",
+        "step3": "QR코드를 스캔하고 안내에 따라 설치",
+        "step4": "목적지 도착 후 데이터 로밍 활성화"
+      },
+      "terms": "이용 조건",
+      "terms_item1": "이 eSIM은 중국 본토에서 사용할 수 없습니다",
+      "terms_item2": "중국 내수용 iPhone은 eSIM 미지원",
+      "terms_item3": "개통 후 환불 불가",
+      "terms_item4": "유효 기간은 현지 네트워크 최초 연결 시점부터",
+      "terms_item5": "다른 기기로 이전 불가",
+      "warning": {
+        "china": "⚠️ 중요: 중국 내수용 iPhone은 eSIM 미지원",
+        "china_desc": "중국 내수용 iPhone은 듀얼 실물 SIM 슬롯을 사용하며 eSIM을 지원하지 않습니다.",
+        "china_note": "홍콩·미국·국제판 iPhone은 정상 사용 가능합니다.",
+        "intl": "이 eSIM은 국제 로밍용이며, 중국 본토 장기 사용에는 적합하지 않습니다"
+      }
+    }
   },
   "warning": {
     "chinaPhone": "⚠️ 중요: 중국 내수용 iPhone은 eSIM 미지원",
@@ -119,7 +182,10 @@
   },
   "cart": {
     "title": "장바구니",
-    "empty": "장바구니가 비어 있습니다",
+    "empty": {
+      "title": "장바구니가 비어 있습니다",
+      "subtitle": "아직 요금제를 선택하지 않으셨나요? 둘러보세요!"
+    },
     "emptyDesc": "아직 요금제를 선택하지 않으셨나요? 둘러보세요!",
     "browse": "요금제 둘러보기",
     "checkout": "결제하기",
@@ -128,15 +194,28 @@
     "remove": "삭제",
     "qty": "수량",
     "items": "개",
-    "continue": "쇼핑 계속하기"
+    "continue": "쇼핑 계속하기",
+    "delete": "삭제"
   },
   "checkout": {
     "title": "주문 확인",
     "summary": "주문 내역",
-    "email": "수신 이메일",
+    "email": {
+      "label": "이메일 주소",
+      "hint": "QR코드가 이 이메일로 전송됩니다. 정확히 입력해 주세요."
+    },
     "emailPlaceholder": "eSIM 개통 코드를 받을 이메일",
     "emailHint": "QR코드가 이 이메일로 전송됩니다. 정확히 입력해 주세요.",
-    "payment": "결제 수단",
+    "payment": {
+      "label": "결제 수단",
+      "card": "신용카드",
+      "stripe": "신용카드 / Apple Pay / Google Pay",
+      "stripe_desc": "Stripe 보안 결제. Visa / Mastercard 지원.",
+      "usdt": {
+        "label": "USDT (암호화폐)",
+        "desc2": "TRC20 / ERC20 네트워크, CryptoPay 경유"
+      }
+    },
     "stripe": "신용카드 / Apple Pay / Google Pay",
     "stripeDesc": "Stripe 보안 결제. Visa / Mastercard 지원.",
     "usdt": "USDT (암호화폐)",
@@ -145,7 +224,10 @@
     "agreePrefix": "이용약관 및 환불 정책에",
     "agreeTerms": "동의합니다",
     "agreeSuffix": ". 기기의 eSIM 지원을 확인했습니다.",
-    "pay": "지금 결제",
+    "pay": {
+      "btn": "지금 결제",
+      "loading": "처리 중…"
+    },
     "processing": "처리 중…",
     "deliveryTitle": "📧 eSIM 수령 방법",
     "deliveryDesc": "결제 후 QR코드가 즉시 이메일로 전송됩니다. 보통 1분 이내입니다.",
@@ -156,11 +238,32 @@
     "errorFailed": "결제 요청에 실패했습니다. 다시 시도해 주세요.",
     "contact": "연락처 이메일",
     "paymentMethod": "결제 수단",
-    "agree": "이용약관에 동의합니다",
+    "agree": {
+      "text": "이용약관에",
+      "terms": "동의합니다",
+      "device": ". 기기의 eSIM 지원을 확인했습니다."
+    },
     "terms": "이용약관",
     "confirmDevice": ", 기기의 eSIM 지원을 확인했습니다",
     "confirmPay": "지금 결제",
-    "security": "🔒 안전한 결제, 데이터 암호화 보호"
+    "security": "🔒 안전한 결제, 데이터 암호화 보호",
+    "confirm_order": "주문 확인",
+    "order_summary": "주문 내역",
+    "days_unit": "일",
+    "delivery": {
+      "title": "📧 eSIM 수령 방법",
+      "desc": "결제 후 QR코드가 즉시 이메일로 전송됩니다. 보통 1분 이내입니다."
+    },
+    "error": {
+      "email": "유효한 이메일 주소를 입력해 주세요",
+      "terms": "이용약관에 먼저 동의해 주세요",
+      "server": "서버 오류입니다. 다시 시도해 주세요.",
+      "network": "네트워크 오류. 연결을 확인해 주세요."
+    },
+    "warning": {
+      "title": "⚠️ 중요 안내",
+      "desc": "이 eSIM은 중국 본토에서 사용할 수 없습니다."
+    }
   },
   "success": {
     "title": "결제 완료! 🎉",
@@ -168,7 +271,14 @@
     "checkEmail": "받은 편지함을 확인하세요 (스팸함 포함)",
     "orderId": "주문 번호",
     "backHome": "홈으로 돌아가기",
-    "viewOrders": "주문 내역 보기"
+    "viewOrders": "주문 내역 보기",
+    "back_home": "홈으로 돌아가기",
+    "view_orders": "내 주문 보기",
+    "order_id": "주문 번호",
+    "email": {
+      "sent": "eSIM이 이메일로 전송되었습니다",
+      "check": "받은 편지함을 확인하세요（스팸 폴더 포함）"
+    }
   },
   "footer": {
     "tagline": "글로벌 eSIM 원스톱 쇼핑. 150개국 이상, USDT 결제 가능, 출발 전 준비 완료.",
@@ -177,7 +287,15 @@
     "support": "24/7 온라인 지원",
     "terms": "이용약관",
     "privacy": "개인정보 처리방침",
-    "refund": "환불 정책"
+    "refund": "환불 정책",
+    "link": {
+      "products": "상품 목록",
+      "countries": "여행지",
+      "help": "고객센터",
+      "faq": "자주 묻는 질문",
+      "orders": "내 주문"
+    },
+    "support_hours": "24/7 온라인 지원"
   },
   "common": {
     "loading": "로딩 중…",
@@ -189,13 +307,15 @@
     "plans": "개 요금제",
     "noResults": "결과 없음",
     "currency": "미국 달러",
-    "usd": "USD"
+    "usd": "USD",
+    "copy": "복사"
   },
   "lang": {
     "zh": "中",
     "en": "EN",
     "ja": "日",
-    "ko": "한"
+    "ko": "한",
+    "switch": "언어 변경"
   },
   "products": {
     "title": "상품 목록",
@@ -214,7 +334,11 @@
     "clickToExpand": "클릭하여 요금제 보기",
     "local": "로컬",
     "regional": "지역",
-    "global": "글로벌"
+    "global": "글로벌",
+    "type": {
+      "data_only": "데이터 전용",
+      "data_voice_sms": "데이터 + 통화 + SMS"
+    }
   },
   "success.order_id": "주문 번호",
   "success.view_orders": "내 주문 보기",
@@ -228,5 +352,161 @@
   "cart.continue_shopping": "계속 쇼핑하기",
   "common.loading": "로딩 중...",
   "common.error": "알 수 없음",
-  "checkout.email": "이메일 주소"
+  "checkout.email": "이메일 주소",
+  "home": {
+    "hero": {
+      "title2": "글로벌 eSIM, 출발 전에 준비 완료",
+      "subtitle2": "150개국 이상, 즉시 개통, USDT 결제 가능",
+      "badge": {
+        "countries": "🌍 150개국 이상",
+        "instant": "⚡ 즉시 개통",
+        "usdt": "💳 USDT 결제"
+      },
+      "search_btn": "검색",
+      "search_placeholder2": "국가 검색 (예: 일본, 미국, 태국…)",
+      "quick": {
+        "jp": "🇯🇵 일본",
+        "kr": "🇰🇷 한국",
+        "th": "🇹🇭 태국",
+        "us": "🇺🇸 미국",
+        "gb": "🇬🇧 영국",
+        "sg": "🇸🇬 싱가포르"
+      }
+    },
+    "how_it_works": {
+      "title": "간단한 3단계",
+      "subtitle": "출발 전 준비하고, 도착 후 바로 사용",
+      "step1": {
+        "title": "요금제 선택",
+        "desc": "국가 또는 요금제 유형으로 검색하여 최적의 eSIM을 선택하세요"
+      },
+      "step2": {
+        "title": "QR코드 스캔",
+        "desc": "결제 후 이메일로 받은 QR코드를 스캔하여 설치"
+      },
+      "step3": {
+        "title": "인터넷 연결",
+        "desc": "목적지 도착 후 데이터 로밍 활성화, 즉시 인터넷 사용"
+      },
+      "view_tutorial": "설치 튜토리얼 보기",
+      "devices": "호환 기기: iPhone XR/XS 이상 · iPad Pro/Air · 일부 안드로이드 플래그십"
+    },
+    "testimonials": {
+      "title": "여행자 후기",
+      "subtitle": "실제 사용자의 솔직한 후기",
+      "user1": {
+        "name": "장 씨",
+        "location": "베이징 → 일본",
+        "content": "내리자마자 인터넷 연결! SIM 교체도 불필요하고 공항보다 훨씬 저렴해요."
+      },
+      "user2": {
+        "name": "이 씨",
+        "location": "상하이 → 유럽 15개국",
+        "content": "유럽 전역을 하나의 요금제로! 신호도 안정적이고 고객지원도 빠릿빠릿해요."
+      },
+      "user3": {
+        "name": "왕 씨",
+        "location": "선전 → 태국",
+        "content": "세 번째 구매입니다! 해외 나갈 때마다 SimRyoko 써요. 속도도 빠르고 신호도 좋아요!"
+      },
+      "user4": {
+        "name": "진 씨",
+        "location": "광저우 → 싱가포르",
+        "content": "1분 안에 QR코드 받고 설치도 너무 쉬워요. 속도도 훌륭해요!"
+      },
+      "view_more": "텔레그램에서 더 많은 후기 보기"
+    },
+    "faq": {
+      "title": "자주 묻는 질문",
+      "subtitle": "궁금한 점을 빠르게 해결하세요"
+    },
+    "popular": {
+      "title": "인기 여행지",
+      "view_all": "전체 보기",
+      "products": "개 요금제"
+    },
+    "types": {
+      "title": "요금제 선택",
+      "subtitle": "로컬·지역·글로벌, 딱 맞는 요금제를 찾아보세요",
+      "local": "로컬 요금제",
+      "local_desc": "단일 국가, 최저 가격",
+      "regional": "지역 요금제",
+      "regional_desc": "여러 국가 동시 사용",
+      "global": "글로벌 요금제",
+      "global_desc": "200개국 이상, 비즈니스 여행",
+      "view_all": "전체 보기"
+    },
+    "trust": {
+      "secure_payment": "안전한 결제",
+      "secure_payment_desc": "SSL 암호화, 데이터 보호",
+      "instant": "즉시 개통",
+      "instant_desc": "결제 후 1분 이내 수신",
+      "support": "24/7 고객지원",
+      "support_desc": "텔레그램 상시 운영",
+      "refund": "7일 환불 보장",
+      "refund_desc": "개통 전 전액 환불 가능"
+    },
+    "payment": {
+      "title": "다양한 결제 수단",
+      "subtitle": "원하는 결제 방법을 선택하세요",
+      "card": "신용카드",
+      "card_desc": "Visa / Mastercard 안전 결제",
+      "apple_pay_desc": "Face ID / Touch ID로 빠른 결제",
+      "google_pay_desc": "Google Pay로 빠른 결제",
+      "alipay": "USDT 암호화폐",
+      "alipay_desc": "TRC20 / ERC20 네트워크 결제",
+      "secure_note": "🔒 모든 거래는 SSL 암호화로 보호됩니다"
+    }
+  },
+  "error": {
+    "pageNotFound": {
+      "title": "페이지를 찾을 수 없습니다",
+      "description": "죄송합니다. 요청하신 페이지가 존재하지 않습니다.",
+      "possibleReasons": "가능한 원인:",
+      "reason1": "링크가 만료되거나 삭제되었습니다",
+      "reason2": "URL 입력이 잘못되었습니다",
+      "reason3": "페이지가 새 주소로 이동했습니다",
+      "goBack": "이전 페이지로",
+      "goHome": "홈으로 가기",
+      "needHelp": "도움이 필요하신가요?"
+    },
+    "serverError": {
+      "title": "서버 오류",
+      "description": "죄송합니다. 서버에 문제가 발생했습니다. 잠시 후 다시 시도해 주세요.",
+      "whatHappened": "무슨 일이 발생했나요?",
+      "explanation": "서버가 요청을 처리할 수 없습니다. 원인으로는:",
+      "reason1": "서버 점검 중",
+      "reason2": "트래픽 과부하",
+      "reason3": "기술적 오류",
+      "retry": "다시 시도",
+      "goHome": "홈으로 가기",
+      "stillNeedHelp": "여전히 도움이 필요하신가요?",
+      "responseTime": "보통 24시간 이내에 답변드립니다"
+    }
+  },
+  "help": {
+    "title": "고객센터",
+    "contact": {
+      "title": "문의하기"
+    }
+  },
+  "seo": {
+    "countries": {
+      "title": "글로벌 eSIM 이용 가능 국가 | SimRyoko",
+      "desc": "SimRyoko eSIM 이용 가능 국가 검색 — 150개국 이상, 즉시 개통."
+    }
+  },
+  "usage": {
+    "title": "데이터 사용량",
+    "total": "총량",
+    "used": "사용됨",
+    "remaining": "잔여",
+    "percent": "사용률",
+    "days_left": "남은 일수",
+    "loading": "로딩 중…",
+    "refresh": "새로 고침",
+    "topup": "충전",
+    "low_data": "⚠️ 데이터 거의 소진",
+    "expiring_soon": "⚠️ 곧 만료"
+  }
 }

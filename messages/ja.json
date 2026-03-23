@@ -6,7 +6,9 @@
     "global": "グローバルプラン",
     "help": "ヘルプ",
     "cart": "カート",
-    "orders": "注文履歴"
+    "orders": "注文履歴",
+    "countries": "目的地",
+    "blog": "ブログ"
   },
   "hero": {
     "title": "グローバルeSIM、出発前に準備完了",
@@ -84,7 +86,40 @@
     "q5": "どんな支払い方法が使えますか？",
     "a5": "クレジットカード（Visa/Mastercard）、Apple Pay、Google Pay、USDTに対応しています。",
     "more": "他にご質問がありますか？",
-    "contact": "サポートに問い合わせる"
+    "contact": {
+      "q": "サポートへの連絡方法は？",
+      "a": "Telegram @Simryokoesimbot またはメール support@simryoko.com でご連絡ください。24時間対応しています。"
+    },
+    "what_is_esim": {
+      "q": "eSIMとは何ですか？",
+      "a": "eSIMは埋め込み型のバーチャルSIMカードです。物理カード不要で、QRコードをスキャンするだけで開通できます。"
+    },
+    "check_compatibility": {
+      "q": "自分のスマホはeSIM対応ですか？",
+      "a": "iPhone XR/XS以降はすべて対応。Androidは設定に「eSIMを追加」の項目があるか確認してください。中国本土向けiPhoneはeSIM非対応です。"
+    },
+    "delivery": {
+      "q": "購入後、eSIMはどうやって受け取りますか？",
+      "a": "決済完了後、eSIMのQRコードと開通手順がすぐにメールで届きます。通常1分以内です。"
+    },
+    "installation": {
+      "q": "eSIMのインストール方法を教えてください",
+      "a": "設定→モバイル通信→eSIMを追加 を開き、メールのQRコードをスキャンして手順に従ってください。"
+    },
+    "usage": {
+      "q": "eSIMはいつから課金されますか？",
+      "a": "インストール直後には開通しません。通常、現地ネットワークに初めて接続した時点から課金が始まります。"
+    },
+    "refund": {
+      "q": "返金はできますか？",
+      "a": "開通前であれば全額返金可能です（7日以内）。QRコードをスキャンして開通済みの場合は返金できません。"
+    },
+    "topup": {
+      "q": "データが切れたら追加できますか？",
+      "a": "一部のプランは追加購入・継続が可能です。注文ページの追加購入オプションをご確認ください。"
+    },
+    "contact_us": "他にご質問がありますか？",
+    "contact_support": "サポートに問い合わせる"
   },
   "product": {
     "buy": "今すぐ購入",
@@ -111,7 +146,35 @@
     "related": "関連プラン",
     "backToProducts": "商品一覧に戻る",
     "addedToCart": "追加しました ✓",
-    "buyingNow": "処理中…"
+    "buyingNow": "処理中…",
+    "added": "追加しました ✓",
+    "added_to_cart": "追加しました ✓",
+    "buy_now": "今すぐ購入",
+    "detail": {
+      "add_to_cart": "カートに追加",
+      "buy_now": "今すぐ購入",
+      "description": "プラン説明",
+      "installation": "インストール手順",
+      "coverage": "到着後、スマホを開いて現地ネットワークに接続してください",
+      "install": {
+        "step1": "Wi-Fiに接続した状態で操作してください",
+        "step2": "設定 → モバイル通信 → eSIMを追加",
+        "step3": "QRコードをスキャンして手順に従う",
+        "step4": "目的地到着後、データローミングをオンにする"
+      },
+      "terms": "ご利用条件",
+      "terms_item1": "このeSIMは中国本土では使用できません",
+      "terms_item2": "中国本土向けiPhoneはeSIM非対応",
+      "terms_item3": "開通後は返金不可",
+      "terms_item4": "有効期限は現地ネットワーク初回接続時から",
+      "terms_item5": "他のデバイスへの転送不可",
+      "warning": {
+        "china": "⚠️ 重要：中国本土向けiPhoneはeSIM非対応",
+        "china_desc": "中国本土向けiPhoneはデュアル物理SIM仕様で、eSIMに対応していません。",
+        "china_note": "香港版・アメリカ版・国際版iPhoneは正常に使用できます。",
+        "intl": "このeSIMは国際ローミング用で、中国本土での長期使用には適していません"
+      }
+    }
   },
   "warning": {
     "chinaPhone": "⚠️ 重要：中国本土向けiPhoneはeSIM非対応",
@@ -119,7 +182,10 @@
   },
   "cart": {
     "title": "ショッピングカート",
-    "empty": "カートは空です",
+    "empty": {
+      "title": "カートは空です",
+      "subtitle": "プランをまだ選んでいませんか？探してみましょう！"
+    },
     "emptyDesc": "プランをまだ選んでいませんか？探してみましょう！",
     "browse": "プランを探す",
     "checkout": "レジに進む",
@@ -128,15 +194,28 @@
     "remove": "削除",
     "qty": "数量",
     "items": "点",
-    "continue": "買い物を続ける"
+    "continue": "買い物を続ける",
+    "delete": "削除"
   },
   "checkout": {
     "title": "注文確認",
     "summary": "注文内容",
-    "email": "受け取りメールアドレス",
+    "email": {
+      "label": "メールアドレス",
+      "hint": "QRコードはこちらのメールに送られます。ご確認ください。"
+    },
     "emailPlaceholder": "eSIM開通コードの受け取り先",
     "emailHint": "QRコードはこちらのメールに送られます。ご確認ください。",
-    "payment": "お支払い方法",
+    "payment": {
+      "label": "お支払い方法",
+      "card": "クレジットカード",
+      "stripe": "クレジットカード / Apple Pay / Google Pay",
+      "stripe_desc": "Stripeによる安全な決済。Visa / Mastercard対応。",
+      "usdt": {
+        "label": "USDT（暗号資産）",
+        "desc2": "TRC20 / ERC20ネットワーク、CryptoPay経由"
+      }
+    },
     "stripe": "クレジットカード / Apple Pay / Google Pay",
     "stripeDesc": "Stripeによる安全な決済。Visa / Mastercard対応。",
     "usdt": "USDT（暗号資産）",
@@ -145,7 +224,10 @@
     "agreePrefix": "利用規約・返金ポリシーに",
     "agreeTerms": "同意する",
     "agreeSuffix": "。端末がeSIM対応であることを確認しました。",
-    "pay": "今すぐ支払う",
+    "pay": {
+      "btn": "今すぐ支払う",
+      "loading": "処理中…"
+    },
     "processing": "処理中…",
     "deliveryTitle": "📧 eSIMの受け取り方",
     "deliveryDesc": "決済後、QRコードがすぐにメールで届きます。通常1分以内です。",
@@ -156,11 +238,32 @@
     "errorFailed": "決済リクエストが失敗しました。もう一度お試しください。",
     "contact": "連絡先メール",
     "paymentMethod": "お支払い方法",
-    "agree": "利用規約に同意する",
+    "agree": {
+      "text": "利用規約に",
+      "terms": "同意する",
+      "device": "。端末がeSIM対応であることを確認しました。"
+    },
     "terms": "利用規約",
     "confirmDevice": "、端末のeSIM対応を確認しました",
     "confirmPay": "今すぐ支払う",
-    "security": "🔒 安全な決済、データは暗号化されています"
+    "security": "🔒 安全な決済、データは暗号化されています",
+    "confirm_order": "注文確認",
+    "order_summary": "注文内容",
+    "days_unit": "日間",
+    "delivery": {
+      "title": "📧 eSIMの受け取り方",
+      "desc": "決済後、QRコードがすぐにメールで届きます。通常1分以内です。"
+    },
+    "error": {
+      "email": "有効なメールアドレスを入力してください",
+      "terms": "先に利用規約に同意してください",
+      "server": "サーバーエラーです。もう一度お試しください。",
+      "network": "ネットワークエラー。接続を確認してください。"
+    },
+    "warning": {
+      "title": "⚠️ 重要なお知らせ",
+      "desc": "このeSIMは中国本土では使用できません。"
+    }
   },
   "success": {
     "title": "お支払い完了！🎉",
@@ -168,7 +271,14 @@
     "checkEmail": "受信トレイをご確認ください（迷惑メールフォルダも）",
     "orderId": "注文番号",
     "backHome": "ホームに戻る",
-    "viewOrders": "注文履歴を見る"
+    "viewOrders": "注文履歴を見る",
+    "back_home": "ホームに戻る",
+    "view_orders": "注文履歴を見る",
+    "order_id": "注文番号",
+    "email": {
+      "sent": "eSIMをメールに送信しました",
+      "check": "メールボックスをご確認ください（迷惑メールも）"
+    }
   },
   "footer": {
     "tagline": "eSIMワンストップショップ。150カ国以上対応、USDT決済可能、出発前に準備完了。",
@@ -177,7 +287,15 @@
     "support": "24時間サポート",
     "terms": "利用規約",
     "privacy": "プライバシーポリシー",
-    "refund": "返金ポリシー"
+    "refund": "返金ポリシー",
+    "link": {
+      "products": "商品一覧",
+      "countries": "目的地",
+      "help": "ヘルプセンター",
+      "faq": "よくある質問",
+      "orders": "注文履歴"
+    },
+    "support_hours": "24時間オンラインサポート"
   },
   "common": {
     "loading": "読み込み中…",
@@ -189,13 +307,15 @@
     "plans": "プラン",
     "noResults": "結果がありません",
     "currency": "米ドル",
-    "usd": "USD"
+    "usd": "USD",
+    "copy": "コピー"
   },
   "lang": {
     "zh": "中",
     "en": "EN",
     "ja": "日",
-    "ko": "한"
+    "ko": "한",
+    "switch": "言語を切替"
   },
   "products": {
     "title": "商品一覧",
@@ -214,7 +334,11 @@
     "clickToExpand": "クリックしてプランを表示",
     "local": "ローカル",
     "regional": "地域",
-    "global": "グローバル"
+    "global": "グローバル",
+    "type": {
+      "data_only": "データのみ",
+      "data_voice_sms": "データ＋音声＋SMS"
+    }
   },
   "success.order_id": "注文番号",
   "success.view_orders": "注文履歴を見る",
@@ -228,5 +352,161 @@
   "cart.continue_shopping": "ショッピングを続ける",
   "common.loading": "読み込み中...",
   "common.error": "不明",
-  "checkout.email": "メールアドレス"
+  "checkout.email": "メールアドレス",
+  "home": {
+    "hero": {
+      "title2": "グローバルeSIM、出発前に準備完了",
+      "subtitle2": "150カ国以上、即時開通、USDT決済対応",
+      "badge": {
+        "countries": "🌍 150カ国以上",
+        "instant": "⚡ 即時開通",
+        "usdt": "💳 USDT決済"
+      },
+      "search_btn": "検索",
+      "search_placeholder2": "国名で検索（例：日本、アメリカ、タイ…）",
+      "quick": {
+        "jp": "🇯🇵 日本",
+        "kr": "🇰🇷 韓国",
+        "th": "🇹🇭 タイ",
+        "us": "🇺🇸 アメリカ",
+        "gb": "🇬🇧 イギリス",
+        "sg": "🇸🇬 シンガポール"
+      }
+    },
+    "how_it_works": {
+      "title": "かんたん3ステップ",
+      "subtitle": "出発前に準備して、到着後すぐに使える",
+      "step1": {
+        "title": "プランを選ぶ",
+        "desc": "国やプランの種類で検索して、最適なeSIMを選択"
+      },
+      "step2": {
+        "title": "QRコードをスキャン",
+        "desc": "決済後にメールでQRコードを受け取り、スキャンしてインストール"
+      },
+      "step3": {
+        "title": "接続完了",
+        "desc": "目的地でデータローミングをオンにして、すぐにネット接続"
+      },
+      "view_tutorial": "インストールチュートリアルを見る",
+      "devices": "対応機種：iPhone XR/XS以降・iPad Pro/Air・一部Androidフラッグシップ"
+    },
+    "testimonials": {
+      "title": "旅行者のレビュー",
+      "subtitle": "実際のユーザーからのフィードバック",
+      "user1": {
+        "name": "張さん",
+        "location": "北京 → 日本",
+        "content": "着いてすぐネットが使えました。SIMの入れ替え不要で、空港より断然安い！"
+      },
+      "user2": {
+        "name": "李さん",
+        "location": "上海 → ヨーロッパ15カ国",
+        "content": "ヨーロッパ全域を1枚でカバー。電波も安定していてサポートも迅速。おすすめ！"
+      },
+      "user3": {
+        "name": "王さん",
+        "location": "深圳 → タイ",
+        "content": "3回目の購入！海外に行くたびにSimRyokoを使ってます。速度も安定してて最高！"
+      },
+      "user4": {
+        "name": "陳さん",
+        "location": "広州 → シンガポール",
+        "content": "1分以内にQRコードを受け取り、インストールも超簡単、速度も快適！"
+      },
+      "view_more": "Telegramでもっとレビューを見る"
+    },
+    "faq": {
+      "title": "よくある質問",
+      "subtitle": "よくある疑問にすばやくお答えします"
+    },
+    "popular": {
+      "title": "人気の渡航先",
+      "view_all": "すべて見る",
+      "products": "プラン"
+    },
+    "types": {
+      "title": "プランを選ぶ",
+      "subtitle": "ローカル・地域・グローバル、あなたに合ったプランを",
+      "local": "ローカルプラン",
+      "local_desc": "1カ国限定、最安値",
+      "regional": "地域プラン",
+      "regional_desc": "複数国対応、1枚で旅行",
+      "global": "グローバルプラン",
+      "global_desc": "200カ国以上、ビジネス向け",
+      "view_all": "すべて見る"
+    },
+    "trust": {
+      "secure_payment": "安全な決済",
+      "secure_payment_desc": "SSL暗号化、データ保護",
+      "instant": "即時開通",
+      "instant_desc": "決済後1分以内に届きます",
+      "support": "24時間サポート",
+      "support_desc": "Telegramでいつでも対応",
+      "refund": "7日間返金保証",
+      "refund_desc": "開通前なら全額返金"
+    },
+    "payment": {
+      "title": "柔軟なお支払い方法",
+      "subtitle": "ご希望の支払い方法をお選びください",
+      "card": "クレジットカード",
+      "card_desc": "Visa / Mastercard 安全決済",
+      "apple_pay_desc": "Face ID / Touch ID で素早く決済",
+      "google_pay_desc": "Google Payで素早く決済",
+      "alipay": "USDT暗号資産",
+      "alipay_desc": "TRC20 / ERC20 ネットワーク決済",
+      "secure_note": "🔒 すべての取引はSSL暗号化されています"
+    }
+  },
+  "error": {
+    "pageNotFound": {
+      "title": "ページが見つかりません",
+      "description": "お探しのページは存在しません",
+      "possibleReasons": "考えられる原因：",
+      "reason1": "リンクが無効または削除されました",
+      "reason2": "URLのスペルが間違っています",
+      "reason3": "ページが新しいアドレスに移動しました",
+      "goBack": "前のページに戻る",
+      "goHome": "ホームに戻る",
+      "needHelp": "お困りですか？"
+    },
+    "serverError": {
+      "title": "サーバーエラー",
+      "description": "サーバーに問題が発生しました。しばらくしてからお試しください。",
+      "whatHappened": "何が起きましたか？",
+      "explanation": "サーバーがリクエストを処理できません。原因として考えられるのは：",
+      "reason1": "サーバーメンテナンス",
+      "reason2": "アクセス集中",
+      "reason3": "技術的な問題",
+      "retry": "再試行",
+      "goHome": "ホームに戻る",
+      "stillNeedHelp": "まだお困りですか？",
+      "responseTime": "通常24時間以内にご返答します"
+    }
+  },
+  "help": {
+    "title": "ヘルプセンター",
+    "contact": {
+      "title": "お問い合わせ"
+    }
+  },
+  "seo": {
+    "countries": {
+      "title": "グローバルeSIM対応国一覧 | SimRyoko",
+      "desc": "SimRyokoのeSIM対応国を探す — 150カ国以上、即時開通。"
+    }
+  },
+  "usage": {
+    "title": "データ使用量",
+    "total": "合計",
+    "used": "使用済み",
+    "remaining": "残り",
+    "percent": "使用率",
+    "days_left": "残り日数",
+    "loading": "読み込み中…",
+    "refresh": "更新",
+    "topup": "チャージ",
+    "low_data": "⚠️ データ残量わずか",
+    "expiring_soon": "⚠️ まもなく有効期限切れ"
+  }
 }

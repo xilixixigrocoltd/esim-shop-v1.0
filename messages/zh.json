@@ -6,7 +6,9 @@
     "global": "全球套餐",
     "help": "帮助",
     "cart": "购物车",
-    "orders": "我的订单"
+    "orders": "我的订单",
+    "countries": "目的地",
+    "blog": "博客"
   },
   "hero": {
     "title": "全球 eSIM，出发前搞定",
@@ -84,7 +86,40 @@
     "q5": "支持哪些支付方式？",
     "a5": "支持信用卡（Visa/Mastercard）、Apple Pay、Google Pay 及 USDT 加密货币支付。",
     "more": "还有其他问题？",
-    "contact": "联系客服"
+    "contact": {
+      "q": "如何联系客服？",
+      "a": "可通过 Telegram @Simryokoesimbot 或邮件 support@simryoko.com 联系我们，24小时在线。"
+    },
+    "what_is_esim": {
+      "q": "什么是 eSIM？",
+      "a": "eSIM 是嵌入式虚拟 SIM 卡，无需实体卡，扫描二维码即可激活使用。"
+    },
+    "check_compatibility": {
+      "q": "我的手机支持 eSIM 吗？",
+      "a": "iPhone XR/XS 及以上全部支持。安卓请在设置中查找「添加 eSIM」选项。国行 iPhone 不支持 eSIM。"
+    },
+    "delivery": {
+      "q": "购买后如何收到 eSIM？",
+      "a": "支付成功后，eSIM 二维码和激活说明将立即发送到您的邮箱，通常在1分钟内。"
+    },
+    "installation": {
+      "q": "如何安装 eSIM？",
+      "a": "打开设置 → 蜂窝网络 → 添加 eSIM，扫描邮件中的二维码，按提示完成即可。"
+    },
+    "usage": {
+      "q": "eSIM 什么时候开始计费？",
+      "a": "eSIM 安装后不立即激活，通常在首次连接当地网络时开始计费。"
+    },
+    "refund": {
+      "q": "可以退款吗？",
+      "a": "eSIM 未激活前可全额退款（7天内）。一旦扫码激活，无法退款。"
+    },
+    "topup": {
+      "q": "流量用完了可以充值吗？",
+      "a": "部分套餐支持续费/充值，请在我的订单页查看充值选项。"
+    },
+    "contact_us": "还有其他问题？",
+    "contact_support": "联系客服"
   },
   "product": {
     "buy": "立即购买",
@@ -111,7 +146,35 @@
     "related": "相关套餐",
     "backToProducts": "返回产品列表",
     "addedToCart": "已加入 ✓",
-    "buyingNow": "处理中…"
+    "buyingNow": "处理中…",
+    "added": "已加入 ✓",
+    "added_to_cart": "已加入 ✓",
+    "buy_now": "立即购买",
+    "detail": {
+      "add_to_cart": "加入购物车",
+      "buy_now": "立即购买",
+      "description": "套餐介绍",
+      "installation": "安装步骤",
+      "coverage": "覆盖地区",
+      "install": {
+        "step1": "确保设备连接 Wi-Fi",
+        "step2": "打开设置 → 蜂窝网络 → 添加 eSIM",
+        "step3": "扫描二维码，按提示完成安装",
+        "step4": "到达目的地后开启「数据漫游」"
+      },
+      "terms": "使用须知",
+      "terms_item1": "本套餐不支持在中国大陆境内使用",
+      "terms_item2": "国行 iPhone 不支持 eSIM",
+      "terms_item3": "eSIM 激活后不可退款",
+      "terms_item4": "有效期从首次连接当地网络起计算",
+      "terms_item5": "不支持转移到其他设备",
+      "warning": {
+        "china": "⚠️ 重要提示：国行手机不支持 eSIM",
+        "china_desc": "国行 iPhone 使用双实体 SIM 卡槽，不支持 eSIM。",
+        "china_note": "港版/美版/国际版 iPhone 可正常使用。",
+        "intl": "本 eSIM 适用于国际漫游，不适合在中国大陆境内长期使用"
+      }
+    }
   },
   "warning": {
     "chinaPhone": "⚠️ 重要提示：国行手机不支持 eSIM",
@@ -119,7 +182,10 @@
   },
   "cart": {
     "title": "购物车",
-    "empty": "购物车是空的",
+    "empty": {
+      "title": "购物车是空的",
+      "subtitle": "还没选好套餐？去逛逛吧！"
+    },
     "emptyDesc": "还没选好套餐？去逛逛吧！",
     "browse": "去选套餐",
     "checkout": "去结账",
@@ -128,15 +194,28 @@
     "remove": "删除",
     "qty": "数量",
     "items": "件商品",
-    "continue": "继续购物"
+    "continue": "继续购物",
+    "delete": "删除"
   },
   "checkout": {
     "title": "确认订单",
     "summary": "订单摘要",
-    "email": "接收邮箱",
+    "email": {
+      "label": "接收邮箱",
+      "hint": "eSIM 二维码将发送至此邮箱，请确认无误"
+    },
     "emailPlaceholder": "用于接收 eSIM 激活码",
     "emailHint": "eSIM 二维码将发送至此邮箱，请确认无误",
-    "payment": "支付方式",
+    "payment": {
+      "label": "支付方式",
+      "card": "信用卡",
+      "stripe": "信用卡 / Apple Pay / Google Pay",
+      "stripe_desc": "由 Stripe 安全处理，支持 Visa / Mastercard",
+      "usdt": {
+        "label": "USDT（加密货币）",
+        "desc2": "TRC20 / ERC20 网络，via CryptoPay"
+      }
+    },
     "stripe": "信用卡 / Apple Pay / Google Pay",
     "stripeDesc": "由 Stripe 安全处理，支持 Visa / Mastercard",
     "usdt": "USDT（加密货币）",
@@ -145,7 +224,10 @@
     "agreePrefix": "我已阅读并同意",
     "agreeTerms": "服务条款与退款政策",
     "agreeSuffix": "，并确认设备支持 eSIM",
-    "pay": "立即支付",
+    "pay": {
+      "btn": "立即支付",
+      "loading": "处理中…"
+    },
     "processing": "处理中…",
     "deliveryTitle": "📧 eSIM 发送方式",
     "deliveryDesc": "支付成功后，eSIM 二维码立即发至邮箱，通常1分钟内到达。",
@@ -156,11 +238,32 @@
     "errorFailed": "支付请求失败，请重试",
     "contact": "联系邮箱",
     "paymentMethod": "支付方式",
-    "agree": "我已阅读并同意",
+    "agree": {
+      "text": "我已阅读并同意",
+      "terms": "服务条款与退款政策",
+      "device": "，并确认设备支持 eSIM"
+    },
     "terms": "服务条款",
     "confirmDevice": "，并确认设备支持 eSIM",
     "confirmPay": "立即支付",
-    "security": "🔒 安全支付，数据加密保护"
+    "security": "🔒 安全支付，数据加密保护",
+    "confirm_order": "确认订单",
+    "order_summary": "订单摘要",
+    "days_unit": "天",
+    "delivery": {
+      "title": "📧 eSIM 发送方式",
+      "desc": "支付成功后，eSIM 二维码立即发至邮箱，通常1分钟内到达。"
+    },
+    "error": {
+      "email": "请输入有效的邮箱地址",
+      "terms": "请先同意服务条款",
+      "server": "服务器错误，请重试",
+      "network": "网络错误，请检查连接后重试"
+    },
+    "warning": {
+      "title": "⚠️ 重要提示",
+      "desc": "本 eSIM 不支持在中国大陆境内使用。"
+    }
   },
   "success": {
     "title": "支付成功！🎉",
@@ -168,7 +271,14 @@
     "checkEmail": "请检查邮箱（含垃圾邮件箱）",
     "orderId": "订单号",
     "backHome": "返回首页",
-    "viewOrders": "查看订单"
+    "viewOrders": "查看订单",
+    "back_home": "返回首页",
+    "view_orders": "查看我的订单",
+    "order_id": "订单号",
+    "email": {
+      "sent": "eSIM 已发送至您的邮箱",
+      "check": "请检查邮箱（含垃圾邮件箱）"
+    }
   },
   "footer": {
     "tagline": "全球 eSIM 一站式购买，覆盖 150+ 国家，USDT 支付，出发前搞定。",
@@ -177,7 +287,15 @@
     "support": "24/7 在线支持",
     "terms": "服务条款",
     "privacy": "隐私政策",
-    "refund": "退款政策"
+    "refund": "退款政策",
+    "link": {
+      "products": "全部套餐",
+      "countries": "目的地",
+      "help": "帮助中心",
+      "faq": "常见问题",
+      "orders": "我的订单"
+    },
+    "support_hours": "24/7 在线支持"
   },
   "common": {
     "loading": "加载中…",
@@ -189,13 +307,15 @@
     "plans": "款套餐",
     "noResults": "暂无结果",
     "currency": "美元",
-    "usd": "USD"
+    "usd": "USD",
+    "copy": "复制"
   },
   "lang": {
     "zh": "中",
     "en": "EN",
     "ja": "日",
-    "ko": "한"
+    "ko": "한",
+    "switch": "切换语言"
   },
   "products": {
     "title": "全部套餐",
@@ -214,7 +334,11 @@
     "clickToExpand": "点击展开套餐",
     "local": "本地",
     "regional": "区域",
-    "global": "全球"
+    "global": "全球",
+    "type": {
+      "data_only": "纯流量",
+      "data_voice_sms": "流量+通话+短信"
+    }
   },
   "success.order_id": "订单号",
   "success.view_orders": "查看我的订单",
@@ -228,5 +352,161 @@
   "cart.continue_shopping": "继续购物",
   "common.loading": "加载中...",
   "common.error": "未知",
-  "checkout.email": "接收邮箱"
+  "checkout.email": "接收邮箱",
+  "home": {
+    "hero": {
+      "title2": "全球 eSIM，出发前搞定",
+      "subtitle2": "150+ 国家，即买即用，USDT 支付",
+      "badge": {
+        "countries": "🌍 150+ 国家",
+        "instant": "⚡ 即时激活",
+        "usdt": "💳 USDT 支付"
+      },
+      "search_btn": "搜索",
+      "search_placeholder2": "搜索国家，如：日本、美国、泰国…",
+      "quick": {
+        "jp": "🇯🇵 日本",
+        "kr": "🇰🇷 韩国",
+        "th": "🇹🇭 泰国",
+        "us": "🇺🇸 美国",
+        "gb": "🇬🇧 英国",
+        "sg": "🇸🇬 新加坡"
+      }
+    },
+    "how_it_works": {
+      "title": "三步轻松上网",
+      "subtitle": "出发前搞定，落地即用",
+      "step1": {
+        "title": "选好套餐",
+        "desc": "按国家或套餐类型浏览，找到最适合您的"
+      },
+      "step2": {
+        "title": "扫码安装",
+        "desc": "支付完成后邮件收到二维码，扫描即装"
+      },
+      "step3": {
+        "title": "出发上网",
+        "desc": "到达目的地开启数据漫游，立即连网"
+      },
+      "view_tutorial": "查看安装教程",
+      "devices": "兼容：iPhone XR/XS 及以上 · iPad Pro/Air · 部分安卓旗舰"
+    },
+    "testimonials": {
+      "title": "旅行者的评价",
+      "subtitle": "来自真实用户的反馈",
+      "user1": {
+        "name": "张先生",
+        "location": "北京 → 日本",
+        "content": "下飞机就有网，不用换卡，价格比机场便宜一半。下次还用！"
+      },
+      "user2": {
+        "name": "李女士",
+        "location": "上海 → 欧洲15国",
+        "content": "欧洲行一个套餐搞定，信号稳定，客服响应超快，强烈推荐。"
+      },
+      "user3": {
+        "name": "王先生",
+        "location": "深圳 → 泰国",
+        "content": "第三次购买了，每次出国都用 SimRyoko，速度快信号好！"
+      },
+      "user4": {
+        "name": "陈女士",
+        "location": "广州 → 新加坡",
+        "content": "一分钟内收到二维码，安装超简单，网速很棒！"
+      },
+      "view_more": "在 Telegram 查看更多评价"
+    },
+    "faq": {
+      "title": "常见问题",
+      "subtitle": "快速找到您想要的答案"
+    },
+    "popular": {
+      "title": "热门目的地",
+      "view_all": "查看全部",
+      "products": "款套餐"
+    },
+    "types": {
+      "title": "选择适合的套餐",
+      "subtitle": "本地、区域、全球，总有一款适合您",
+      "local": "本地套餐",
+      "local_desc": "单个国家，价格最优",
+      "regional": "区域套餐",
+      "regional_desc": "多国通用，一卡畅行",
+      "global": "全球套餐",
+      "global_desc": "全球200+国，商务首选",
+      "view_all": "查看全部"
+    },
+    "trust": {
+      "secure_payment": "安全支付",
+      "secure_payment_desc": "SSL 加密，数据安全",
+      "instant": "即时激活",
+      "instant_desc": "支付后1分钟内收到",
+      "support": "24/7 客服",
+      "support_desc": "Telegram 随时在线",
+      "refund": "7天退款",
+      "refund_desc": "未激活可全额退款"
+    },
+    "payment": {
+      "title": "灵活支付方式",
+      "subtitle": "选择您偏好的支付方式",
+      "card": "信用卡",
+      "card_desc": "Visa / Mastercard 安全支付",
+      "apple_pay_desc": "Face ID / Touch ID 快速支付",
+      "google_pay_desc": "Google Pay 快速支付",
+      "alipay": "USDT 加密货币",
+      "alipay_desc": "TRC20 / ERC20 网络支付",
+      "secure_note": "🔒 所有交易均经过 SSL 加密保护"
+    }
+  },
+  "error": {
+    "pageNotFound": {
+      "title": "页面未找到",
+      "description": "抱歉，您访问的页面不存在",
+      "possibleReasons": "可能的原因：",
+      "reason1": "链接已失效或被移除",
+      "reason2": "网址拼写有误",
+      "reason3": "页面已迁移到新地址",
+      "goBack": "返回上一页",
+      "goHome": "返回首页",
+      "needHelp": "需要帮助？"
+    },
+    "serverError": {
+      "title": "服务器错误",
+      "description": "抱歉，服务器遇到了一些问题，请稍后重试",
+      "whatHappened": "发生了什么？",
+      "explanation": "我们的服务器暂时无法处理您的请求。这可能是由于：",
+      "reason1": "服务器临时维护",
+      "reason2": "访问量过大",
+      "reason3": "技术故障",
+      "retry": "重试",
+      "goHome": "返回首页",
+      "stillNeedHelp": "仍然需要帮助？",
+      "responseTime": "我们通常会在 24 小时内回复"
+    }
+  },
+  "help": {
+    "title": "帮助中心",
+    "contact": {
+      "title": "联系我们"
+    }
+  },
+  "seo": {
+    "countries": {
+      "title": "全球 eSIM 覆盖国家 | SimRyoko",
+      "desc": "浏览 SimRyoko 全球 eSIM 覆盖国家，150+ 国家，即买即用。"
+    }
+  },
+  "usage": {
+    "title": "数据用量",
+    "total": "总流量",
+    "used": "已使用",
+    "remaining": "剩余",
+    "percent": "使用率",
+    "days_left": "剩余天数",
+    "loading": "加载中…",
+    "refresh": "刷新",
+    "topup": "充值",
+    "low_data": "⚠️ 流量即将耗尽",
+    "expiring_soon": "⚠️ 即将到期"
+  }
 }

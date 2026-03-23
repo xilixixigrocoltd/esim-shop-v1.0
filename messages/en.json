@@ -6,7 +6,9 @@
     "global": "Global",
     "help": "Help",
     "cart": "Cart",
-    "orders": "My Orders"
+    "orders": "My Orders",
+    "countries": "Destinations",
+    "blog": "Blog"
   },
   "hero": {
     "title": "Global eSIM, Ready Before You Go",
@@ -84,7 +86,40 @@
     "q5": "What payment methods are supported?",
     "a5": "We accept credit cards (Visa/Mastercard), Apple Pay, Google Pay, and USDT cryptocurrency.",
     "more": "Still have questions?",
-    "contact": "Contact Support"
+    "contact": {
+      "q": "How do I contact support?",
+      "a": "Reach us via Telegram @Simryokoesimbot or email support@simryoko.com. We are online 24/7."
+    },
+    "what_is_esim": {
+      "q": "What is eSIM?",
+      "a": "eSIM is an embedded virtual SIM card. No physical card needed — just scan the QR code to activate."
+    },
+    "check_compatibility": {
+      "q": "Does my phone support eSIM?",
+      "a": "iPhone XR/XS and newer all support eSIM. For Android, check Settings for 'Add eSIM'. China-mainland iPhones do NOT support eSIM."
+    },
+    "delivery": {
+      "q": "How do I receive the eSIM after purchase?",
+      "a": "After payment, the eSIM QR code and activation instructions are sent to your email instantly, usually within 1 minute."
+    },
+    "installation": {
+      "q": "How do I install the eSIM?",
+      "a": "Go to Settings → Cellular → Add eSIM, then scan the QR code from your email and follow the prompts."
+    },
+    "usage": {
+      "q": "When does the eSIM start counting usage?",
+      "a": "The eSIM does not activate immediately after installation. It usually starts when you first connect to a local network."
+    },
+    "refund": {
+      "q": "Can I get a refund?",
+      "a": "Full refund available before activation (within 7 days). Once the QR code is scanned, refunds are not possible."
+    },
+    "topup": {
+      "q": "Can I top up when data runs out?",
+      "a": "Some plans support top-up/renewal. Check the top-up option on your order page."
+    },
+    "contact_us": "Still have questions?",
+    "contact_support": "Contact Support"
   },
   "product": {
     "buy": "Buy Now",
@@ -111,7 +146,35 @@
     "related": "Related Plans",
     "backToProducts": "Back to Products",
     "addedToCart": "Added ✓",
-    "buyingNow": "Processing…"
+    "buyingNow": "Processing…",
+    "added": "Added ✓",
+    "added_to_cart": "Added ✓",
+    "buy_now": "Buy Now",
+    "detail": {
+      "add_to_cart": "Add to Cart",
+      "buy_now": "Buy Now",
+      "description": "Plan Description",
+      "installation": "Installation Steps",
+      "coverage": "After arrival, open your phone and connect to local network",
+      "install": {
+        "step1": "Connect device to Wi-Fi",
+        "step2": "Settings → Cellular → Add eSIM",
+        "step3": "Scan QR code and follow prompts",
+        "step4": "Enable Data Roaming at destination"
+      },
+      "terms": "Terms of Use",
+      "terms_item1": "This eSIM cannot be used inside mainland China",
+      "terms_item2": "China-mainland iPhones do not support eSIM",
+      "terms_item3": "Non-refundable after activation",
+      "terms_item4": "Validity starts from first connection to local network",
+      "terms_item5": "Cannot be transferred to another device",
+      "warning": {
+        "china": "⚠️ Important: China Mainland iPhones NOT Compatible",
+        "china_desc": "China mainland iPhones use dual physical SIM slots and do NOT support eSIM.",
+        "china_note": "International versions (HK, US, JP, etc.) work fine.",
+        "intl": "This eSIM is for international roaming, not for long-term use in mainland China"
+      }
+    }
   },
   "warning": {
     "chinaPhone": "⚠️ Important: China Mainland iPhones NOT Compatible",
@@ -119,7 +182,10 @@
   },
   "cart": {
     "title": "Shopping Cart",
-    "empty": "Your cart is empty",
+    "empty": {
+      "title": "Your cart is empty",
+      "subtitle": "Haven't picked a plan yet? Go explore!"
+    },
     "emptyDesc": "Haven't picked a plan yet? Go explore!",
     "browse": "Browse Plans",
     "checkout": "Checkout",
@@ -128,15 +194,28 @@
     "remove": "Remove",
     "qty": "Qty",
     "items": "items",
-    "continue": "Continue Shopping"
+    "continue": "Continue Shopping",
+    "delete": "Delete"
   },
   "checkout": {
     "title": "Checkout",
     "summary": "Order Summary",
-    "email": "Receive Email",
+    "email": {
+      "label": "Email Address",
+      "hint": "eSIM QR code will be sent here. Please double-check."
+    },
     "emailPlaceholder": "For receiving eSIM activation code",
     "emailHint": "eSIM QR code will be sent here. Please double-check.",
-    "payment": "Payment Method",
+    "payment": {
+      "label": "Payment Method",
+      "card": "Credit Card",
+      "stripe": "Credit Card / Apple Pay / Google Pay",
+      "stripe_desc": "Securely processed by Stripe. Visa / Mastercard supported.",
+      "usdt": {
+        "label": "USDT (Crypto)",
+        "desc2": "TRC20 / ERC20 network, via CryptoPay"
+      }
+    },
     "stripe": "Credit Card / Apple Pay / Google Pay",
     "stripeDesc": "Securely processed by Stripe. Visa / Mastercard supported.",
     "usdt": "USDT (Crypto)",
@@ -145,7 +224,10 @@
     "agreePrefix": "I have read and agree to the",
     "agreeTerms": "Terms & Refund Policy",
     "agreeSuffix": ", and confirm my device supports eSIM",
-    "pay": "Pay Now",
+    "pay": {
+      "btn": "Pay Now",
+      "loading": "Processing…"
+    },
     "processing": "Processing…",
     "deliveryTitle": "📧 eSIM Delivery",
     "deliveryDesc": "After payment, your eSIM QR code is sent to your email instantly, usually within 1 minute.",
@@ -156,11 +238,32 @@
     "errorFailed": "Payment request failed. Please try again.",
     "contact": "Contact Email",
     "paymentMethod": "Payment Method",
-    "agree": "I have read and agree to the",
+    "agree": {
+      "text": "I have read and agree to the",
+      "terms": "Terms & Refund Policy",
+      "device": ", and confirm my device supports eSIM"
+    },
     "terms": "Terms of Service",
     "confirmDevice": ", and confirm my device supports eSIM",
     "confirmPay": "Pay Now",
-    "security": "🔒 Secure payment, encrypted data"
+    "security": "🔒 Secure payment, encrypted data",
+    "confirm_order": "Checkout",
+    "order_summary": "Order Summary",
+    "days_unit": "days",
+    "delivery": {
+      "title": "📧 eSIM Delivery",
+      "desc": "After payment, your eSIM QR code is sent to your email instantly, usually within 1 minute."
+    },
+    "error": {
+      "email": "Please enter a valid email address",
+      "terms": "Please agree to the terms first",
+      "server": "Server error. Please try again.",
+      "network": "Network error. Please check your connection and retry."
+    },
+    "warning": {
+      "title": "⚠️ Important Notice",
+      "desc": "This eSIM does not work inside mainland China."
+    }
   },
   "success": {
     "title": "Payment Successful! 🎉",
@@ -168,7 +271,14 @@
     "checkEmail": "Check your inbox (including spam folder)",
     "orderId": "Order ID",
     "backHome": "Back to Home",
-    "viewOrders": "View Orders"
+    "viewOrders": "View Orders",
+    "back_home": "Back to Home",
+    "view_orders": "View My Orders",
+    "order_id": "Order ID",
+    "email": {
+      "sent": "eSIM sent to your email",
+      "check": "Please check your inbox (including spam)"
+    }
   },
   "footer": {
     "tagline": "One-stop global eSIM shop. 150+ countries, USDT accepted, ready before you go.",
@@ -177,7 +287,15 @@
     "support": "24/7 Online Support",
     "terms": "Terms of Service",
     "privacy": "Privacy Policy",
-    "refund": "Refund Policy"
+    "refund": "Refund Policy",
+    "link": {
+      "products": "All Plans",
+      "countries": "Destinations",
+      "help": "Help Center",
+      "faq": "FAQ",
+      "orders": "My Orders"
+    },
+    "support_hours": "24/7 Online Support"
   },
   "common": {
     "loading": "Loading…",
@@ -189,13 +307,15 @@
     "plans": "plans",
     "noResults": "No results",
     "currency": "USD",
-    "usd": "USD"
+    "usd": "USD",
+    "copy": "Copy"
   },
   "lang": {
     "zh": "中",
     "en": "EN",
     "ja": "日",
-    "ko": "한"
+    "ko": "한",
+    "switch": "Switch Language"
   },
   "products": {
     "title": "All Plans",
@@ -214,7 +334,11 @@
     "clickToExpand": "Click to expand plans",
     "local": "Local",
     "regional": "Regional",
-    "global": "Global"
+    "global": "Global",
+    "type": {
+      "data_only": "Data Only",
+      "data_voice_sms": "Data + Voice + SMS"
+    }
   },
   "success.order_id": "Order ID",
   "success.view_orders": "View My Orders",
@@ -228,5 +352,161 @@
   "cart.continue_shopping": "Continue Shopping",
   "common.loading": "Loading...",
   "common.error": "Unknown",
-  "checkout.email": "Email Address"
+  "checkout.email": "Email Address",
+  "home": {
+    "hero": {
+      "title2": "Global eSIM, Ready Before You Go",
+      "subtitle2": "150+ Countries, Instant Activation, USDT Payment",
+      "badge": {
+        "countries": "🌍 150+ Countries",
+        "instant": "⚡ Instant Activation",
+        "usdt": "💳 USDT Payment"
+      },
+      "search_btn": "Search",
+      "search_placeholder2": "Search country, e.g. Japan, USA, Thailand…",
+      "quick": {
+        "jp": "🇯🇵 Japan",
+        "kr": "🇰🇷 Korea",
+        "th": "🇹🇭 Thailand",
+        "us": "🇺🇸 USA",
+        "gb": "🇬🇧 UK",
+        "sg": "🇸🇬 Singapore"
+      }
+    },
+    "how_it_works": {
+      "title": "3 Easy Steps",
+      "subtitle": "Set up before departure, connect on arrival",
+      "step1": {
+        "title": "Choose a Plan",
+        "desc": "Browse by country or plan type to find the right one"
+      },
+      "step2": {
+        "title": "Scan & Install",
+        "desc": "Get QR code by email after payment, scan to install"
+      },
+      "step3": {
+        "title": "Stay Connected",
+        "desc": "Enable data roaming at destination, enjoy instant internet"
+      },
+      "view_tutorial": "View Installation Tutorial",
+      "devices": "Compatible: iPhone XR/XS+ · iPad Pro/Air · Select Android flagships"
+    },
+    "testimonials": {
+      "title": "Traveler Reviews",
+      "subtitle": "Real feedback from real users",
+      "user1": {
+        "name": "Mr. Zhang",
+        "location": "Beijing → Japan",
+        "content": "Had internet the moment I landed. No SIM swap needed. Half the price of the airport. Will use again!"
+      },
+      "user2": {
+        "name": "Ms. Li",
+        "location": "Shanghai → Europe x15",
+        "content": "One plan for all of Europe. Stable signal, lightning-fast support. Highly recommend."
+      },
+      "user3": {
+        "name": "Mr. Wang",
+        "location": "Shenzhen → Thailand",
+        "content": "Third purchase! Always use SimRyoko when traveling abroad. Fast speed, great signal!"
+      },
+      "user4": {
+        "name": "Ms. Chen",
+        "location": "Guangzhou → Singapore",
+        "content": "Received QR code within a minute, super easy to install, great speed!"
+      },
+      "view_more": "View more reviews on Telegram"
+    },
+    "faq": {
+      "title": "FAQ",
+      "subtitle": "Find quick answers to common questions"
+    },
+    "popular": {
+      "title": "Popular Destinations",
+      "view_all": "View All",
+      "products": "plans"
+    },
+    "types": {
+      "title": "Choose Your Plan",
+      "subtitle": "Local, Regional or Global — we have you covered",
+      "local": "Local Plan",
+      "local_desc": "Single country, best value",
+      "regional": "Regional Plan",
+      "regional_desc": "Multiple countries, one card",
+      "global": "Global Plan",
+      "global_desc": "200+ countries, business travel",
+      "view_all": "View All"
+    },
+    "trust": {
+      "secure_payment": "Secure Payment",
+      "secure_payment_desc": "SSL encrypted, data protected",
+      "instant": "Instant Activation",
+      "instant_desc": "Receive within 1 minute",
+      "support": "24/7 Support",
+      "support_desc": "Telegram team always online",
+      "refund": "7-Day Refund",
+      "refund_desc": "Full refund before activation"
+    },
+    "payment": {
+      "title": "Flexible Payment Methods",
+      "subtitle": "Choose your preferred way to pay",
+      "card": "Credit Card",
+      "card_desc": "Visa / Mastercard secure payment",
+      "apple_pay_desc": "Fast payment with Face ID / Touch ID",
+      "google_pay_desc": "Fast payment with Google Pay",
+      "alipay": "USDT Crypto",
+      "alipay_desc": "TRC20 / ERC20 network payment",
+      "secure_note": "🔒 All transactions are SSL encrypted"
+    }
+  },
+  "error": {
+    "pageNotFound": {
+      "title": "Page Not Found",
+      "description": "Sorry, the page you are looking for does not exist",
+      "possibleReasons": "Possible reasons:",
+      "reason1": "The link has expired or been removed",
+      "reason2": "The URL may be mistyped",
+      "reason3": "The page has moved to a new address",
+      "goBack": "Go Back",
+      "goHome": "Go Home",
+      "needHelp": "Need help?"
+    },
+    "serverError": {
+      "title": "Server Error",
+      "description": "Sorry, the server encountered an issue. Please try again later.",
+      "whatHappened": "What happened?",
+      "explanation": "Our server is temporarily unable to handle your request. This may be due to:",
+      "reason1": "Server maintenance",
+      "reason2": "High traffic volume",
+      "reason3": "Technical issue",
+      "retry": "Retry",
+      "goHome": "Go Home",
+      "stillNeedHelp": "Still need help?",
+      "responseTime": "We typically respond within 24 hours"
+    }
+  },
+  "help": {
+    "title": "Help Center",
+    "contact": {
+      "title": "Contact Us"
+    }
+  },
+  "seo": {
+    "countries": {
+      "title": "Global eSIM Coverage | SimRyoko",
+      "desc": "Browse SimRyoko's global eSIM coverage — 150+ countries, instant activation."
+    }
+  },
+  "usage": {
+    "title": "Data Usage",
+    "total": "Total",
+    "used": "Used",
+    "remaining": "Remaining",
+    "percent": "Usage",
+    "days_left": "Days Left",
+    "loading": "Loading…",
+    "refresh": "Refresh",
+    "topup": "Top Up",
+    "low_data": "⚠️ Data running low",
+    "expiring_soon": "⚠️ Expiring soon"
+  }
 }
