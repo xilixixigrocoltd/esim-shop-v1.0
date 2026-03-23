@@ -876,5 +876,18 @@
   "usage.low_data": "데이터 부족",
   "usage.loading": "로딩 중...",
   "usage.refresh": "새로고침",
-  "usage.topup": "충전"
+  "usage.topup": "충전",
+  "payment": {
+    "usdt": {
+      "confirm_title": "USDT 결제 확인",
+      "confirm_desc": "다음 주소로 지정된 금액을 송금한 후 \"결제 완료\"를 클릭하세요",
+      "address": "USDT 주소",
+      "amount": "송금 금액",
+      "memo": "참고 (있는 경우)",
+      "copy_address": "주소 복사",
+      "copy_amount": "금액 복사",
+      "completed": "결제 완료됨",
+      "completed_desc": "송금 후 클릭하여 확인하고 eSIM을 수신하세요"
+    }
+  }
 }

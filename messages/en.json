@@ -876,5 +876,18 @@
   "usage.low_data": "Low Data",
   "usage.loading": "Loading...",
   "usage.refresh": "Refresh",
-  "usage.topup": "Top Up"
+  "usage.topup": "Top Up",
+  "payment": {
+    "usdt": {
+      "confirm_title": "Confirm USDT Payment",
+      "confirm_desc": "Please transfer the specified amount to the address below, then click \"Payment Completed\" to confirm",
+      "address": "USDT Address",
+      "amount": "Transfer Amount",
+      "memo": "Memo (if any)",
+      "copy_address": "Copy Address",
+      "copy_amount": "Copy Amount",
+      "completed": "Payment Completed",
+      "completed_desc": "Click after transfer to verify and receive your eSIM"
+    }
+  }
 }

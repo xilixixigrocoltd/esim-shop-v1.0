@@ -876,5 +876,18 @@
   "usage.low_data": "流量不足",
   "usage.loading": "加载中...",
   "usage.refresh": "刷新",
-  "usage.topup": "续费"
+  "usage.topup": "续费",
+  "payment": {
+    "usdt": {
+      "confirm_title": "确认 USDT 支付",
+      "confirm_desc": "请向以下地址转账指定金额，转账后点击“已完成支付”进行确认",
+      "address": "USDT 地址",
+      "amount": "转账金额",
+      "memo": "备注（如有）",
+      "copy_address": "复制地址",
+      "copy_amount": "复制金额",
+      "completed": "已完成支付",
+      "completed_desc": "转账完成后点击按钮，我们将核实到账并为您发货"
+    }
+  }
 }

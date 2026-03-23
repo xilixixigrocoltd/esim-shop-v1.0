@@ -876,5 +876,18 @@
   "usage.low_data": "データ残少",
   "usage.loading": "読み込み中...",
   "usage.refresh": "更新",
-  "usage.topup": "チャージ"
+  "usage.topup": "チャージ",
+  "payment": {
+    "usdt": {
+      "confirm_title": "USDT支払いを確認",
+      "confirm_desc": "以下のアドレスに指定金額を送金し、「支払い完了」ボタンをクリックしてください",
+      "address": "USDTアドレス",
+      "amount": "送金額",
+      "memo": "備考（あれば）",
+      "copy_address": "アドレスをコピー",
+      "copy_amount": "金額をコピー",
+      "completed": "支払い完了",
+      "completed_desc": "転送後にクリックして確認し、eSIMをお届けします"
+    }
+  }
 }

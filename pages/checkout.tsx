@@ -1,6 +1,7 @@
 import Head from 'next/head'
 import { useRouter } from 'next/router'
 import { useState, useEffect } from 'react'
+import { Modal } from '../components/ui/Modal'
 import { getFlagEmoji, formatData } from '../components/ProductCard'
 import { useI18n } from '../lib/i18n-context'
 import { Product } from '../lib/data'
@@ -20,6 +21,10 @@ export default function CheckoutPage() {
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
   const [copied, setCopied] = useState(false)
+  
+  // USDT 支付确认弹窗
+  const [showUsdtModal, setShowUsdtModal] = useState(false)
+  const [usdtInfo, setUsdtInfo] = useState({ address: '', amount: '' })
 
   useEffect(() => {
     setMounted(true)
@@ -46,14 +51,13 @@ export default function CheckoutPage() {
         if (data.url) window.location.href = data.url
         else throw new Error(t('checkout.errorFailed'))
       } else {
-        // USDT flow: notify admin and show address
-        try {
-          await fetch('/api/payment/usdt-notify', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ email, items: cart, amount: total.toFixed(2) }),
-          })
-        } catch (_) { /* fire-and-forget */ }
+        // USDT flow: show confirmation modal
+        const usdtAddress = 'TBuhpRpFPV1HkdfaPEdxsKgTE43jV911rL' // USDT 接收地址
+        setUSDTInfo({
+          address: usdtAddress,
+          amount: total.toFixed(2)
+        })
+        setShowUsdtModal(true)
         setLoading(false)
         return
       }
@@ -61,6 +65,21 @@ export default function CheckoutPage() {
       setError(e.message || t('checkout.errorFailed'))
     }
     setLoading(false)
+  }
+
+  // USDT 确认支付
+  const confirmUsdtPayment = async () => {
+    setShowUsdtModal(false)
+    try {
+      await fetch('/api/payment/usdt-notify', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, amount: usdtInfo.amount })
+      })
+      alert(t('payment.usdt.completed') + ' - ' + t('payment.usdt.completed_desc'))
+    } catch (err) {
+      console.error('USDT notify failed:', err)
+    }
   }
 
   function copyAddress() {
@@ -140,26 +159,11 @@ export default function CheckoutPage() {
                 {/* USDT */}
                 <label className={`flex items-start gap-4 p-4 rounded-xl border-2 cursor-pointer transition-colors ${payMethod === 'usdt' ? 'border-orange-400 bg-orange-50' : 'border-gray-100 hover:border-gray-200'}`}>
                   <input type="radio" name="pay" value="usdt" checked={payMethod === 'usdt'} onChange={() => setPayMethod('usdt')} className="mt-0.5 accent-orange-500" />
-                  <div className="flex-1 min-w-0">
+                  <div>
                     <div className="flex items-center gap-2 font-medium text-gray-900 text-sm">
                       <span>₮</span> {t('checkout.usdt')}
                     </div>
                     <div className="text-xs text-gray-400 mt-0.5">{t('checkout.usdtDesc')}</div>
-                    {payMethod === 'usdt' && (
-                      <div className="mt-3 p-3 bg-gray-50 rounded-xl">
-                        <p className="text-xs text-gray-500 mb-1.5">{t('checkout.usdtAddress')}</p>
-                        <div className="flex items-center gap-2">
-                          <code className="text-xs text-gray-700 break-all flex-1">{USDT_ADDRESS}</code>
-                          <button onClick={copyAddress}
-                            className="flex-shrink-0 bg-orange-500 text-white text-xs px-3 py-1.5 rounded-lg font-medium hover:bg-orange-600 transition-colors">
-                            {copied ? '✓' : t('common.copy') || 'Copy'}
-                          </button>
-                        </div>
-                        <p className="text-xs text-gray-400 mt-2">
-                          {total.toFixed(2)} USDT → {t('checkout.email')} {email || '…'}
-                        </p>
-                      </div>
-                    )}
                   </div>
                 </label>
               </div>
@@ -227,6 +231,67 @@ export default function CheckoutPage() {
           </div>
         </div>
       </div>
+
+      {/* USDT 支付确认弹窗 */}
+      <Modal isOpen={showUsdtModal} onClose={() => setShowUsdtModal(false)}>
+        <div className="bg-white rounded-xl p-6 max-w-md w-full">
+          <h2 className="text-xl font-bold text-gray-900 mb-4">{t('payment.usdt.confirm_title')}</h2>
+          <p className="text-gray-600 mb-6">{t('payment.usdt.confirm_desc')}</p>
+          
+          <div className="space-y-4">
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">{t('payment.usdt.address')}</label>
+              <div className="flex gap-2">
+                <input 
+                  type="text" 
+                  value={usdtInfo.address} 
+                  readOnly 
+                  className="flex-1 border border-gray-300 rounded-lg px-3 py-2 text-sm"
+                />
+                <button 
+                  onClick={() => navigator.clipboard.writeText(usdtInfo.address)}
+                  className="px-3 py-2 bg-gray-100 rounded-lg text-sm hover:bg-gray-200"
+                >
+                  {t('payment.usdt.copy_address')}
+                </button>
+              </div>
+            </div>
+            
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">{t('payment.usdt.amount')}</label>
+              <div className="flex gap-2">
+                <input 
+                  type="text" 
+                  value={usdtInfo.amount} 
+                  readOnly 
+                  className="flex-1 border border-gray-300 rounded-lg px-3 py-2 text-sm"
+                />
+                <button 
+                  onClick={() => navigator.clipboard.writeText(usdtInfo.amount)}
+                  className="px-3 py-2 bg-gray-100 rounded-lg text-sm hover:bg-gray-200"
+                >
+                  {t('payment.usdt.copy_amount')}
+                </button>
+              </div>
+            </div>
+          </div>
+          
+          <div className="mt-6 flex flex-col gap-3">
+            <button 
+              onClick={confirmUsdtPayment}
+              className="w-full bg-green-600 text-white py-3 rounded-lg font-medium hover:bg-green-700"
+            >
+              {t('payment.usdt.completed')}
+            </button>
+            <button 
+              onClick={() => setShowUsdtModal(false)}
+              className="w-full border border-gray-300 text-gray-700 py-3 rounded-lg font-medium hover:bg-gray-50"
+            >
+              {t('common.cancel')}
+            </button>
+          </div>
+        </div>
+      </Modal>
     </>
   )
 }
