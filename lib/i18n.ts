@@ -10,6 +10,7 @@ export const translations = {
     'nav.help': '帮助',
     'nav.cart': '购物车',
     'nav.blog': '博客',
+    'nav.orders': '我的订单',
     
     // 首页 Hero
     'home.hero.title': '全球 eSIM，即时连接',
@@ -402,6 +403,7 @@ export const translations = {
     'nav.help': 'Help',
     'nav.cart': 'Cart',
     'nav.blog': 'Blog',
+    'nav.orders': 'My Orders',
     
     // 首页 Hero
     'home.hero.title': 'Global eSIM, Instant Connection',
