@@ -195,7 +195,8 @@
     "qty": "Qty",
     "items": "items",
     "continue": "Continue Shopping",
-    "delete": "Delete"
+    "delete": "Delete",
+    "continue_shopping": "Continue Shopping"
   },
   "checkout": {
     "title": "Checkout",
@@ -308,7 +309,8 @@
     "noResults": "No results",
     "currency": "USD",
     "usd": "USD",
-    "copy": "Copy"
+    "copy": "Copy",
+    "cancel": "Cancel"
   },
   "lang": {
     "zh": "中",

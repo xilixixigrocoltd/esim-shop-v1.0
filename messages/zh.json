@@ -195,7 +195,8 @@
     "qty": "数量",
     "items": "件商品",
     "continue": "继续购物",
-    "delete": "删除"
+    "delete": "删除",
+    "continue_shopping": "继续购物"
   },
   "checkout": {
     "title": "确认订单",
@@ -308,7 +309,8 @@
     "noResults": "暂无结果",
     "currency": "美元",
     "usd": "USD",
-    "copy": "复制"
+    "copy": "复制",
+    "cancel": "取消"
   },
   "lang": {
     "zh": "中",
