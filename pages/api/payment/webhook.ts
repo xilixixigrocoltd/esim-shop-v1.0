@@ -69,14 +69,15 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         let order;
         if (b2bOrderId) {
           console.log('Using existing B2B order:', b2bOrderId);
-          // 这里需要实现 getOrder 方法，暂时跳过
           return res.status(200).json({ received: true, orderId: b2bOrderId });
         } else {
           // 创建 B2B 订单（支付成功后才创建！）
           const firstItem = items[0];
+          // items 中 qty/quantity 两种字段名都兼容
+          const qty = firstItem.qty || firstItem.quantity || 1;
           const orderPayload = {
             productId: firstItem.id || firstItem.productId,
-            quantity: firstItem.quantity || 1,
+            quantity: qty,
             customerEmail: email
           };
           
@@ -84,54 +85,83 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
           order = await b2bApi.createOrder(orderPayload);
         }
         
-        const orderId = order.orderNumber || `ORD-${Date.now()}`;
+        // 订单号：B2B API 返回 orderNumber 或 orderNo
+        const orderId = order.orderNumber || order.orderNo || `ORD-${Date.now()}`;
         console.log('B2B order created:', orderId);
         
         // 3. 发送确认邮件（包含 eSIM 信息）
-        if (order.esims && order.esims.length > 0) {
-          try {
-            const esim = order.esims[0];
-            const product = order.orderItems?.[0];
-            
-            await sendOrderConfirmation(email, {
-              orderId,
-              customerEmail: email,
-              items: [{
-                name: product?.productName || 'eSIM 套餐',
-                quantity: 1,
-                price: amount.toString(),
-                dataSize: product?.dataSize ? `${formatDataSize(product.dataSize)}` : undefined,
-                validity: product?.validDays ? `${product.validDays}天` : undefined,
-                countries: product?.countries?.map((c: any) => c.name) || [],
-              }],
-              totalAmount: amount.toString(),
-              paymentMethod: '信用卡',
-              esimData: {
-                iccid: esim.iccid,
-                qrCode: esim.qrCode || esim.activationCode || '',
-                activationCode: esim.activationCode || '',
-                dataAmount: product?.dataSize ? `${formatDataSize(product.dataSize)}` : 'N/A',
-                validityDays: product?.validDays || 0,
-              },
-            });
-            console.log('Confirmation email sent to:', email);
-          } catch (emailError) {
-            console.error('Failed to send confirmation email:', emailError);
-          }
+        // B2B API 实际返回结构：
+        //   order.esimIccid        - ICCID 字符串（快捷字段）
+        //   order.esimQrCode       - LPA 激活码字符串（快捷字段）
+        //   order.esimActivationCode - matching_id（快捷字段）
+        //   order.esimData.sims[]  - 完整 SIM 数组，含 qrCodeUrl（图片URL）、activationCode
+        //   order.product          - 关联产品信息（而非 order.orderItems[]）
+        const esimSims: any[] = order.esimData?.sims || [];
+        const esim = esimSims[0] || null;
+        const productInfo = items[0]; // 从 metadata 取产品信息（order.product 在 pending 时可能为 null）
+        
+        const esimDataPayload = (esim || order.esimIccid) ? {
+          iccid: esim?.iccid || order.esimIccid || '',
+          // qrCode 字段传图片 URL（用于邮件显示二维码图片）
+          qrCode: esim?.qrCodeUrl || '',
+          // activationCode 是 LPA matching_id，如 "HDFGO6T8VW7WM1QW"
+          activationCode: esim?.activationCode || order.esimActivationCode || '',
+          dataAmount: productInfo?.dataSize ? `${formatDataSize(productInfo.dataSize)}` : 'N/A',
+          validityDays: productInfo?.validDays || 0,
+          directAppleUrl: esim?.directAppleUrl || undefined,
+        } : undefined;
+        
+        // 无论是否有 eSIM（可能仍在 pending），都发送确认邮件
+        try {
+          await sendOrderConfirmation(email, {
+            orderId,
+            customerEmail: email,
+            items: [{
+              name: productInfo?.name || 'eSIM 套餐',
+              quantity: productInfo?.qty || 1,
+              price: amount.toString(),
+              dataSize: productInfo?.dataSize ? `${formatDataSize(productInfo.dataSize)}` : undefined,
+              validity: productInfo?.validDays ? `${productInfo.validDays}天` : undefined,
+              countries: productInfo?.countries?.map((c: any) => c.name || c.cn || c.en || c.code) || [],
+            }],
+            totalAmount: amount.toString(),
+            paymentMethod: '信用卡',
+            esimData: esimDataPayload,
+          });
+          console.log('Confirmation email sent to:', email);
+        } catch (emailError) {
+          console.error('Failed to send confirmation email:', emailError);
         }
         
-        // 4. 这里可以添加数据库记录、通知等
+        if (!esim && !order.esimIccid) {
+          console.warn('Order created but eSIM not yet delivered (pending):', orderId);
+        }
         
         return res.status(200).json({ 
           received: true, 
           orderId,
-          esimStatus: order.esims?.[0]?.status || 'pending'
+          esimStatus: order.deliveryStatus || 'pending'
         });
         
       } catch (orderError: any) {
         console.error('Failed to process order:', orderError);
         // 订单创建失败，但仍然返回成功给 Stripe（避免重复 webhook）
-        // 需要人工介入处理
+        // 发送告警邮件，人工介入处理
+        try {
+          await sendOrderConfirmation('simryokoesim@gmail.com', {
+            orderId: `ALERT-${session.id}`,
+            customerEmail: session.customer_email || session.metadata?.email || 'unknown',
+            items: [{ 
+              name: `⚠️ 订单处理失败，需人工介入\n客户: ${session.customer_email}\nStripe: ${session.id}\n错误: ${orderError.message}`, 
+              quantity: 1, 
+              price: session.metadata?.amount || '0' 
+            }],
+            totalAmount: session.metadata?.amount || '0',
+            paymentMethod: '信用卡',
+          });
+        } catch (_alertErr) {
+          console.error('Failed to send alert email:', _alertErr);
+        }
         return res.status(200).json({ 
           received: true, 
           error: 'Order processing failed, manual review needed'

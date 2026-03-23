@@ -26,12 +26,19 @@ function typeColor(type: string) {
 interface Props {
   product: Product
   compact?: boolean
+  isLowestPrice?: boolean
+  soldCount?: number
 }
 
-export default function ProductCard({ product, compact = false }: Props) {
+export default function ProductCard({ product, compact = false, isLowestPrice = false, soldCount }: Props) {
   const { t } = useI18n()
   const flags = product.countries.slice(0, 3).map(c => getFlagEmoji(c.code)).join(' ')
   const primaryName = product.countries[0]?.name || ''
+
+  // Data unit price: $X.XX/GB
+  const pricePerGb = product.dataSize > 0
+    ? `$${(product.price / (product.dataSize / 1024)).toFixed(2)}/GB`
+    : null
 
   function addToCart(e: React.MouseEvent) {
     e.preventDefault()
@@ -98,7 +105,10 @@ export default function ProductCard({ product, compact = false }: Props) {
               {t(`product.${product.type}`)}
             </span>
             {product.isHot && (
-              <span className="text-[10px] px-2 py-0.5 rounded-full font-medium bg-red-100 text-red-600">🔥 {t('product.hot')}</span>
+              <span className="text-[10px] px-2 py-0.5 rounded-full font-bold bg-red-500 text-white shadow-sm animate-pulse">🔥 热销</span>
+            )}
+            {isLowestPrice && (
+              <span className="text-[10px] px-2 py-0.5 rounded-full font-bold bg-green-500 text-white shadow-sm">💰 最低价</span>
             )}
           </div>
         </div>
@@ -120,15 +130,23 @@ export default function ProductCard({ product, compact = false }: Props) {
 
         {/* Price + CTA */}
         <div className="flex items-center justify-between mt-auto">
-          <div className="flex items-baseline gap-1">
-            <span className="text-2xl font-bold text-orange-500">${product.price}</span>
-            <span className="text-xs text-gray-400">USD</span>
+          <div>
+            <div className="flex items-baseline gap-1">
+              <span className="text-2xl font-bold text-orange-500">${product.price}</span>
+              <span className="text-xs text-gray-400">USD</span>
+            </div>
+            {pricePerGb && (
+              <div className="text-[11px] text-gray-400 mt-0.5">{pricePerGb}</div>
+            )}
           </div>
           <button onClick={addToCart}
             className="bg-orange-500 text-white px-4 py-2 rounded-xl text-sm font-semibold hover:bg-orange-600 transition-colors active:scale-95 min-h-[44px]">
             {t('product.addCart')}
           </button>
         </div>
+        {soldCount !== undefined && (
+          <div className="mt-2 text-[11px] text-orange-500 font-medium">🔥 本周已售出 {soldCount} 份</div>
+        )}
       </div>
     </Link>
   )

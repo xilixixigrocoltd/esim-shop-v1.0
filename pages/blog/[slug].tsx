@@ -1,6 +1,5 @@
 import { useState, useEffect } from "react";
 import { useRouter } from "next/router";
-import Layout from "@/components/ui/Layout";
 import SEO from "@/components/ui/SEO";
 
 interface BlogPost {
@@ -47,11 +46,9 @@ export default function BlogPostPage() {
 
   if (loading) {
     return (
-      <Layout>
-        <div className="min-h-screen flex items-center justify-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-orange-500"></div>
-        </div>
-      </Layout>
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-orange-500"></div>
+      </div>
     );
   }
 
@@ -60,7 +57,7 @@ export default function BlogPostPage() {
   }
 
   return (
-    <Layout>
+    <>
       <SEO
         title={`${post.title} - SimRyoko`}
         description={post.excerpt}
@@ -180,6 +177,6 @@ export default function BlogPostPage() {
           </div>
         </div>
       </article>
-    </Layout>
+    </>
   );
 }

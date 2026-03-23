@@ -48,7 +48,7 @@ export default function CartPage() {
         <h1 className="text-2xl font-bold text-gray-900 mb-8">{t('cart.title')}</h1>
 
         {cart.length === 0 ? (
-          <div className="text-center py-24">
+          <div className="text-center py-16">
             <div className="text-7xl mb-6">🛒</div>
             <h2 className="text-xl font-bold text-gray-900 mb-2">{t('cart.empty')}</h2>
             <p className="text-gray-400 mb-8">{t('cart.emptyDesc')}</p>
@@ -56,6 +56,25 @@ export default function CartPage() {
               className="inline-block bg-orange-500 text-white font-bold px-8 py-4 rounded-2xl hover:bg-orange-600 transition-colors">
               {t('cart.browse')}
             </Link>
+            {/* Hot destinations */}
+            <div className="mt-12 text-left max-w-lg mx-auto">
+              <h3 className="text-base font-bold text-gray-800 mb-4 text-center">🔥 热门套餐推荐</h3>
+              <div className="flex flex-wrap justify-center gap-3">
+                {[
+                  { label: '🇯🇵 日本 5GB', href: '/products?country=JP' },
+                  { label: '🇹🇭 泰国 10GB', href: '/products?country=TH' },
+                  { label: '🇰🇷 韩国 5GB', href: '/products?country=KR' },
+                  { label: '🇺🇸 美国 10GB', href: '/products?country=US' },
+                  { label: '🌏 亚洲通', href: '/products?type=regional' },
+                  { label: '🌍 全球套餐', href: '/products?tab=global' },
+                ].map(item => (
+                  <Link key={item.label} href={item.href}
+                    className="bg-white border border-gray-200 hover:border-orange-400 text-gray-700 hover:text-orange-500 px-4 py-2 rounded-xl text-sm font-medium transition-all hover:shadow-md">
+                    {item.label}
+                  </Link>
+                ))}
+              </div>
+            </div>
           </div>
         ) : (
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">

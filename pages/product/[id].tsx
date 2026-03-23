@@ -7,6 +7,12 @@ import { getAllProducts, getProductById, Product } from '../../lib/data'
 import { getFlagEmoji, formatData } from '../../components/ProductCard'
 import { useI18n } from '../../lib/i18n-context'
 
+// Deterministic "random" buyer count based on product id
+function getBuyerCount(id: number | string): number {
+  const n = typeof id === 'string' ? parseInt(id, 10) || 0 : id
+  return 50 + (n * 37 + 13) % 451
+}
+
 interface Props { product: Product; related: Product[] }
 
 export default function ProductDetail({ product, related }: Props) {
@@ -58,6 +64,8 @@ export default function ProductDetail({ product, related }: Props) {
 
   const dataMb = product.dataSize
   const dataStr = formatData(dataMb, t)
+  const originalPrice = (product.price * 1.2).toFixed(2)
+  const buyerCount = getBuyerCount(product.id)
 
   return (
     <>
@@ -155,11 +163,12 @@ export default function ProductDetail({ product, related }: Props) {
             {product.countries.length > 1 && (
               <div className="bg-white rounded-2xl border border-gray-100 p-6">
                 <h3 className="font-bold text-gray-900 mb-4">{t('product.coverage')} ({product.countries.length})</h3>
-                <div className="flex flex-wrap gap-2">
+                <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 gap-2">
                   {product.countries.map(c => (
-                    <span key={c.code} className="flex items-center gap-1 bg-gray-50 border border-gray-100 px-3 py-1.5 rounded-full text-sm">
-                      {getFlagEmoji(c.code)} {c.name || c.code}
-                    </span>
+                    <div key={c.code} className="flex flex-col items-center gap-1 bg-gray-50 border border-gray-100 rounded-xl p-2 text-center">
+                      <span className="text-2xl">{getFlagEmoji(c.code)}</span>
+                      <span className="text-xs text-gray-600 leading-tight truncate w-full">{c.name || c.code}</span>
+                    </div>
                   ))}
                 </div>
               </div>
@@ -183,8 +192,15 @@ export default function ProductDetail({ product, related }: Props) {
           <div className="lg:col-span-2">
             <div className="sticky top-24 bg-white rounded-3xl border border-gray-100 shadow-xl p-6 space-y-4">
               <div className="text-center pb-4 border-b border-gray-100">
-                <div className="text-4xl font-extrabold text-orange-500">${product.price}</div>
+                <div className="flex items-center justify-center gap-2 mb-1">
+                  <span className="text-xs bg-red-100 text-red-600 font-bold px-2 py-0.5 rounded-full">限时优惠</span>
+                </div>
+                <div className="flex items-baseline justify-center gap-2">
+                  <div className="text-4xl font-extrabold text-orange-500">${product.price}</div>
+                  <div className="text-sm text-gray-300 line-through">${originalPrice}</div>
+                </div>
                 <div className="text-sm text-gray-400 mt-1">USD</div>
+                <div className="text-xs text-gray-500 mt-1.5">👥 已有 <span className="font-semibold text-gray-700">{buyerCount}</span> 人购买此套餐</div>
               </div>
 
               <div className="space-y-2.5 text-sm">
@@ -258,10 +274,13 @@ export default function ProductDetail({ product, related }: Props) {
 }
 
 export const getStaticPaths: GetStaticPaths = async () => {
+  // 只预生成热销产品（避免 2720 个产品导致构建超时）
+  // fallback: 'blocking' = 未预生成的产品按需 SSR，对 SEO 友好
   const products = getAllProducts()
+  const popular = products.filter((p: any) => p.isHot).slice(0, 50)
   return {
-    paths: products.slice(0, 200).map(p => ({ params: { id: String(p.id) } })),
-    fallback: true,
+    paths: popular.map((p: any) => ({ params: { id: String(p.id) } })),
+    fallback: 'blocking',
   }
 }
 

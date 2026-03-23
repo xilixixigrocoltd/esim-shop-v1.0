@@ -117,7 +117,7 @@ export default function ProductsPage({ allProducts, countries }: Props) {
         <div className="sticky top-0 z-40 bg-white border-b border-gray-100 shadow-sm">
           <div className="max-w-5xl mx-auto px-4 py-3">
             {/* 搜索框 */}
-            <div className="relative mb-3">
+            <div className="relative mb-2">
               <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
               <input
                 value={search}
@@ -126,6 +126,32 @@ export default function ProductsPage({ allProducts, countries }: Props) {
                 className="w-full pl-10 pr-4 py-2.5 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-orange-400 text-sm"
               />
             </div>
+            {/* 热门搜索词 */}
+            {!search && (
+              <div className="flex flex-wrap gap-1.5 mb-2">
+                <span className="text-xs text-gray-400 self-center mr-1">热门：</span>
+                {[
+                  { label: '日本 🇯🇵', country: 'JP' },
+                  { label: '泰国 🇹🇭', country: 'TH' },
+                  { label: '韩国 🇰🇷', country: 'KR' },
+                  { label: '美国 🇺🇸', country: 'US' },
+                  { label: '欧洲 🇪🇺', type: 'regional', continent: 'europe' },
+                  { label: '全球 🌐', type: 'global' },
+                ].map(tag => (
+                  <button
+                    key={tag.label}
+                    onClick={() => {
+                      if (tag.type === 'global') { setTab('global'); setSelectedCountry(null); setSelectedContinent(null); setSearch('') }
+                      else if (tag.type === 'regional' && tag.continent) { setTab('regional'); setSelectedContinent(tag.continent); setSelectedCountry(null); setSearch('') }
+                      else if (tag.country) { setTab('popular'); setSelectedCountry(tag.country); setSelectedContinent(null); setSearch('') }
+                    }}
+                    className="text-xs bg-orange-50 text-orange-600 border border-orange-200 px-2.5 py-1 rounded-full hover:bg-orange-100 transition-colors font-medium"
+                  >
+                    {tag.label}
+                  </button>
+                ))}
+              </div>
+            )}
             {/* Tab */}
             <div className="flex gap-2 overflow-x-auto pb-0.5 scrollbar-hide">
               {tabs.map(t => (
@@ -144,14 +170,34 @@ export default function ProductsPage({ allProducts, countries }: Props) {
           {search.trim() && (
             <div>
               <p className="text-sm text-gray-500 mb-4">{locale === 'zh' ? `找到 ${displayProducts.length} 个结果` : `${displayProducts.length} results`}</p>
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-                {displayProducts.map(p => <ProductCard key={p.id} product={p} />)}
-              </div>
+              {(() => {
+                const minPrice = Math.min(...displayProducts.map(p => p.price))
+                return (
+                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                    {displayProducts.map(p => <ProductCard key={p.id} product={p} isLowestPrice={p.price === minPrice} />)}
+                  </div>
+                )
+              })()}
               {displayProducts.length === 0 && (
-                <div className="text-center py-16">
+                <div className="text-center py-12">
                   <div className="text-5xl mb-4">🔍</div>
                   <p className="text-gray-500 font-medium mb-2">{locale === 'zh' ? '没有找到相关套餐' : 'No plans found'}</p>
-                  <p className="text-gray-400 text-sm">{locale === 'zh' ? '试试其他关键词或浏览全部套餐' : 'Try different keywords or browse all plans'}</p>
+                  <p className="text-gray-400 text-sm mb-6">{locale === 'zh' ? '试试其他关键词或浏览全部套餐' : 'Try different keywords or browse all plans'}</p>
+                  <p className="text-sm font-semibold text-gray-600 mb-3">🌟 试试这些热门目的地</p>
+                  <div className="flex flex-wrap justify-center gap-2">
+                    {[
+                      { label: '日本 🇯🇵', country: 'JP' },
+                      { label: '泰国 🇹🇭', country: 'TH' },
+                      { label: '韩国 🇰🇷', country: 'KR' },
+                      { label: '美国 🇺🇸', country: 'US' },
+                      { label: '新加坡 🇸🇬', country: 'SG' },
+                    ].map(dest => (
+                      <button key={dest.country} onClick={() => { setSearch(''); setTab('popular'); setSelectedCountry(dest.country) }}
+                        className="bg-orange-50 text-orange-600 border border-orange-200 px-4 py-2 rounded-full text-sm font-medium hover:bg-orange-100 transition-colors">
+                        {dest.label}
+                      </button>
+                    ))}
+                  </div>
                 </div>
               )}
             </div>
@@ -188,9 +234,14 @@ export default function ProductsPage({ allProducts, countries }: Props) {
                     </h2>
                     <span className="text-sm text-gray-500">({displayProducts.length}{locale === 'zh' ? '款' : ' plans'})</span>
                   </div>
-                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-                    {displayProducts.map(p => <ProductCard key={p.id} product={p} />)}
-                  </div>
+                  {(() => {
+                    const minPrice = displayProducts.length > 0 ? Math.min(...displayProducts.map(p => p.price)) : Infinity
+                    return (
+                      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                        {displayProducts.map(p => <ProductCard key={p.id} product={p} isLowestPrice={p.price === minPrice} />)}
+                      </div>
+                    )
+                  })()}
                   {displayProducts.length === 0 && <div className="text-center py-12 text-gray-400">{locale === 'zh' ? '暂无套餐' : 'No plans'}</div>}
                 </>
               )}

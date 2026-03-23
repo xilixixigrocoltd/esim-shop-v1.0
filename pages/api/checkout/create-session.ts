@@ -36,6 +36,30 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       }
     })
 
+    // 构建 metadata items（Stripe 每个 value 限制 500 字符）
+    // 先尝试完整格式，超出则降级到精简格式
+    const itemsForMeta = items.map((item: any) => {
+      const p = item.product || item
+      return {
+        id: p.id,
+        name: p.name,
+        price: p.price,
+        dataSize: p.dataSize,
+        validDays: p.validDays,
+        qty: item.qty || item.quantity || 1,
+        countries: p.countries?.slice(0, 2)?.map((c: any) => ({
+          code: c.code,
+          name: c.name || c.cn || c.en,
+        })),
+      }
+    })
+    const fullItemsJson = JSON.stringify(itemsForMeta)
+    const slimItemsJson = JSON.stringify(items.map((item: any) => {
+      const p = item.product || item
+      return { id: p.id, qty: item.qty || item.quantity || 1 }
+    }))
+    const itemsMetadata = fullItemsJson.length <= 490 ? fullItemsJson : slimItemsJson.slice(0, 490)
+
     const session = await stripe.checkout.sessions.create({
       payment_method_types: ['card', 'alipay'],
       line_items: lineItems,
@@ -46,19 +70,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       metadata: {
         email,
         amount: total.toFixed(2),
-        // 存储产品信息供 webhook 使用（Stripe metadata 限制 500 字符/key）
-        items: JSON.stringify(items.map((item: any) => {
-          const p = item.product || item
-          return {
-            id: p.id,
-            name: p.name,
-            price: p.price,
-            dataSize: p.dataSize,
-            validDays: p.validDays,
-            qty: item.qty || 1,
-            countries: p.countries?.slice(0, 3),
-          }
-        })).slice(0, 490), // Stripe metadata value limit
+        items: itemsMetadata,
       },
     })
 

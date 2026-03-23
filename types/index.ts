@@ -54,19 +54,47 @@ export interface EsimData {
   lpa?: string;
 }
 
+// B2B API 返回的完整 SIM 卡数据（order.esimData.sims[]）
+export interface B2BSimData {
+  id: number;
+  iccid: string;
+  qrCode: string;        // LPA 激活码字符串，如 "LPA:1$wbg.prod.ondemandconnectivity.com$XXXXX"
+  qrCodeUrl: string;     // QR 码图片 URL（用于邮件展示）
+  activationCode: string; // matching_id，如 "HDFGO6T8VW7WM1QW"
+  directAppleUrl?: string; // iOS 直接安装链接
+  lpa?: string;
+  apnType?: string;
+  apnValue?: string;
+  isRoaming?: boolean;
+  createdAt?: string;
+  confirmationCode?: string | null;
+}
+
 export interface Order {
-  id: string;
+  id: number;
   orderNumber: string;
+  orderNo?: string;        // 冗余字段，同 orderNumber
   email?: string;
+  customerEmail?: string;
   items?: OrderItem[];
-  orderItems?: OrderItem[];  // B2B API 返回字段
-  totalAmount: number;
+  orderItems?: OrderItem[]; // 兼容旧代码
+  product?: any;            // B2B API 返回的关联产品（单个，非数组）
+  totalAmount: string | number;
   status: 'pending' | 'paid' | 'delivered' | 'refunded';
+  deliveryStatus?: 'pending' | 'delivered' | 'failed';
   paymentMethod?: 'stripe' | 'usdt';
   paymentTime?: string;
   createdAt: string;
-  esimData?: EsimData[];
-  esims?: any[];  // B2B API 返回字段
+  // 快捷 eSIM 字段（B2B API 直接在订单根级返回）
+  esimIccid?: string;
+  esimQrCode?: string;      // LPA 激活码字符串
+  esimActivationCode?: string; // matching_id
+  // 完整 eSIM 数据（包含多个 SIM 卡）
+  esimData?: {
+    sims: B2BSimData[];
+    totalCount: number;
+  };
+  esims?: any[];  // 兼容旧代码
 }
 
 export interface ApiResponse<T> {

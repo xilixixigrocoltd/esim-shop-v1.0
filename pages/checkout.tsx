@@ -87,6 +87,10 @@ export default function CheckoutPage() {
                 placeholder={t('checkout.emailPlaceholder')}
                 className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-orange-400 focus:border-transparent text-sm"
               />
+              <div className="mt-2 flex items-center gap-2 bg-orange-50 border border-orange-200 rounded-lg px-3 py-2">
+                <span className="text-orange-500 text-sm flex-shrink-0">📧</span>
+                <p className="text-xs text-orange-700 font-medium">eSIM 将发到此邮箱，请务必填写正确！</p>
+              </div>
               <p className="text-xs text-gray-400 mt-2">{t('checkout.emailHint')}</p>
             </div>
 
@@ -94,6 +98,15 @@ export default function CheckoutPage() {
             <div className="bg-blue-50 border border-blue-100 rounded-2xl p-5">
               <p className="font-semibold text-blue-800 mb-1">{t('checkout.deliveryTitle')}</p>
               <p className="text-blue-700 text-sm">{t('checkout.deliveryDesc')}</p>
+            </div>
+
+            {/* Refund guarantee */}
+            <div className="bg-green-50 border border-green-200 rounded-2xl p-5 flex items-start gap-3">
+              <span className="text-2xl flex-shrink-0">🛡️</span>
+              <div>
+                <p className="font-semibold text-green-800 mb-1">7天无理由退款保障</p>
+                <p className="text-green-700 text-sm">购买后7天内，如因产品质量问题无法正常使用，可申请全额退款。</p>
+              </div>
             </div>
 
             {/* China warning */}
@@ -157,6 +170,15 @@ export default function CheckoutPage() {
 
             {error && <div className="bg-red-50 border border-red-200 rounded-xl p-4 text-sm text-red-700">{error}</div>}
 
+            {/* Mobile order summary (visible on small screens) */}
+            <div className="lg:hidden bg-orange-50 border border-orange-200 rounded-2xl p-4">
+              <div className="flex justify-between items-center">
+                <span className="font-semibold text-gray-900 text-sm">订单总计</span>
+                <span className="text-2xl font-extrabold text-orange-500">${total.toFixed(2)}</span>
+              </div>
+              <div className="text-xs text-gray-500 mt-1">{cart.length} 件商品</div>
+            </div>
+
             <button onClick={handlePay} disabled={loading}
               className="w-full bg-orange-500 hover:bg-orange-600 text-white font-bold py-4 rounded-2xl text-lg transition-colors shadow-lg disabled:opacity-60 disabled:cursor-not-allowed min-h-[60px] flex items-center justify-center gap-2">
               {loading
@@ -164,7 +186,14 @@ export default function CheckoutPage() {
                 : payMethod === 'usdt' ? `${t('checkout.pay')} (USDT)` : t('checkout.pay')
               }
             </button>
-            <p className="text-center text-xs text-gray-400">{t('checkout.security')}</p>
+            <div className="flex items-center justify-center gap-3 flex-wrap">
+              <p className="text-center text-xs text-gray-400">{t('checkout.security')}</p>
+              <div className="flex items-center gap-2">
+                <span className="text-xs text-gray-400">🔒 SSL加密</span>
+                <span className="text-xs text-gray-400">💳 Stripe</span>
+                <span className="text-xs text-gray-400">🛡️ 7天退款</span>
+              </div>
+            </div>
           </div>
 
           {/* Right: order summary */}
