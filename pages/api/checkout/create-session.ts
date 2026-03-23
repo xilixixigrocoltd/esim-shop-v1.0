@@ -13,17 +13,24 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     const Stripe = (await import('stripe')).default
     const stripe = new Stripe(stripeKey)
 
-    const lineItems = items.map((item: any) => ({
-      price_data: {
-        currency: 'usd',
-        product_data: {
-          name: item.product?.name || 'eSIM',
-          description: `${item.product?.validDays || 0} days · ${item.product?.dataSize ? item.product.dataSize >= 1024 ? `${item.product.dataSize/1024}GB` : `${item.product.dataSize}MB` : 'Unlimited'}`,
+    const lineItems = items.map((item: any) => {
+      // 兼容两种格式: { product: {...}, qty } 或 { id, name, price, qty, ... }
+      const p = item.product || item
+      const price = parseFloat(p.price || p.amount || 0)
+      const dataSize = p.dataSize || 0
+      const dataStr = dataSize === 0 ? 'Unlimited' : dataSize >= 1024 ? `${dataSize/1024}GB` : `${dataSize}MB`
+      return {
+        price_data: {
+          currency: 'usd',
+          product_data: {
+            name: p.name || 'eSIM',
+            description: `${p.validDays || 0} days · ${dataStr}`,
+          },
+          unit_amount: Math.round(price * 100),
         },
-        unit_amount: Math.round((item.product?.price || 0) * 100),
-      },
-      quantity: item.qty || 1,
-    }))
+        quantity: item.qty || item.quantity || 1,
+      }
+    })
 
     const session = await stripe.checkout.sessions.create({
       payment_method_types: ['card', 'alipay'],
