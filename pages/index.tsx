@@ -297,6 +297,36 @@ export default function Home({ hotProducts, countries }: Props) {
         </div>
       </section>
 
+      {/* ── COUNTRY LANDING PAGES ── */}
+      <section className="max-w-7xl mx-auto px-4 sm:px-6 py-14">
+        <div className="text-center mb-8">
+          <h2 className="text-2xl font-bold text-gray-900 mb-2">热门目的地 eSIM 套餐</h2>
+          <p className="text-gray-500 text-sm">覆盖全球主要旅游目的地，落地即用</p>
+        </div>
+        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-3">
+          {[
+            { slug: 'japan-esim', name: '日本', flag: '🇯🇵' },
+            { slug: 'korea-esim', name: '韩国', flag: '🇰🇷' },
+            { slug: 'thailand-esim', name: '泰国', flag: '🇹🇭' },
+            { slug: 'singapore-esim', name: '新加坡', flag: '🇸🇬' },
+            { slug: 'usa-esim', name: '美国', flag: '🇺🇸' },
+            { slug: 'uk-esim', name: '英国', flag: '🇬🇧' },
+            { slug: 'europe-esim', name: '欧洲', flag: '🇪🇺' },
+            { slug: 'australia-esim', name: '澳大利亚', flag: '🇦🇺' },
+            { slug: 'hong-kong-esim', name: '香港', flag: '🇭🇰' },
+            { slug: 'taiwan-esim', name: '台湾', flag: '🇹🇼' },
+            { slug: 'vietnam-esim', name: '越南', flag: '🇻🇳' },
+            { slug: 'malaysia-esim', name: '马来西亚', flag: '🇲🇾' },
+          ].map(dest => (
+            <Link key={dest.slug} href={`/${dest.slug}`}
+              className="flex flex-col items-center gap-2 bg-white border border-gray-100 hover:border-orange-300 hover:shadow-md rounded-2xl p-4 text-center transition-all group">
+              <span className="text-3xl group-hover:scale-110 transition-transform">{dest.flag}</span>
+              <span className="text-xs font-semibold text-gray-900">{dest.name} eSIM</span>
+            </Link>
+          ))}
+        </div>
+      </section>
+
       {/* ── FAQ ── */}
       <section className="bg-gray-50">
         <div className="max-w-3xl mx-auto px-4 sm:px-6 py-16">

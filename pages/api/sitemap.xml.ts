@@ -11,6 +11,27 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
     { url: `${BASE}/countries`, priority: '0.9', changefreq: 'weekly' },
     { url: `${BASE}/help`, priority: '0.8', changefreq: 'monthly' },
     { url: `${BASE}/blog`, priority: '0.8', changefreq: 'weekly' },
+    // Country landing pages
+    { url: `${BASE}/japan-esim`, priority: '0.9', changefreq: 'weekly' },
+    { url: `${BASE}/korea-esim`, priority: '0.9', changefreq: 'weekly' },
+    { url: `${BASE}/thailand-esim`, priority: '0.9', changefreq: 'weekly' },
+    { url: `${BASE}/singapore-esim`, priority: '0.9', changefreq: 'weekly' },
+    { url: `${BASE}/usa-esim`, priority: '0.9', changefreq: 'weekly' },
+    { url: `${BASE}/uk-esim`, priority: '0.9', changefreq: 'weekly' },
+    { url: `${BASE}/europe-esim`, priority: '0.9', changefreq: 'weekly' },
+    { url: `${BASE}/australia-esim`, priority: '0.9', changefreq: 'weekly' },
+    { url: `${BASE}/hong-kong-esim`, priority: '0.9', changefreq: 'weekly' },
+    { url: `${BASE}/taiwan-esim`, priority: '0.9', changefreq: 'weekly' },
+    { url: `${BASE}/vietnam-esim`, priority: '0.9', changefreq: 'weekly' },
+    { url: `${BASE}/malaysia-esim`, priority: '0.9', changefreq: 'weekly' },
+    // Blog posts
+    { url: `${BASE}/blog/what-is-esim`, priority: '0.8', changefreq: 'monthly' },
+    { url: `${BASE}/blog/esim-vs-sim-card`, priority: '0.8', changefreq: 'monthly' },
+    { url: `${BASE}/blog/how-to-use-esim`, priority: '0.8', changefreq: 'monthly' },
+    { url: `${BASE}/blog/best-esim-japan-2026`, priority: '0.8', changefreq: 'monthly' },
+    { url: `${BASE}/blog/japan`, priority: '0.8', changefreq: 'monthly' },
+    { url: `${BASE}/blog/korea`, priority: '0.8', changefreq: 'monthly' },
+    { url: `${BASE}/blog/europe`, priority: '0.8', changefreq: 'monthly' },
   ]
 
   const products = getAllProducts()
