@@ -3,6 +3,72 @@ import Link from 'next/link'
 import { useRouter } from 'next/router'
 import { useI18n, LOCALES, LOCALE_LABELS, Locale } from '../lib/i18n-context'
 
+// Cookie Consent Banner
+function CookieConsent() {
+  const [visible, setVisible] = useState(false)
+  useEffect(() => {
+    if (typeof window !== 'undefined' && !localStorage.getItem('cookie_consent')) {
+      setVisible(true)
+    }
+  }, [])
+  if (!visible) return null
+  return (
+    <div style={{
+      position: 'fixed', bottom: 0, left: 0, right: 0, zIndex: 9999,
+      background: 'rgba(15, 23, 42, 0.97)',
+      borderTop: '1px solid rgba(255,255,255,0.1)',
+      backdropFilter: 'blur(12px)',
+      padding: '16px 20px',
+      display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+      flexWrap: 'wrap', gap: '12px',
+    }}>
+      <p style={{ margin: 0, color: 'rgba(255,255,255,0.75)', fontSize: '13px', lineHeight: 1.6, flex: 1, minWidth: '240px' }}>
+        我们使用 Cookie 改善体验。继续使用即表示同意我们的{' '}
+        <a href="/privacy" style={{ color: '#60a5fa', textDecoration: 'underline' }}>隐私政策</a>
+        {' '}和{' '}
+        <a href="/terms" style={{ color: '#60a5fa', textDecoration: 'underline' }}>服务条款</a>
+      </p>
+      <button
+        onClick={() => { localStorage.setItem('cookie_consent', '1'); setVisible(false) }}
+        style={{
+          background: 'linear-gradient(135deg, #f97316, #ea580c)',
+          border: 'none', borderRadius: '8px', color: '#fff',
+          fontSize: '13px', fontWeight: 600, padding: '9px 20px', cursor: 'pointer',
+          whiteSpace: 'nowrap',
+        }}
+      >
+        同意并继续
+      </button>
+    </div>
+  )
+}
+
+// Live Chat Floating Button
+function ChatButton() {
+  return (
+    <a
+      href="https://t.me/Esim_kefu_bot"
+      target="_blank"
+      rel="noopener noreferrer"
+      style={{
+        position: 'fixed', bottom: '80px', right: '20px', zIndex: 9998,
+        background: 'linear-gradient(135deg, #0088cc, #0066aa)',
+        borderRadius: '50px',
+        color: '#fff', fontSize: '13px', fontWeight: 600,
+        padding: '10px 16px',
+        display: 'flex', alignItems: 'center', gap: '6px',
+        boxShadow: '0 4px 20px rgba(0,136,204,0.5)',
+        textDecoration: 'none',
+        transition: 'transform 0.2s',
+      }}
+      onMouseEnter={e => (e.currentTarget.style.transform = 'scale(1.06)')}
+      onMouseLeave={e => (e.currentTarget.style.transform = 'scale(1)')}
+    >
+      💬 <span>联系客服</span>
+    </a>
+  )
+}
+
 function CartBadge() {
   const [count, setCount] = useState(0)
   useEffect(() => {
@@ -144,6 +210,9 @@ export default function Layout({ children }: { children: React.ReactNode }) {
       {langOpen && <div className="fixed inset-0 z-40" onClick={() => setLangOpen(false)} />}
 
       <main className="flex-1">{children}</main>
+
+      <ChatButton />
+      <CookieConsent />
 
       {/* Footer */}
       <footer className="bg-[#1e3a5f] text-gray-300">
