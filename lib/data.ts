@@ -4,6 +4,7 @@ import path from 'path'
 export type Product = {
   id: string | number
   name: string
+  nameEn?: string
   type: string
   countries: { code: string; name: string }[]
   dataSize: number
@@ -88,9 +89,18 @@ function loadData() {
 }
 
 function normalizeProduct(p: any): Product {
+  // Extract operator name from nameEn (e.g. "Moshi Moshi - 1 GB - 7 days" → "Moshi Moshi")
+  let operatorName: string | undefined
+  if (p.nameEn && typeof p.nameEn === 'string') {
+    const parts = p.nameEn.split(' - ')
+    if (parts.length >= 2) {
+      operatorName = parts[0].trim()
+    }
+  }
   return {
     id: p.id,
     name: p.name,
+    nameEn: operatorName,
     type: p.type,
     countries: (p.countries || []).map((c: any) => ({ code: c.code, name: getCountryName(c.code) })),
     dataSize: p.dataSize ?? 0,

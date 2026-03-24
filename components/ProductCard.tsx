@@ -116,6 +116,14 @@ export default function ProductCard({ product, compact = false, isLowestPrice = 
         {/* Name */}
         <h3 className="font-semibold text-gray-900 text-sm leading-snug mb-4 line-clamp-2 flex-1">{product.name}</h3>
 
+        {/* Operator name */}
+        {product.nameEn && (
+          <div className="flex items-center gap-1 mb-3">
+            <span className="text-[11px] text-gray-400">📡</span>
+            <span className="text-[11px] text-gray-500 font-medium truncate">{product.nameEn}</span>
+          </div>
+        )}
+
         {/* Stats */}
         <div className="grid grid-cols-2 gap-2 mb-4">
           <div className="bg-gray-50 rounded-xl p-2.5 text-center">

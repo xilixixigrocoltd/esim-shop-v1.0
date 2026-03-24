@@ -122,6 +122,12 @@ export default function ProductDetail({ product, related }: Props) {
                 )}
               </div>
               <h1 className="text-xl font-bold leading-snug mb-4">{product.name}</h1>
+              {product.nameEn && (
+                <div className="flex items-center gap-1.5 mb-3 text-blue-300 text-sm">
+                  <span>📡</span>
+                  <span className="font-medium">{product.nameEn}</span>
+                </div>
+              )}
               <div className="grid grid-cols-3 gap-3">
                 {[
                   { label: t('product.data'), val: dataStr },
