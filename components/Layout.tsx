@@ -184,7 +184,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
             <div className="flex gap-4">
               <Link href="/terms" className="hover:text-gray-300 transition-colors">{t('footer.terms')}</Link>
               <Link href="/privacy" className="hover:text-gray-300 transition-colors">{t('footer.privacy')}</Link>
-              <Link href="/help#refund" className="hover:text-gray-300 transition-colors">{t('footer.refund')}</Link>
+              <Link href="/refund" className="hover:text-gray-300 transition-colors">{t('footer.refund')}</Link>
             </div>
           </div>
         </div>
