@@ -47,7 +47,7 @@ function CookieConsent() {
 function ChatButton() {
   return (
     <a
-      href="https://t.me/Esim_kefu_bot"
+      href="https://t.me/Simryokoesimbot"
       target="_blank"
       rel="noopener noreferrer"
       style={{
