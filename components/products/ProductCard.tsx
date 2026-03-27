@@ -21,6 +21,39 @@ function getPlanType(product: Product, t: any): { type: string; icon: any; color
   }
 }
 
+function translateProductName(name: string): string {
+  if (!name) return 'eSIM Plan'
+  const hasChinese = /[\u4e00-\u9fff]/.test(name)
+  if (!hasChinese) return name
+  const regionMap: Record<string, string> = {
+    '全球通用': 'Global',
+    '全球': 'Global',
+    '亚洲': 'Asia',
+    '东南亚': 'Southeast Asia',
+    '欧洲': 'Europe',
+    '美洲': 'Americas',
+    '北美': 'North America',
+    '中东': 'Middle East',
+    '非洲': 'Africa',
+    '大洋洲': 'Oceania',
+    '覆盖': 'Coverage',
+    '国家': 'Countries',
+    '地区': 'Regions',
+    '本地': 'Local',
+    '区域': 'Regional',
+    '无限流量': 'Unlimited Data',
+    '日': 'Day',
+    '天': 'Day',
+    '月': 'Month',
+  }
+  let translated = name
+  for (const [cn, en] of Object.entries(regionMap)) {
+    translated = translated.replace(new RegExp(cn, 'g'), en)
+  }
+  translated = translated.replace(/[\u4e00-\u9fff]+/g, ' ').replace(/\s+/g, ' ').trim()
+  return translated || 'eSIM Plan'
+}
+
 export default function ProductCard({ product }: ProductCardProps) {
   const { t } = useI18n();
   const planType = getPlanType(product, t);
@@ -40,7 +73,7 @@ export default function ProductCard({ product }: ProductCardProps) {
             )}
           </div>
           {product.isHot && (
-            <span className="px-2 py-1 bg-red-500 text-white text-xs font-medium rounded-full">热销</span>
+            <span className="px-2 py-1 bg-red-500 text-white text-xs font-medium rounded-full">Hot</span>
           )}
         </div>
 
@@ -52,7 +85,7 @@ export default function ProductCard({ product }: ProductCardProps) {
 
         {/* 产品名称 */}
         <h3 className="font-semibold text-gray-900 mb-3 line-clamp-2 group-hover:text-orange-600 transition-colors min-h-[2.5rem]">
-          {product.name}
+          {translateProductName(product.name)}
         </h3>
 
         {/* 产品详情 */}
@@ -63,7 +96,7 @@ export default function ProductCard({ product }: ProductCardProps) {
           </div>
           <div className="flex items-center gap-2">
             <Clock className="w-4 h-4 text-orange-500" />
-            <span>{product.validDays + ' 天'}</span>
+            <span>{product.validDays + ' days'}</span>
           </div>
           {product.type !== 'local' && (
             <div className="flex items-center gap-2">

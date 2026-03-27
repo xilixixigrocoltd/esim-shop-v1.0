@@ -12,6 +12,25 @@ interface ProductDetailProps {
   product: Product;
 }
 
+function translateProductName(name: string): string {
+  if (!name) return 'eSIM Plan'
+  const hasChinese = /[\u4e00-\u9fff]/.test(name)
+  if (!hasChinese) return name
+  const regionMap: Record<string, string> = {
+    '全球通用': 'Global', '全球': 'Global', '亚洲': 'Asia', '东南亚': 'Southeast Asia',
+    '欧洲': 'Europe', '美洲': 'Americas', '北美': 'North America', '中东': 'Middle East',
+    '非洲': 'Africa', '大洋洲': 'Oceania', '覆盖': 'Coverage', '国家': 'Countries',
+    '地区': 'Regions', '本地': 'Local', '区域': 'Regional', '无限流量': 'Unlimited Data',
+    '日': 'Day', '天': 'Day', '月': 'Month',
+  }
+  let translated = name
+  for (const [cn, en] of Object.entries(regionMap)) {
+    translated = translated.replace(new RegExp(cn, 'g'), en)
+  }
+  translated = translated.replace(/[\u4e00-\u9fff]+/g, ' ').replace(/\s+/g, ' ').trim()
+  return translated || 'eSIM Plan'
+}
+
 export default function ProductDetail({ product }: ProductDetailProps) {
   const router = useRouter();
   const { t } = useI18n();
@@ -49,8 +68,8 @@ export default function ProductDetail({ product }: ProductDetailProps) {
   const structuredData = {
     "@context": "https://schema.org",
     "@type": "Product",
-    "name": product.name,
-    "description": `${product.name} - ${formatDataSize(product.dataSize)} data, ${product.validDays} days`,
+    "name": translateProductName(product.name),
+    "description": `${translateProductName(product.name)} - ${formatDataSize(product.dataSize)} data, ${product.validDays} days`,
     "image": product.imageUrl,
     "brand": {
       "@type": "Brand",
@@ -100,7 +119,7 @@ export default function ProductDetail({ product }: ProductDetailProps) {
             ))}
           </div>
 
-          <h1 className="text-2xl md:text-3xl font-bold text-gray-900 mb-4">{product.name}</h1>
+          <h1 className="text-2xl md:text-3xl font-bold text-gray-900 mb-4">{translateProductName(product.name)}</h1>
 
           {/* 套餐类型标签 */}
           <div className={`inline-flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium mb-4 border ${planType.color}`}>

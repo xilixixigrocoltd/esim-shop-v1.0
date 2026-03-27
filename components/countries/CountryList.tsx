@@ -19,11 +19,11 @@ interface CountryListProps {
 
 // Map region ids to continent labels with emoji
 const CONTINENT_LABELS: Record<string, string> = {
-  asia: '🌏 亚洲',
-  europe: '🌍 欧洲',
-  americas: '🌎 美洲',
-  oceania: '🌊 大洋洲',
-  mea: '🕌 中东 & 非洲',
+  asia: '🌏 Asia',
+  europe: '🌍 Europe',
+  americas: '🌎 Americas',
+  oceania: '🌊 Oceania',
+  mea: '🕌 Middle East & Africa',
 };
 
 export default function CountryList({ initialSearch = '' }: CountryListProps) {
@@ -96,8 +96,8 @@ export default function CountryList({ initialSearch = '' }: CountryListProps) {
       <div className="max-w-6xl mx-auto px-4">
         {/* Header */}
         <div className="text-center mb-8">
-          <h1 className="text-3xl font-bold text-gray-900 mb-1">全球 eSIM 覆盖</h1>
-          <p className="text-gray-500">{countries.length} 个国家和地区，随时出发</p>
+          <h1 className="text-3xl font-bold text-gray-900 mb-1">Global eSIM Coverage</h1>
+          <p className="text-gray-500">{countries.length} countries and regions, ready to go</p>
         </div>
 
         {/* Search */}
@@ -108,7 +108,7 @@ export default function CountryList({ initialSearch = '' }: CountryListProps) {
               type="text"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              placeholder="搜索国家名称或代码…"
+              placeholder="Search country name or code…"
               className="w-full pl-12 pr-4 py-3 bg-white border border-gray-200 rounded-2xl shadow-sm focus:ring-2 focus:ring-orange-400 focus:border-transparent outline-none"
             />
           </div>
@@ -162,9 +162,9 @@ function CountryCard({ country }: { country: CountryWithProducts }) {
     >
       <span className="text-4xl mb-2 block">{getCountryFlag(country.code)}</span>
       <h3 className="font-semibold text-gray-800 text-sm leading-tight group-hover:text-orange-500 transition-colors">
-        {country.name}
+        {country.nameEn || country.name}
       </h3>
-      <p className="text-xs text-gray-400 mt-1">{country.productCount} 款套餐</p>
+      <p className="text-xs text-gray-400 mt-1">{country.productCount} plans</p>
     </Link>
   );
 }

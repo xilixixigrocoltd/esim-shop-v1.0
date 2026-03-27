@@ -129,14 +129,14 @@ export default function ProductsPage({ allProducts, countries }: Props) {
             {/* 热门搜索词 */}
             {!search && (
               <div className="flex flex-wrap gap-1.5 mb-2">
-                <span className="text-xs text-gray-400 self-center mr-1">热门：</span>
+                <span className="text-xs text-gray-400 self-center mr-1">Popular:</span>
                 {[
-                  { label: '日本 🇯🇵', country: 'JP' },
-                  { label: '泰国 🇹🇭', country: 'TH' },
-                  { label: '韩国 🇰🇷', country: 'KR' },
-                  { label: '美国 🇺🇸', country: 'US' },
-                  { label: '欧洲 🇪🇺', type: 'regional', continent: 'europe' },
-                  { label: '全球 🌐', type: 'global' },
+                  { label: 'Japan 🇯🇵', country: 'JP' },
+                  { label: 'Thailand 🇹🇭', country: 'TH' },
+                  { label: 'Korea 🇰🇷', country: 'KR' },
+                  { label: 'USA 🇺🇸', country: 'US' },
+                  { label: 'Europe 🇪🇺', type: 'regional', continent: 'europe' },
+                  { label: 'Global 🌐', type: 'global' },
                 ].map(tag => (
                   <button
                     key={tag.label}
@@ -183,14 +183,14 @@ export default function ProductsPage({ allProducts, countries }: Props) {
                   <div className="text-5xl mb-4">🔍</div>
                   <p className="text-gray-500 font-medium mb-2">{locale === 'zh' ? '没有找到相关套餐' : 'No plans found'}</p>
                   <p className="text-gray-400 text-sm mb-6">{locale === 'zh' ? '试试其他关键词或浏览全部套餐' : 'Try different keywords or browse all plans'}</p>
-                  <p className="text-sm font-semibold text-gray-600 mb-3">🌟 试试这些热门目的地</p>
+                  <p className="text-sm font-semibold text-gray-600 mb-3">🌟 Try these popular destinations</p>
                   <div className="flex flex-wrap justify-center gap-2">
                     {[
-                      { label: '日本 🇯🇵', country: 'JP' },
-                      { label: '泰国 🇹🇭', country: 'TH' },
-                      { label: '韩国 🇰🇷', country: 'KR' },
-                      { label: '美国 🇺🇸', country: 'US' },
-                      { label: '新加坡 🇸🇬', country: 'SG' },
+                      { label: 'Japan 🇯🇵', country: 'JP' },
+                      { label: 'Thailand 🇹🇭', country: 'TH' },
+                      { label: 'Korea 🇰🇷', country: 'KR' },
+                      { label: 'USA 🇺🇸', country: 'US' },
+                      { label: 'Singapore 🇸🇬', country: 'SG' },
                     ].map(dest => (
                       <button key={dest.country} onClick={() => { setSearch(''); setTab('popular'); setSelectedCountry(dest.country) }}
                         className="bg-orange-50 text-orange-600 border border-orange-200 px-4 py-2 rounded-full text-sm font-medium hover:bg-orange-100 transition-colors">

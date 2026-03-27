@@ -9,6 +9,25 @@ import { getCountryFlag, formatDataSize } from '@/lib/api';
 import { useI18n } from '@/lib/i18n-context';
 import type { CartItem } from '@/types';
 
+function translateProductName(name: string): string {
+  if (!name) return 'eSIM Plan'
+  const hasChinese = /[\u4e00-\u9fff]/.test(name)
+  if (!hasChinese) return name
+  const regionMap: Record<string, string> = {
+    '全球通用': 'Global', '全球': 'Global', '亚洲': 'Asia', '东南亚': 'Southeast Asia',
+    '欧洲': 'Europe', '美洲': 'Americas', '北美': 'North America', '中东': 'Middle East',
+    '非洲': 'Africa', '大洋洲': 'Oceania', '覆盖': 'Coverage', '国家': 'Countries',
+    '地区': 'Regions', '本地': 'Local', '区域': 'Regional', '无限流量': 'Unlimited Data',
+    '日': 'Day', '天': 'Day', '月': 'Month',
+  }
+  let translated = name
+  for (const [cn, en] of Object.entries(regionMap)) {
+    translated = translated.replace(new RegExp(cn, 'g'), en)
+  }
+  translated = translated.replace(/[\u4e00-\u9fff]+/g, ' ').replace(/\s+/g, ' ').trim()
+  return translated || 'eSIM Plan'
+}
+
 export default function CartPage() {
   const router = useRouter();
   const { t } = useI18n();
@@ -101,7 +120,7 @@ export default function CartPage() {
 
               {/* Info */}
               <div className="flex-1 min-w-0">
-                <h3 className="font-semibold text-gray-900 truncate">{item.product.name}</h3>
+                <h3 className="font-semibold text-gray-900 truncate">{translateProductName(item.product.name)}</h3>
                 <p className="text-sm text-gray-400 mt-0.5">
                   {formatDataSize(item.product.dataSize)} · {item.product.validDays} {t('checkout.days_unit')}
                 </p>

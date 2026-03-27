@@ -30,6 +30,39 @@ interface Props {
   soldCount?: number
 }
 
+function translateProductName(name: string): string {
+  if (!name) return 'eSIM Plan'
+  const hasChinese = /[\u4e00-\u9fff]/.test(name)
+  if (!hasChinese) return name
+  const regionMap: Record<string, string> = {
+    '全球通用': 'Global',
+    '全球': 'Global',
+    '亚洲': 'Asia',
+    '东南亚': 'Southeast Asia',
+    '欧洲': 'Europe',
+    '美洲': 'Americas',
+    '北美': 'North America',
+    '中东': 'Middle East',
+    '非洲': 'Africa',
+    '大洋洲': 'Oceania',
+    '覆盖': 'Coverage',
+    '国家': 'Countries',
+    '地区': 'Regions',
+    '本地': 'Local',
+    '区域': 'Regional',
+    '无限流量': 'Unlimited Data',
+    '日': 'Day',
+    '天': 'Day',
+    '月': 'Month',
+  }
+  let translated = name
+  for (const [cn, en] of Object.entries(regionMap)) {
+    translated = translated.replace(new RegExp(cn, 'g'), en)
+  }
+  translated = translated.replace(/[\u4e00-\u9fff]+/g, ' ').replace(/\s+/g, ' ').trim()
+  return translated || 'eSIM Plan'
+}
+
 export default function ProductCard({ product, compact = false, isLowestPrice = false, soldCount }: Props) {
   const { t } = useI18n()
   const flags = product.countries.slice(0, 3).map(c => getFlagEmoji(c.code)).join(' ')
@@ -66,7 +99,7 @@ export default function ProductCard({ product, compact = false, isLowestPrice = 
           <div className="flex items-center gap-3">
             <span className="text-2xl flex-shrink-0">{getFlagEmoji(product.countries[0]?.code || '')}</span>
             <div className="flex-1 min-w-0">
-              <div className="font-medium text-gray-900 text-sm truncate">{product.name}</div>
+              <div className="font-medium text-gray-900 text-sm truncate">{translateProductName(product.name)}</div>
               <div className="text-xs text-gray-400 mt-0.5">{formatData(product.dataSize, t)} · {product.validDays}{t('product.days')}</div>
             </div>
             <div className="flex items-center gap-2 flex-shrink-0">
@@ -105,16 +138,16 @@ export default function ProductCard({ product, compact = false, isLowestPrice = 
               {t(`product.${product.type}`)}
             </span>
             {product.isHot && (
-              <span className="text-[10px] px-2 py-0.5 rounded-full font-bold bg-red-500 text-white shadow-sm animate-pulse">🔥 热销</span>
+              <span className="text-[10px] px-2 py-0.5 rounded-full font-bold bg-red-500 text-white shadow-sm animate-pulse">🔥 Hot</span>
             )}
             {isLowestPrice && (
-              <span className="text-[10px] px-2 py-0.5 rounded-full font-bold bg-green-500 text-white shadow-sm">💰 最低价</span>
+              <span className="text-[10px] px-2 py-0.5 rounded-full font-bold bg-green-500 text-white shadow-sm">💰 Best Price</span>
             )}
           </div>
         </div>
 
         {/* Name */}
-        <h3 className="font-semibold text-gray-900 text-sm leading-snug mb-4 line-clamp-2 flex-1">{product.name}</h3>
+        <h3 className="font-semibold text-gray-900 text-sm leading-snug mb-4 line-clamp-2 flex-1">{translateProductName(product.name)}</h3>
 
         {/* Operator name */}
         {product.nameEn && (
@@ -153,7 +186,7 @@ export default function ProductCard({ product, compact = false, isLowestPrice = 
           </button>
         </div>
         {soldCount !== undefined && (
-          <div className="mt-2 text-[11px] text-orange-500 font-medium">🔥 本周已售出 {soldCount} 份</div>
+          <div className="mt-2 text-[11px] text-orange-500 font-medium">🔥 {soldCount} sold this week</div>
         )}
       </div>
     </Link>

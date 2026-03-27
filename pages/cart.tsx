@@ -58,15 +58,15 @@ export default function CartPage() {
             </Link>
             {/* Hot destinations */}
             <div className="mt-12 text-left max-w-lg mx-auto">
-              <h3 className="text-base font-bold text-gray-800 mb-4 text-center">🔥 热门套餐推荐</h3>
+              <h3 className="text-base font-bold text-gray-800 mb-4 text-center">🔥 Popular Plans</h3>
               <div className="flex flex-wrap justify-center gap-3">
                 {[
-                  { label: '🇯🇵 日本 5GB', href: '/products?country=JP' },
-                  { label: '🇹🇭 泰国 10GB', href: '/products?country=TH' },
-                  { label: '🇰🇷 韩国 5GB', href: '/products?country=KR' },
-                  { label: '🇺🇸 美国 10GB', href: '/products?country=US' },
-                  { label: '🌏 亚洲通', href: '/products?type=regional' },
-                  { label: '🌍 全球套餐', href: '/products?tab=global' },
+                  { label: '🇯🇵 Japan 5GB', href: '/products?country=JP' },
+                  { label: '🇹🇭 Thailand 10GB', href: '/products?country=TH' },
+                  { label: '🇰🇷 Korea 5GB', href: '/products?country=KR' },
+                  { label: '🇺🇸 USA 10GB', href: '/products?country=US' },
+                  { label: '🌏 Asia Regional', href: '/products?type=regional' },
+                  { label: '🌍 Global Plan', href: '/products?tab=global' },
                 ].map(item => (
                   <Link key={item.label} href={item.href}
                     className="bg-white border border-gray-200 hover:border-orange-400 text-gray-700 hover:text-orange-500 px-4 py-2 rounded-xl text-sm font-medium transition-all hover:shadow-md">

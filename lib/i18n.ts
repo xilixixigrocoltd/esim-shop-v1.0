@@ -801,4 +801,4 @@ export const translations = {
   },
 };
 
-export const defaultLocale: Locale = 'zh';
+export const defaultLocale: Locale = 'en';
